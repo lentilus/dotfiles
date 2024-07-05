@@ -1,0 +1,26 @@
+# --a--
+# assign [app_id="foot"] workspace number 1
+
+# --s--
+assign [app_id="qutebrowser"] workspace number 2
+
+# --d--
+assign [title="xk"] workspace number 3
+
+# --f--
+assign [app_id="com.github.xournalpp.xournalpp"] workspace number 4
+assign [title="Anki"] workspace number 4
+assign [title="Signal"] workspace number 4
+
+# --u--
+assign [title="neomutt"] workspace number 5
+assign [title="ranger"] workspace number 5
+
+
+# --o--
+assign [title="mpv$"] workspace number 7
+
+for_window [title="Signal"] no_focus
+for_window [app_id="org.pwmt.zathura"] no_focus
+for_window [title="^float$"] floating enable
+for_window [title="qutebrowser$"] layout tabbed

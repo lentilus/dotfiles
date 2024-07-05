@@ -1,0 +1,29 @@
+#!/usr/bin/bash
+
+#
+# Heavily inspired by ThePrimagen's tmux sessionizer
+#
+
+targets="$HOME/git $HOME/git/dotfiles.git/master/desktop $HOME/git/dotfiles.git/master/dev-dotfiles/"
+
+if [[ $# -eq 1 ]]; then
+    selected=$1
+else
+    cd || exit
+    # we want word splitting here
+    selected=$(find $targets -maxdepth 1 -type d -exec sh -c \
+        'i="$1"; realpath -s --relative-to=. "$i"' shell {} \; | fzf)
+fi
+
+
+if [[ -z $selected ]]; then
+    exit 0
+fi
+
+selected_name=$(basename "$selected" | tr . _)
+
+if ! tmux has-session -t="$selected_name" 2> /dev/null; then
+    tmux new-session -ds "$selected_name" -c "$selected" 'nvim -c "normal -"; $SHELL'
+fi
+
+tmux switch-client -t "$selected_name"

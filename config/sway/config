@@ -1,0 +1,23 @@
+### sway config ###
+
+include ./configuration/theming
+exec_always $XDG_CONFIG_HOME/sway/scripts/lock.sh
+exec_always $XDG_CONFIG_HOME/sway/scripts/autostart.sh
+include ./configuration/rules
+include ./configuration/inputs
+include ./configuration/app_bindings
+include ./configuration/sway_bindings
+
+# waybar
+bar {
+    swaybar_command waybar
+}
+
+input * {
+    repeat_delay 300
+    repeat_rate 30
+    xkb_layout us,de
+    xkb_options caps:swapescape
+}
+
+include /etc/sway/config.d/*

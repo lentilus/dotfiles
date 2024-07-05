@@ -1,0 +1,45 @@
+#!/usr/bin/env bash
+set -o errexit
+set -o pipefail
+
+if [ -z "$QUTE_FIFO" ] ; then
+    echo not qute fifo
+    help
+    exit
+fi
+
+[ -z "$1" ] && exit
+url="$1"
+
+tmp_file="/tmp/qute-ranger-chosen"
+
+if test -f "$tmp_file"; then
+    rm "$tmp_file"
+fi
+
+footclient ranger --choosedir="$tmp_file" --show-only-dirs
+
+if test -f "$tmp_file"; then
+    chosen="$(cat "$tmp_file")"
+    rm "$tmp_file"
+    footclient read -p "File to save as? [d]efault/(o)verwrite/(n)ew: " -N 1 choice; echo \"\$choice\" > "$tmp_file"
+    choice="$(cat "$tmp_file")"
+    rm "$tmp_file"
+    case $choice in
+        o)
+            footclient ranger --choosefile="$tmp_file" --selectfile="$chosen"
+            if test -f "$tmp_file"; then
+                chosen="$(cat "$tmp_file")"
+                rm "$tmp_file"
+            fi
+            ;;
+        n)
+            footclient read -p "Name: " name; echo "$name" > "$tmp_file"
+            if test -f "$tmp_file"; then
+                chosen="$chosen/$(cat "$tmp_file")"
+                rm "$tmp_file"
+            fi
+            ;;
+    esac
+    echo "download $url --dest \"$chosen\"" >> "$QUTE_FIFO"
+fi
