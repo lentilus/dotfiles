@@ -3,6 +3,7 @@
 {
     home.packages = [
         # desktop dependencies
+        pkgs.nixgl.auto.nixGLDefault
         pkgs.dunst
         pkgs.kanshi
         pkgs.waybar

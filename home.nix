@@ -9,6 +9,8 @@
 
   home.username = userConfig.name;
   home.homeDirectory = userConfig.home;
+# nixpkgs.config.allowUnfree;
+  # pkgs.config.allowUnfree = true;
 
   # home-manager release
   home.stateVersion = "24.05"; # dont change?

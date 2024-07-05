@@ -3,16 +3,22 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    nixgl.url = "github:nix-community/nixGL";
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
 
-  outputs = { nixpkgs, home-manager, ... }:
+  outputs = { nixpkgs, nixgl, home-manager, ... }:
     let
-      system = "x86_64-linux";
-      pkgs = nixpkgs.legacyPackages.${system};
+        pkgs = import nixpkgs {
+            system = "x86_64-linux";
+            overlays = [ nixgl.overlay ];
+        };
+      # system = "x86_64-linux";
+      # pkgs = nixpkgs.legacyPackages.${system};
+
     in {
       homeConfigurations = {
       "lentilus" = home-manager.lib.homeManagerConfiguration {

@@ -1,4 +1,8 @@
 #!/bin/bash
 if [ -z "$WAYLAND_DISPLAY" ] && [ "$XDG_VTNR" -eq 1 ]; then
-  exec sway
+    if command -v nixGL ; then
+        exec nixGL sway
+    else
+        exec sway
+    fi
 fi
