@@ -6,7 +6,10 @@
     ];
 
     home.file = {
-        "${config.xdg.configHome}/ranger".source = "${dotfiles}/ranger";
+        "${config.xdg.configHome}/ranger" = {
+            source = "${dotfiles}/ranger";
+            recursive = true;
+        };
     };
 }
 
