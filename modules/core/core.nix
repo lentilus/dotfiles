@@ -12,5 +12,4 @@
         "${config.home.homeDirectory}/.local/scripts".source = "${scripts}";
     };
 
-
 }

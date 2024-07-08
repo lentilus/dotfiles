@@ -13,7 +13,7 @@
     ];
 
     home.file = {
-        # "${config.xdg.configHome}/zsh".source = "${dotfiles}/zsh";
+        "${config.xdg.configHome}/sway".source = "${dotfiles}/sway";
     };
 }
 
