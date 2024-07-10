@@ -1,10 +1,14 @@
-{ config, pkgs, ... }:
-
 {
-    home.packages = [
-        pkgs.poetry
-        pkgs.fzf
-        pkgs.git
-        (pkgs.nerdfonts.override { fonts = ["JetBrainsMono"]; })
-    ];
+  config,
+  pkgs,
+  ...
+}: {
+  home.packages = [
+    pkgs.poetry
+    pkgs.pyenv
+    pkgs.fzf
+    pkgs.git
+    pkgs.lean4
+    (pkgs.nerdfonts.override {fonts = ["JetBrainsMono"];})
+  ];
 }

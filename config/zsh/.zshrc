@@ -7,8 +7,15 @@ export XDG_CACHE_HOME="$HOME/.cache"
 # locale stuff
 export LANGUAGE="C.UTF-8"
 export LC_ALL="C.UTF-8"
-# export LANGUAGE="en_US.UTF-8"
-# export LC_ALL="en_US.UTF-8"
+
+# default tools
+export EDITOR="nvim"
+
+# path
+# typeset -U path # mitigate duplications in path
+export PATH="$HOME/.local/bin:$PATH"
+export PATH="$HOME/.local/scripts:$PATH"
+export PASSWORD_STORE_DIR="$HOME/git/password-store"
 
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
@@ -55,12 +62,6 @@ zinit cdreplay -q
 # To customize prompt, run `p10k configure` or edit ~/.config/zsh/.p10k.zsh.
 [[ ! -f ~/.config/zsh/.p10k.zsh ]] || source ~/.config/zsh/.p10k.zsh
 
-# # Keybindings
-bindkey -v # vim keybindings
-# set blink-matching-paren on
-# bindkey '^p' history-search-backward
-# bindkey '^n' history-search-forward
-# bindkey '^[w' kill-region
 
 # History
 HISTSIZE=5000
@@ -82,26 +83,21 @@ zstyle ':completion:*' menu no
 zstyle ':fzf-tab:complete:cd:*' fzf-preview 'ls --color $realpath'
 zstyle ':fzf-tab:complete:__zoxide_z:*' fzf-preview 'ls --color $realpath'
 
+# # Keybindings
+bindkey -v # vim keybindings
+
 # Aliases
 alias ls='ls -A --color'
 alias vi='nvim'
 alias c='clear'
 
-export EDITOR="nvim"
 # Shell integrations
-# eval "$(fzf --zsh)"
+eval "$(fzf --zsh)"
 eval "$(zoxide init --cmd cd zsh)"
-
-export PYENV_ROOT="$HOME/.local/pyenv"
-export PATH="$PYENV_ROOT/bin:$PATH"
-export PASSWORD_STORE_DIR="$HOME/git/password-store"
 eval "$(pyenv init - --no-rehash)"
 
-export PATH="$HOME/.local/bin:$PATH"
-export PATH="$HOME/.local/pyenv/bin:$PATH"
-export PATH="$HOME/.local/scripts:$PATH"
-
-# export PATH="$HOME/git/scripts:$PATH"
+# deduplicate path. keep at the bottom
+typeset -U PATH
 
 # auto start os stuff
 source "${ZDOTDIR}/autostart"

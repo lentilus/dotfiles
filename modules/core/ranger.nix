@@ -1,15 +1,17 @@
-{ config, pkgs, dotfiles, ... }:
-
 {
-    home.packages = [
-        pkgs.ranger
-    ];
+  config,
+  pkgs,
+  dotfiles,
+  ...
+}: {
+  home.packages = [
+    pkgs.ranger
+  ];
 
-    home.file = {
-        "${config.xdg.configHome}/ranger" = {
-            source = "${dotfiles}/ranger";
-            recursive = true;
-        };
+  home.file = {
+    "${config.xdg.configHome}/ranger" = {
+      source = "${dotfiles}/ranger";
+      recursive = true;
     };
+  };
 }
-

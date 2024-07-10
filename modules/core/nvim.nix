@@ -1,17 +1,19 @@
-{ config, pkgs, dotfiles, ... }:
-
 {
-    home.packages = [
-        # plugin dependencies
-        pkgs.fd
-        pkgs.ripgrep
-        pkgs.cargo
+  config,
+  pkgs,
+  dotfiles,
+  ...
+}: {
+  home.packages = [
+    # plugin dependencies
+    pkgs.fd
+    pkgs.ripgrep
+    pkgs.cargo
 
-        pkgs.neovim
-    ];
+    pkgs.neovim
+  ];
 
-    home.file = {
-        "${config.xdg.configHome}/nvim".source = "${dotfiles}/nvim";
-    };
+  home.file = {
+    "${config.xdg.configHome}/nvim".source = "${dotfiles}/nvim";
+  };
 }
-

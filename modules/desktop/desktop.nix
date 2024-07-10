@@ -1,7 +1,9 @@
-{ config, pkgs, ... }:
-
 {
-    imports = [
-        ./sway.nix
-    ];
+  config,
+  pkgs,
+  ...
+}: {
+  imports = [
+    ./sway.nix
+  ];
 }
