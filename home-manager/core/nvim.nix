@@ -9,7 +9,6 @@
     pkgs.fd
     pkgs.ripgrep
     pkgs.cargo
-
     pkgs.neovim
   ];
 

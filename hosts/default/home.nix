@@ -1,17 +1,16 @@
 {
   config,
   pkgs,
-  userConfig,
   ...
-}: {
+} @ inputs: {
   imports = [
-    ./modules/core/core.nix
-    ./modules/dev/dev.nix
-    ./modules/desktop/desktop.nix
+    ../../home-manager/core/core.nix
+    ../../home-manager/dev/dev.nix
+    ../../home-manager/desktop/desktop.nix
   ];
 
-  home.username = userConfig.name;
-  home.homeDirectory = userConfig.home;
+  home.username = inputs.userConfig.name;
+  home.homeDirectory = inputs.userConfig.home;
 
   home.stateVersion = "23.11"; # dont change
 

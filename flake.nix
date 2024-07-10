@@ -39,7 +39,7 @@
         extraSpecialArgs = {
           inherit inputs outputs;
           dotfiles = ./config;
-          scripts = ./scripts;
+          scripts = ./config/scripts;
           userConfig = rec {
             name = builtins.head (nixpkgs.lib.splitString "@" "${user}");
             home = "/home/${name}";
@@ -47,7 +47,11 @@
         };
 
         modules = [
-          ./home.nix
+          (
+            if builtins.pathExists ./hosts/${user}/home.nix
+            then ./hosts/${user}/home.nix
+            else ./hosts/default/home.nix
+          )
         ];
       });
   };

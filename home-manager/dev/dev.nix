@@ -4,6 +4,7 @@
   ...
 }: {
   home.packages = [
+    pkgs.htop
     pkgs.poetry
     pkgs.pyenv
     pkgs.fzf
