@@ -1,12 +1,12 @@
 {
   config,
   pkgs,
-  dotfiles,
+  nixgl,
   ...
 }: {
   home.packages = [
     # desktop dependencies
-    pkgs.nixgl.auto.nixGLDefault
+    # nixgl.nixGLCommon
     pkgs.dunst
     pkgs.kanshi
     pkgs.waybar
@@ -18,9 +18,9 @@
   ];
 
   home.file = {
-    "${config.xdg.configHome}/sway".source = "${dotfiles}/sway";
-    "${config.xdg.configHome}/waybar".source = "${dotfiles}/waybar";
-    "${config.xdg.configHome}/rofi".source = "${dotfiles}/rofi";
-    "${config.xdg.configHome}/foot".source = "${dotfiles}/foot";
+    "${config.xdg.configHome}/sway".source = ../../config/sway;
+    "${config.xdg.configHome}/waybar".source = ../../config/waybar;
+    # "${config.xdg.configHome}/rofi".source = ../../config/rofi;
+    "${config.xdg.configHome}/foot".source = ../../config/foot;
   };
 }

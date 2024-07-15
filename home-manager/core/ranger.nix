@@ -1,7 +1,6 @@
 {
   config,
   pkgs,
-  dotfiles,
   ...
 }: {
   home.packages = [
@@ -10,7 +9,7 @@
 
   home.file = {
     "${config.xdg.configHome}/ranger" = {
-      source = "${dotfiles}/ranger";
+      source = ../../config/ranger;
       recursive = true;
     };
   };

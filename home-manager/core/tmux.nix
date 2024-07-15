@@ -1,7 +1,6 @@
 {
   config,
   pkgs,
-  dotfiles,
   ...
 }: {
   home.packages = [
@@ -14,6 +13,6 @@
   ];
 
   home.file = {
-    "${config.xdg.configHome}/tmux".source = "${dotfiles}/tmux";
+    "${config.xdg.configHome}/tmux".source = ../../config/tmux;
   };
 }

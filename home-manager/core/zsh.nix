@@ -1,7 +1,6 @@
 {
   config,
   pkgs,
-  dotfiles,
   ...
 }: {
   home.packages = [
@@ -13,7 +12,7 @@
   ];
 
   home.file = {
-    "${config.xdg.configHome}/zsh".source = "${dotfiles}/zsh";
+    "${config.xdg.configHome}/zsh".source = ../../config/zsh;
     ".zshenv".text = ''
       # move zsh config out of home
       ZDOTDIR="${config.xdg.configHome}/zsh"
