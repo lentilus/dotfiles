@@ -101,10 +101,10 @@
           )
 
           (let 
-            user = builtins.head (nixpkgs.lib.splitString "@" "${user}");
+            shortUser = builtins.head (nixpkgs.lib.splitString "@" "${user}");
           in {
-            home.username = user;
-            home.homeDirectory = "/home/${users}";
+            home.username = shortUser;
+            home.homeDirectory = "/home/${shortUser}";
           })
         ];
       });

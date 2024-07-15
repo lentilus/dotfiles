@@ -1,6 +1,7 @@
 {
   config,
   pkgs,
+  sources,
   ...
 }: {
   home.packages = [
@@ -12,6 +13,6 @@
   ];
 
   home.file = {
-    "${config.xdg.configHome}/nvim".source = ../../config/nvim;
+    "${config.xdg.configHome}/nvim".source = "${sources.dotfiles}/nvim";
   };
 }

@@ -1,6 +1,7 @@
 {
   config,
   pkgs,
+  sources,
   nixgl,
   ...
 }: {
@@ -18,9 +19,9 @@
   ];
 
   home.file = {
-    "${config.xdg.configHome}/sway".source = ../../config/sway;
-    "${config.xdg.configHome}/waybar".source = ../../config/waybar;
+    "${config.xdg.configHome}/sway".source = "${sources.dotfiles}/sway";
+    "${config.xdg.configHome}/waybar".source = "${sources.dotfiles}/waybar";
     # "${config.xdg.configHome}/rofi".source = ../../config/rofi;
-    "${config.xdg.configHome}/foot".source = ../../config/foot;
+    "${config.xdg.configHome}/foot".source = "${sources.dotfiles}/foot";
   };
 }

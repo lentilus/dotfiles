@@ -1,6 +1,7 @@
 {
   config,
   pkgs,
+  sources,
   ...
 }: {
   imports = [
@@ -11,6 +12,6 @@
   ];
 
   home.file = {
-    "${config.home.homeDirectory}/.local/scripts".source = ../../config/scripts;
+    "${config.home.homeDirectory}/.local/scripts".source = sources.scripts;
   };
 }
