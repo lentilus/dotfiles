@@ -1,4 +1,4 @@
 #!/bin/bash
 
-nix-shell '<home-manager>' -A install 
-home-manager switch --flake "$HOME"/dotfiles --impure
+echo "experimental-features = nix-command flakes" > /etc/nix/nix.conf
+nix-shell -p home-manager 'home-manager switch --flake "$HOME"/dotfiles --impure'
