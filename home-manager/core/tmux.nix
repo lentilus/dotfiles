@@ -1,18 +1,25 @@
 {
   config,
   pkgs,
+  lib,
   ...
 }: {
-  home.packages = [
-    # tpm dependencies
-    pkgs.gawk
-    pkgs.gnused
-    pkgs.git
+  options = {
+    tmux.enable = lib.mkEnableOption "foo";
+  };
 
-    pkgs.tmux
-  ];
+  config = lib.mkIf config.tmux.enable {
+      home.packages = [
+        # tpm dependencies
+        pkgs.gawk
+        pkgs.gnused
+        pkgs.git
 
-  home.file = {
-    "${config.xdg.configHome}/tmux".source = ../../config/tmux;
+        pkgs.tmux
+      ];
+
+      home.file = {
+        "${config.xdg.configHome}/tmux".source = ../../config/tmux;
+      };
   };
 }

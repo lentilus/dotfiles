@@ -1,9 +1,12 @@
 {
   config,
   pkgs,
+  lib,
   ...
 }: {
-  imports = [
-    ./sway.nix
-  ];
+    # we check if desktop is enabled in sway module
+      imports = [
+        ./sway.nix
+      ];
 }
+

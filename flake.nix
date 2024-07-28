@@ -3,8 +3,8 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.05";
-    flake-parts.url = "github:hercules-ci/flake-parts";
-    flake-utils.url = "github:numtide/flake-utils";
+    # flake-parts.url = "github:hercules-ci/flake-parts";
+    # flake-utils.url = "github:numtide/flake-utils";
     home-manager = {
       url = "github:nix-community/home-manager/release-24.05";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -35,11 +35,11 @@
       "lentilus@fedora" = {system = "x86_64-linux";};
       "foo@bar" = {system = "x86_64-linux";};
     };
-    
+
     # needed for resolving imports
     sources = {
-          dotfiles = ./config;
-          scripts = ./config/scripts;
+      dotfiles = ./config;
+      scripts = ./config/scripts;
     };
 
     systems = nixpkgs.lib.mapAttrsToList (_: conf: conf.system) deployments;
@@ -52,6 +52,8 @@
     forAllShortUsers = nixpkgs.lib.genAttrs shortUsers;
   in {
     formatter = forAllSystems (system: nixpkgs.legacyPackages.${system}.alejandra);
+
+    # homeManagerModules = import ./modules/home-manager;
 
     apps = forAllSystems (
       system: {
@@ -73,24 +75,25 @@
     # NOTE: we don't want/have to include everything from hm here!
     homeManagerProfiles = forAllShortUsers (user: {
       imports = [
-          (
-            if builtins.pathExists ./hosts/${user}/home.nix
-            then ./hosts/${user}/home.nix
-            else ./hosts/default/home.nix
-          )
+        (
+          if builtins.pathExists ./hosts/${user}/home.nix
+          then ./hosts/${user}/home.nix
+          else ./hosts/default/home.nix
+        )
       ];
     });
 
     homeConfigurations = forAllUsers (user:
-      home-manager.lib.homeManagerConfiguration 
+      home-manager.lib.homeManagerConfiguration
       {
         # Home-manager requires 'pkgs' instance
         pkgs = import nixpkgs {
-          legacyPackages = deployments.${user}.system; 
+          legacyPackages = deployments.${user}.system;
         };
 
         extraSpecialArgs = {
           inherit inputs outputs nixgl sources;
+          # config.desktop.enable = false;
         };
 
         modules = [
@@ -100,7 +103,7 @@
             else ./hosts/default/home.nix
           )
 
-          (let 
+          (let
             shortUser = builtins.head (nixpkgs.lib.splitString "@" "${user}");
           in {
             home.username = shortUser;

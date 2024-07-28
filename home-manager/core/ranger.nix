@@ -1,8 +1,15 @@
 {
   config,
   pkgs,
+  lib,
   ...
 }: {
+  options = {
+    ranger.enable = lib.mkEnableOption "foo";
+  };
+
+  config = lib.mkIf config.ranger.enable {
+
   home.packages = [
     pkgs.ranger
   ];
@@ -12,5 +19,6 @@
       source = ../../config/ranger;
       recursive = true;
     };
+  };
   };
 }
