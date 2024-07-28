@@ -1,6 +1,6 @@
 #!/bin/bash
 
-nix-env -iA nixpgs.home-manager
+nix-env -iA nixpkgs.home-manager
 
 
 # nixconf=$PWD/nixbuildconf/nix.conf
