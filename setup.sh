@@ -1,3 +1,3 @@
 #!/bin/bash
 
-echo hello > $HOME/helloworld.txt
+nix-shell -p home-manager --run 'home-manager switch --flake $HOME/dotfiles --impure'
