@@ -7,14 +7,14 @@
   imports = [
     # things I need everywhere without exception
     # -> shell, tmux, nvim, ranger
-    ../../home-manager/core/core.nix
+    ../../home-manager/core
 
     # development stuff
     # -> git, pyenv, poetry, etc
-    ../../home-manager/dev/dev.nix
+    ../../home-manager/dev
 
     # my sway desktop
-    ../../home-manager/desktop/desktop.nix
+    ../../home-manager/desktop
   ];
 
   desktop.enable = lib.mkDefault false;

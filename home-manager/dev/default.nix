@@ -11,6 +11,7 @@
 
   config = lib.mkIf config.dev.enable {
       home.packages = [
+        pkgs.devpod
         pkgs.htop
         pkgs.poetry
         pkgs.pyenv
