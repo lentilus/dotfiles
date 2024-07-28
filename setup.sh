@@ -1,4 +1,4 @@
 #!/bin/bash
 
-nix-env -iA home-manager
+nix-shell '<home-manager>' -A install 
 home-manager switch --flake "$HOME"/dotfiles --impure
