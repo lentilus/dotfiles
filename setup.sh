@@ -1,3 +1,4 @@
 #!/bin/bash
 
-nix-shell --extra-experimental-features nix-command -p home-manager --run 'home-manager switch --flake $HOME/dotfiles --impure'
+nix-env -iA home-manager
+home-manager switch --flake "$HOME"/dotfiles --impure
