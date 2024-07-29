@@ -2,9 +2,9 @@
 
 
 # install home-manager
-nix-channel --add https://github.com/nix-community/home-manager/archive/release-22.11.tar.gz home-manager
-nix-channel --update
-nix-shell '<home-manager>' -A install
+# nix-channel --add https://github.com/nix-community/home-manager/archive/release-22.11.tar.gz home-manager
+# nix-channel --update
+# nix-shell '<home-manager>' -A install
 
 # nix-env -iA nixpkgs.home-manager
 
