@@ -22,8 +22,8 @@ bindsym {
 	$mod+Shift+t exec  grim -g "$(slurp)" - | wl-copy
 
     # Terminal
-    $mod+Return exec $term
-    $mod+Shift+Return exec $term tmux -c jump-tmux
+    $mod+Return workspace 1; exec $term
+    # $mod+Shift+Return exec $term tmux -c jump-tmux
 
 	# sway stuff
 	$mod+Shift+c reload
@@ -37,9 +37,9 @@ bindsym {
     $mod+x workspace 3; exec $term --title=xk nvim -c ':lua require("telescope") require("xettelkasten.zettel").find()'
     $mod+Shift+x workspace 3; exec ~/git/xettelkasten-core/scripts/viewpdf
 
-    $mod+e workspace 4; exec $term --title=ranger ranger
+    $mod+e workspace 5; exec $term --title=ranger ranger
 
-	$mod+m workspace 5; exec $term --title=neomutt neomutt
+	$mod+m workspace 4; exec $term --title=neomutt neomutt
 }
 
 

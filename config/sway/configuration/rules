@@ -1,24 +1,24 @@
-# --a--
-# assign [app_id="foot"] workspace number 1
-
-# --s--
+# --s-- BROWSER
 assign [app_id="qutebrowser"] workspace number 2
 
-# --d--
+# --d-- ZETTELKASTEN
 assign [title="xk"] workspace number 3
 
-# --f--
-assign [app_id="com.github.xournalpp.xournalpp"] workspace number 4
-assign [title="Anki"] workspace number 4
+# --f-- COMMUNICATION
 assign [title="Signal"] workspace number 4
+assign [title="neomutt"] workspace number 4
 
 # --u--
-assign [title="neomutt"] workspace number 5
 assign [title="ranger"] workspace number 5
+assign [title="Anki"] workspace number 5
+assign [app_id="com.github.xournalpp.xournalpp"] workspace number 5
 
-
-# --o--
+# --o-- MPV
 assign [title="mpv$"] workspace number 7
+
+# --a-- TERMINAL
+# needs to be at the bottom for lowest priority!
+assign [app_id="foot"] workspace number 1
 
 for_window [title="Signal"] no_focus
 for_window [app_id="org.pwmt.zathura"] no_focus

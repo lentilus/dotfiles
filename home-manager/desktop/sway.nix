@@ -29,6 +29,10 @@
       "${config.xdg.configHome}/waybar".source = "${sources.dotfiles}/waybar";
       # "${config.xdg.configHome}/rofi".source = ../../config/rofi;
       "${config.xdg.configHome}/foot".source = "${sources.dotfiles}/foot";
+      "${config.xdg.configHome}/qutebrowser" = {
+          source = "${sources.dotfiles}/qutebrowser";
+          recursive = true;
+      };
     };
   };
 }

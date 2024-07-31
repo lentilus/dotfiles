@@ -32,8 +32,9 @@
     inherit (self) outputs;
 
     deployments = {
-      "lentilus@fedora" = {system = "x86_64-linux";};
-      "foo@bar" = {system = "x86_64-linux";};
+      "lentilus@fedora" = {sys = "x86_64-linux";};
+      "foo@bar" = {sys = "x86_64-linux";};
+      "vscode" = {sys = "x86_64-linux";};
     };
 
     # needed for resolving imports
@@ -42,7 +43,7 @@
       scripts = ./config/scripts;
     };
 
-    systems = nixpkgs.lib.mapAttrsToList (_: conf: conf.system) deployments;
+    systems = nixpkgs.lib.mapAttrsToList (_: conf: conf.sys) deployments;
     users = nixpkgs.lib.mapAttrsToList (usr: _: usr) deployments;
     shortUsers = nixpkgs.lib.mapAttrsToList (usr: _: builtins.head (nixpkgs.lib.splitString "@" "${usr}")) deployments;
 
@@ -51,7 +52,7 @@
     forAllUsers = nixpkgs.lib.genAttrs users;
     forAllShortUsers = nixpkgs.lib.genAttrs shortUsers;
   in {
-    formatter = forAllSystems (system: nixpkgs.legacyPackages.${system}.alejandra);
+    formatter = forAllSystems (sys: nixpkgs.legacyPackages.${sys}.alejandra);
 
     # homeManagerModules = import ./modules/home-manager;
 
