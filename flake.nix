@@ -2,26 +2,26 @@
   description = "lentilus @ nix";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-24.05";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.05";
     home-manager = {
       url = "github:nix-community/home-manager/release-24.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    home-manager-shell = {
-      url = "sourcehut:~dermetfan/home-manager-shell/release-24.05";
-      inputs = {
-        nixpkgs.follows = "nixpkgs";
-        flake-utils.follows = "flake-utils";
-        home-manager.follows = "home-manager";
-      };
-    };
+    # home-manager-shell = {
+    #   url = "sourcehut:~dermetfan/home-manager-shell/release-24.05";
+    #   inputs = {
+    #     nixpkgs.follows = "nixpkgs";
+    #     flake-utils.follows = "flake-utils";
+    #     home-manager.follows = "home-manager";
+    #   };
+    # };
   };
 
   outputs = {
     self,
     nixpkgs,
     home-manager,
-    home-manager-shell,
+    # home-manager-shell,
     flake-utils,
     ...
   } @ inputs: let
@@ -52,34 +52,35 @@
 
     # homeManagerModules = import ./modules/home-manager;
 
-    apps = forAllSystems (
-      system: {
-        # creates a shell in a temporary home uses
-        # config from homeManagerProfiles
-        tmp-shell = flake-utils.lib.mkApp {
-          drv = home-manager-shell.lib {
-            inherit self system;
-            args.extraSpecialArgs = {
-              # inherit nixgl;
-              inherit sources;
-            };
-          };
-        };
-      }
-    );
+    # apps = forAllSystems (
+    #   system: {
+    #     # creates a shell in a temporary home uses
+    #     # config from homeManagerProfiles
+    #     tmp-shell = flake-utils.lib.mkApp {
+    #       drv = home-manager-shell.lib {
+    #         inherit self system;
+    #         args.extraSpecialArgs = {
+    #           # inherit nixgl;
+    #           inherit sources;
+    #         };
+    #       };
+    #     };
+    #   }
+    # );
 
     # import everything interesting from home-manager
     # that we want in tmp-shell
     # NOTE: we don't want/have to include everything from hm here!
-    homeManagerProfiles = forAllShortUsers (user: {
-      imports = [
-        (
-          if builtins.pathExists ./hosts/${user}/home.nix
-          then ./hosts/${user}/home.nix
-          else ./hosts/default/home.nix
-        )
-      ];
-    });
+
+    # homeManagerProfiles = forAllShortUsers (user: {
+    #   imports = [
+    #     (
+    #       if builtins.pathExists ./hosts/${user}/home.nix
+    #       then ./hosts/${user}/home.nix
+    #       else ./hosts/default/home.nix
+    #     )
+    #   ];
+    # });
 
     homeConfigurations = forAllUsers (user:
       home-manager.lib.homeManagerConfiguration
