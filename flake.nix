@@ -17,13 +17,13 @@
         home-manager.follows = "home-manager";
       };
     };
-    nixgl.url = "github:nix-community/nixGL"; # openGL wrapper (necessary as of now)
+    # nixgl.url = "github:nix-community/nixGL"; # openGL wrapper (necessary as of now)
   };
 
   outputs = {
     self,
     nixpkgs,
-    nixgl,
+    # nixgl,
     home-manager,
     home-manager-shell,
     flake-utils,
@@ -64,7 +64,8 @@
           drv = home-manager-shell.lib {
             inherit self system;
             args.extraSpecialArgs = {
-              inherit nixgl sources;
+              # inherit nixgl;
+              inherit sources;
             };
           };
         };
@@ -93,7 +94,8 @@
         };
 
         extraSpecialArgs = {
-          inherit inputs outputs nixgl sources;
+          # inherit nixgl
+          inherit inputs outputs sources;
           # config.desktop.enable = false;
         };
 

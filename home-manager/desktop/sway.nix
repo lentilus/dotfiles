@@ -3,7 +3,7 @@
   pkgs,
   lib,
   sources,
-  nixgl,
+  # nixgl,
   ...
 }: {
   options = {
