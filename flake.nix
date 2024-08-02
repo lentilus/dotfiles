@@ -2,9 +2,7 @@
   description = "lentilus @ nix";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.05";
-    # flake-parts.url = "github:hercules-ci/flake-parts";
-    # flake-utils.url = "github:numtide/flake-utils";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-24.05";
     home-manager = {
       url = "github:nix-community/home-manager/release-24.05";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -17,13 +15,11 @@
         home-manager.follows = "home-manager";
       };
     };
-    # nixgl.url = "github:nix-community/nixGL"; # openGL wrapper (necessary as of now)
   };
 
   outputs = {
     self,
     nixpkgs,
-    # nixgl,
     home-manager,
     home-manager-shell,
     flake-utils,
