@@ -44,6 +44,7 @@ zinit light zsh-users/zsh-syntax-highlighting
 zinit light zsh-users/zsh-completions
 zinit light zsh-users/zsh-autosuggestions
 zinit light Aloxaf/fzf-tab
+zinit light kutsan/zsh-system-clipboard
 
 # Add in snippets
 zinit snippet OMZP::git
@@ -94,7 +95,7 @@ alias c='clear'
 # Shell integrations
 eval "$(fzf --zsh)"
 eval "$(zoxide init --cmd cd zsh)"
-eval "$(pyenv init - --no-rehash)"
+eval "$(pyenv init - --no-rehash)" || true # fail silently
 
 # deduplicate path. keep at the bottom
 typeset -U PATH

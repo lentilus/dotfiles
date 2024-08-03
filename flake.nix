@@ -3,18 +3,19 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.05";
+    flake-utils.url = "github:numtide/flake-utils";
     home-manager = {
       url = "github:nix-community/home-manager/release-24.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    # home-manager-shell = {
-    #   url = "sourcehut:~dermetfan/home-manager-shell/release-24.05";
-    #   inputs = {
-    #     nixpkgs.follows = "nixpkgs";
-    #     flake-utils.follows = "flake-utils";
-    #     home-manager.follows = "home-manager";
-    #   };
-    # };
+    home-manager-shell = {
+      url = "sourcehut:~dermetfan/home-manager-shell/release-24.05";
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+        flake-utils.follows = "flake-utils";
+        home-manager.follows = "home-manager";
+      };
+    };
   };
 
   outputs = {
@@ -28,8 +29,8 @@
     inherit (self) outputs;
 
     deployments = {
-      "lentilus@fedora" = {sys = "x86_64-linux";};
-      "foo@bar" = {sys = "x86_64-linux";};
+      "lentilus" = {sys = "x86_64-linux";};
+      "foo" = {sys = "x86_64-linux";};
       "vscode" = {sys = "x86_64-linux";};
     };
 
@@ -41,12 +42,12 @@
 
     systems = nixpkgs.lib.mapAttrsToList (_: conf: conf.sys) deployments;
     users = nixpkgs.lib.mapAttrsToList (usr: _: usr) deployments;
-    shortUsers = nixpkgs.lib.mapAttrsToList (usr: _: builtins.head (nixpkgs.lib.splitString "@" "${usr}")) deployments;
+    # shortUsers = nixpkgs.lib.mapAttrsToList (usr: _: builtins.head (nixpkgs.lib.splitString "@" "${usr}")) deployments;
 
     # attribute maps
     forAllSystems = nixpkgs.lib.genAttrs systems;
     forAllUsers = nixpkgs.lib.genAttrs users;
-    forAllShortUsers = nixpkgs.lib.genAttrs shortUsers;
+    # forAllShortUsers = nixpkgs.lib.genAttrs shortUsers;
   in {
     formatter = forAllSystems (sys: nixpkgs.legacyPackages.${sys}.alejandra);
 
@@ -82,18 +83,16 @@
     #   ];
     # });
 
-    homeConfigurations = forAllUsers (user:
-      home-manager.lib.homeManagerConfiguration
-      {
-        # Home-manager requires 'pkgs' instance
-        pkgs = import nixpkgs {
-          legacyPackages = deployments.${user}.system;
-        };
+    homeConfigurations = forAllUsers (user: 
+        home-manager.lib.homeManagerConfiguration
+        {
+        pkgs = let
+            system="x86_64-linux";
+        in
+        nixpkgs.legacyPackages.${system};
 
         extraSpecialArgs = {
-          # inherit nixgl
-          inherit inputs outputs sources;
-          # config.desktop.enable = false;
+            inherit inputs outputs sources;
         };
 
         modules = [
@@ -103,13 +102,40 @@
             else ./hosts/default/home.nix
           )
 
-          (let
-            shortUser = builtins.head (nixpkgs.lib.splitString "@" "${user}");
-          in {
-            home.username = shortUser;
-            home.homeDirectory = "/home/${shortUser}";
-          })
+          {
+            home.username = "${user}";
+            home.homeDirectory = "/home/${user}";
+          }
+
         ];
-      });
+    });
+
+    # homeConfigurations = forAllUsers (user:
+    #   home-manager.lib.homeManagerConfiguration
+    #   {
+    #     # Home-manager requires 'pkgs' instance
+    #     pkgs = import nixpkgs {
+    #       legacyPackages = deployments.${user}.system;
+    #     };
+    #
+    #     extraSpecialArgs = {
+    #       # inherit nixgl
+    #       inherit inputs outputs sources;
+    #       # config.desktop.enable = false;
+    #     };
+    #
+    #     modules = [
+    #       (
+    #         if builtins.pathExists ./hosts/${user}/home.nix
+    #         then ./hosts/${user}/home.nix
+    #         else ./hosts/default/home.nix
+    #       )
+    #
+    #       {
+    #         home.username = "${user}";
+    #         home.homeDirectory = "/home/${user}";
+    #       }
+    #     ];
+    #   });
   };
 }

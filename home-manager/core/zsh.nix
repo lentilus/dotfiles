@@ -17,6 +17,7 @@
       pkgs.glibcLocales
       pkgs.git
       pkgs.zsh
+      pkgs.fzf
       pkgs.zoxide
     ];
 

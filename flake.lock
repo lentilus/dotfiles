@@ -13,8 +13,9 @@
         "type": "github"
       },
       "original": {
-        "id": "flake-utils",
-        "type": "indirect"
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "type": "github"
       }
     },
     "home-manager": {
@@ -38,6 +39,33 @@
         "type": "github"
       }
     },
+    "home-manager-shell": {
+      "inputs": {
+        "flake-utils": [
+          "flake-utils"
+        ],
+        "home-manager": [
+          "home-manager"
+        ],
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1720006481,
+        "narHash": "sha256-Xhd9sRkR1wQoAhpd8viTK9TMIyjZzcL6hAnoKDW5OWE=",
+        "owner": "~dermetfan",
+        "repo": "home-manager-shell",
+        "rev": "cc77f23187dbcf450d67832a448cf25076f2ed90",
+        "type": "sourcehut"
+      },
+      "original": {
+        "owner": "~dermetfan",
+        "ref": "release-24.05",
+        "repo": "home-manager-shell",
+        "type": "sourcehut"
+      }
+    },
     "nixpkgs": {
       "locked": {
         "lastModified": 1720553833,
@@ -58,6 +86,7 @@
       "inputs": {
         "flake-utils": "flake-utils",
         "home-manager": "home-manager",
+        "home-manager-shell": "home-manager-shell",
         "nixpkgs": "nixpkgs"
       }
     },
