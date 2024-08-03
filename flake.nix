@@ -22,7 +22,7 @@
     self,
     nixpkgs,
     home-manager,
-    # home-manager-shell,
+    home-manager-shell,
     flake-utils,
     ...
   } @ inputs: let
@@ -31,7 +31,7 @@
     deployments = {
       "lentilus" = {sys = "x86_64-linux";};
       "foo" = {sys = "x86_64-linux";};
-      "vscode" = {sys = "x86_64-linux";};
+      "vscode" = {sys = "x86_64-linux";}; # for devcontainers
     };
 
     # needed for resolving imports
@@ -42,52 +42,48 @@
 
     systems = nixpkgs.lib.mapAttrsToList (_: conf: conf.sys) deployments;
     users = nixpkgs.lib.mapAttrsToList (usr: _: usr) deployments;
-    # shortUsers = nixpkgs.lib.mapAttrsToList (usr: _: builtins.head (nixpkgs.lib.splitString "@" "${usr}")) deployments;
 
     # attribute maps
     forAllSystems = nixpkgs.lib.genAttrs systems;
     forAllUsers = nixpkgs.lib.genAttrs users;
-    # forAllShortUsers = nixpkgs.lib.genAttrs shortUsers;
   in {
     formatter = forAllSystems (sys: nixpkgs.legacyPackages.${sys}.alejandra);
 
-    # homeManagerModules = import ./modules/home-manager;
-
-    # apps = forAllSystems (
-    #   system: {
-    #     # creates a shell in a temporary home uses
-    #     # config from homeManagerProfiles
-    #     tmp-shell = flake-utils.lib.mkApp {
-    #       drv = home-manager-shell.lib {
-    #         inherit self system;
-    #         args.extraSpecialArgs = {
-    #           # inherit nixgl;
-    #           inherit sources;
-    #         };
-    #       };
-    #     };
-    #   }
-    # );
+    apps = forAllSystems (
+      system: {
+        # creates a shell in a temporary home uses
+        # config from homeManagerProfiles
+        tmp-shell = flake-utils.lib.mkApp {
+          drv = home-manager-shell.lib {
+            inherit self system;
+            args.extraSpecialArgs = {
+              # inherit nixgl;
+              inherit sources;
+            };
+          };
+        };
+      }
+    );
 
     # import everything interesting from home-manager
     # that we want in tmp-shell
     # NOTE: we don't want/have to include everything from hm here!
 
-    # homeManagerProfiles = forAllShortUsers (user: {
-    #   imports = [
-    #     (
-    #       if builtins.pathExists ./hosts/${user}/home.nix
-    #       then ./hosts/${user}/home.nix
-    #       else ./hosts/default/home.nix
-    #     )
-    #   ];
-    # });
+    homeManagerProfiles = forAllUsers (user: {
+      imports = [
+        (
+          if builtins.pathExists ./hosts/${user}/home.nix
+          then ./hosts/${user}/home.nix
+          else ./hosts/default/home.nix
+        )
+      ];
+    });
 
     homeConfigurations = forAllUsers (user: 
         home-manager.lib.homeManagerConfiguration
         {
         pkgs = let
-            system="x86_64-linux";
+            system=deployments.${user}.sys;
         in
         nixpkgs.legacyPackages.${system};
 
@@ -109,33 +105,5 @@
 
         ];
     });
-
-    # homeConfigurations = forAllUsers (user:
-    #   home-manager.lib.homeManagerConfiguration
-    #   {
-    #     # Home-manager requires 'pkgs' instance
-    #     pkgs = import nixpkgs {
-    #       legacyPackages = deployments.${user}.system;
-    #     };
-    #
-    #     extraSpecialArgs = {
-    #       # inherit nixgl
-    #       inherit inputs outputs sources;
-    #       # config.desktop.enable = false;
-    #     };
-    #
-    #     modules = [
-    #       (
-    #         if builtins.pathExists ./hosts/${user}/home.nix
-    #         then ./hosts/${user}/home.nix
-    #         else ./hosts/default/home.nix
-    #       )
-    #
-    #       {
-    #         home.username = "${user}";
-    #         home.homeDirectory = "/home/${user}";
-    #       }
-    #     ];
-    #   });
   };
 }
