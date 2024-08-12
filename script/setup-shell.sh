@@ -2,4 +2,4 @@
 
 # change default shell to zsh
 path="$( which zsh )"
-chsh -s "$path" "$USER"
+sudo chsh -s "$path" "$USER"
