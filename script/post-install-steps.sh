@@ -33,5 +33,9 @@ if [ ! -z "${FLAKEURI}" ] && [ "${FLAKEURI}" != "none" ]; then
     nix profile install "${FLAKEURI}"
 fi
 
+# Install home manager configuration
+nix build "../#homeConfigurations.${USER}.activationPackage"
+./result/activate
+
 # nix-collect-garbage --delete-old
 # nix-store --optimise
