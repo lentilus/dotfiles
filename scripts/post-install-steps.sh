@@ -33,5 +33,5 @@ if [ ! -z "${FLAKEURI}" ] && [ "${FLAKEURI}" != "none" ]; then
     nix profile install "${FLAKEURI}"
 fi
 
-nix-collect-garbage --delete-old
-nix-store --optimise
+# nix-collect-garbage --delete-old
+# nix-store --optimise
