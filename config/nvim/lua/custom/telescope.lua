@@ -6,11 +6,11 @@ require("git-worktree").setup()
 
 telescope.setup({
     extensions = {
-        xettelkasten = {},
+        -- xettelkasten = {},
         git_worktree = {},
     },
 })
-telescope.load_extension("xettelkasten")
+-- telescope.load_extension("xettelkasten")
 telescope.load_extension("git_worktree")
 
 

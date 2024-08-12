@@ -23,13 +23,16 @@
 
     home.file = {
       "${config.xdg.configHome}/zsh".source = ../../config/zsh;
-      ".zshenv".text = ''
+      ".zshenv".text = let
+        configHome = config.xdg.configHome;
+        home = config.home.homeDirectory;
+      in ''
         # move zsh config out of home
-        ZDOTDIR="${config.xdg.configHome}/zsh"
+        ZDOTDIR="${configHome}/zsh"
 
         # normally added by nix installer
-        if [ -e ${config.home.homeDirectory}/.nix-profile/etc/profile.d/nix.sh ]; then
-            . ${config.home.homeDirectory}/.nix-profile/etc/profile.d/nix.sh;
+        if [ -e ${home}/.nix-profile/etc/profile.d/nix.sh ]; then
+            . ${home}/.nix-profile/etc/profile.d/nix.sh;
         fi
       '';
     };

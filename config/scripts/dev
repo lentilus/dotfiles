@@ -1,0 +1,73 @@
+#!/bin/bash
+
+#
+# The purpose of this script is to inject
+# my nix configuration into any devpod
+# it takes about 15min with a prebuilt home-manager flake
+#
+# TODO: fix hardcoded home-manager path
+#
+
+set -e
+
+dotfiles="$HOME/git/nix-dotfiles"
+
+if [ -n "$DEVPOD" ]; then
+    echo "you are already in a devpod. aborting"
+    exit
+fi
+
+echo "checking for exitisting pod..."
+path="$(pwd)"
+filter=".[] | select(.source[] ==\"${path}\").id"
+id=$(devpod list --output json | jq -c "$filter" -r)
+
+if [ -n "$id" ]; then
+    devpod ssh .
+    exit
+fi
+
+read -rp "create new devpod (y/n)?" choice
+case "$choice" in 
+  y|Y ) echo "confirmed";;
+  n|N ) echo "aborting"; exit;;
+  * ) echo "invalid"; exit;;
+esac
+
+devpod up . --ide none
+echo "waiting 5s for the pod to start up..."
+sleep 5
+
+echo "getting id..."
+path="$(pwd)"
+filter=".[] | select(.source[] ==\"${path}\").id"
+id=$(devpod list --output json | jq -c "$filter" -r)
+
+if [ -z "$id" ]; then
+    echo "error: devpod not found"
+    exit
+fi
+
+echo "checking for nix installation"
+ssh "${id}.devpod" 'command -v nix' || exit
+
+echo "building nix configuration"
+nix build "$dotfiles/#homeConfigurations.vscode.activationPackage" --impure -L
+
+tries=0
+max=3
+while [ $tries -le $max ]; do
+    {
+        # for some reason this likes to fail in the process
+        # so we just wrap it with three tries
+        nix copy --no-check-sigs --to ssh-ng:"${id}.devpod" ./result && break
+    }||{
+        echo "[${tries}/${max}] tries..."
+        tries=$(( tries + 1 ))
+    }
+done
+
+echo running activation
+ssh "${id}.devpod" 'hm="$(ls /nix/store | grep "home-manager-generation")"; /nix/store/${hm}/activate'
+
+devpod ssh .

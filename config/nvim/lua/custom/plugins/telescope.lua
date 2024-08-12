@@ -11,9 +11,11 @@ return {
             require("custom.telescope")
         end
     },
+    --[[
     {
         dir = "~/git/xettelkasten.nvim",
         config = function()
+            require("telescope").load_extension("xettelkasten")
             vim.keymap.set("n", "<leader>jn", function() require("xettelkasten.zettel").insert() end)
             vim.keymap.set("n", "<leader>jx", function() require("xettelkasten.zettel").rm() end)
             vim.keymap.set("n", "<leader>jf", function() require("xettelkasten.zettel").grep() end)
@@ -21,4 +23,5 @@ return {
             vim.keymap.set("n", "<leader>jp", function() require("xettelkasten.git").publish() end)
         end
     }
+    --]]
 }
