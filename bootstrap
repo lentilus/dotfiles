@@ -1,4 +1,4 @@
 #!/bin/bash
 # bootsrap home-manager config for devcontainers
-
-sudo ./script/install.sh
+sudo ./script/nix-install.sh
+sudo ./script/setup-shell.sh
