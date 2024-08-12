@@ -34,7 +34,7 @@ if [ ! -z "${FLAKEURI}" ] && [ "${FLAKEURI}" != "none" ]; then
 fi
 
 # Install home manager configuration
-nix build "../#homeConfigurations.${USER}.activationPackage"
+nix build --extra-experimantal-features "nix-command flakes" "../#homeConfigurations.${USER}.activationPackage"
 ./result/activate
 
 # nix-collect-garbage --delete-old
