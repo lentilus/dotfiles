@@ -1,4 +1,4 @@
 #!/bin/bash
 # bootsrap home-manager config for devcontainers
 
-./script/install.sh
+sudo ./script/install.sh
