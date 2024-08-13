@@ -26,6 +26,7 @@
                 echo "copying lazy-lock file"
                 rm -rf ${config.xdg.configHome}/nvim/lazy-lock.json
                 cp ${config.xdg.configHome}/nvim/lazy-lock.json.bak ${config.xdg.configHome}/nvim/lazy-lock.json
+                chmod u+w ${config.xdg.configHome}/nvim/lazy-lock.json
             '';
         };
       };
