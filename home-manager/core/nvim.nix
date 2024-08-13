@@ -19,7 +19,15 @@
       ];
 
       home.file = {
-        "${config.xdg.configHome}/nvim".source = "${sources.dotfiles}/nvim";
+        "${config.xdg.configHome}/nvim" = {
+            source = "${sources.dotfiles}/nvim";
+            recursive = true;
+            onChange = ''
+                echo "copying lazy-lock file"
+                rm -rf ${config.xdg.configHome}/nvim/lazy-lock.json
+                cp ${config.xdg.configHome}/nvim/lazy-lock.json.bak ${config.xdg.configHome}/nvim/lazy-lock.json
+            '';
+        };
       };
   };
 }
