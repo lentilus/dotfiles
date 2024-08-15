@@ -4,7 +4,6 @@
 
 notify-send autostarting programms
 
-gpg-agent &
 foot --server &
 kanshi &
 ydotoold &
@@ -12,4 +11,3 @@ autotiling &
 /usr/libexec/polkit-gnome-authentication-agent-1 &
 nm-applet --indicator &
 flatpak run org.signal.Signal --start-in-tray &
-

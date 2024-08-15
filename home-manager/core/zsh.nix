@@ -23,6 +23,11 @@
 
     home.file = {
       "${config.xdg.configHome}/zsh".source = ../../config/zsh;
+      # ".profile".text = ''
+      #   # start ssh-agent
+      #   eval $(ssh-agent -s)
+      #   trap 'kill $SSH_AGENT_PID' EXIT
+      # '';
       ".zshenv".text = let
         configHome = config.xdg.configHome;
         home = config.home.homeDirectory;

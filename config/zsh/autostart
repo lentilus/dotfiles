@@ -1,8 +1,11 @@
 #!/bin/bash
 if [ -z "$WAYLAND_DISPLAY" ] && [ "$XDG_VTNR" -eq 1 ]; then
-    if command -v nixGL ; then
-        exec nixGL sway
-    else
-        exec sway
-    fi
+    # start ssh-agent
+    eval $(ssh-agent -s)
+    trap 'kill $SSH_AGENT_PID' EXIT
+
+    # start gpg-agent
+    eval $(gpg-agent -s)
+
+    exec sway
 fi
