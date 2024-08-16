@@ -16,6 +16,7 @@
         pkgs.ripgrep
         pkgs.cargo
         pkgs.neovim
+        pkgs.nodejs # to install LSPs
       ];
 
       home.file = {
