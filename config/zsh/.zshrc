@@ -7,7 +7,8 @@
 
 # custom utils
 running_in_docker() { # check if in a pod
-  (awk -F/ '$2 == "docker"' /proc/self/cgroup | read non_empty_input)
+  # (awk -F/ '$2 == "docker"' /proc/self/cgroup | read non_empty_input)
+  [[ -f /.dockerenv ]]
 }
 
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
