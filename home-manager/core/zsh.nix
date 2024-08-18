@@ -22,24 +22,11 @@
     ];
 
     home.file = {
-      "${config.xdg.configHome}/zsh".source = ../../config/zsh;
-      # ".profile".text = ''
-      #   # start ssh-agent
-      #   eval $(ssh-agent -s)
-      #   trap 'kill $SSH_AGENT_PID' EXIT
-      # '';
-      ".zshenv".text = let
-        configHome = config.xdg.configHome;
-        home = config.home.homeDirectory;
-      in ''
-        # move zsh config out of home
-        ZDOTDIR="${configHome}/zsh"
-
-        # normally added by nix installer
-        if [ -e ${home}/.nix-profile/etc/profile.d/nix.sh ]; then
-            . ${home}/.nix-profile/etc/profile.d/nix.sh;
-        fi
-      '';
+      "${config.xdg.configHome}/zsh" = {
+        source = ../../config/zsh;
+        recursive = true;
+      };
+      ".zshenv".source = ../../config/zsh/_.zshenv;
     };
   };
 }

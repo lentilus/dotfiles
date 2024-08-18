@@ -1,21 +1,14 @@
-# enforce XDG specification
-export XDG_DATA_HOME="$HOME/.local/share"
-export XDG_CONFIG_HOME="$HOME/.config"
-export XDG_STATE_HOME="$HOME/.local/state"
-export XDG_CACHE_HOME="$HOME/.cache"
+#
+# ONLY put things related to zsh behaviour in here, such as
+# STYLING,
+# COMPLETIONS,
+# ALIASES,
+#
 
-# locale stuff
-export LANGUAGE="C.UTF-8"
-export LC_ALL="C.UTF-8"
-
-# default tools
-export EDITOR="nvim"
-
-# path
-# typeset -U path # mitigate duplications in path
-export PATH="$HOME/.local/bin:$PATH"
-export PATH="$HOME/.local/scripts:$PATH"
-export PASSWORD_STORE_DIR="$HOME/git/password-store"
+# custom utils
+running_in_docker() { # check if in a pod
+  (awk -F/ '$2 == "docker"' /proc/self/cgroup | read non_empty_input)
+}
 
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
@@ -39,20 +32,18 @@ source "${ZINIT_HOME}/zinit.zsh"
 # Add in Powerlevel10k
 zinit ice depth=1; zinit light romkatv/powerlevel10k
 
-# Add in zsh plugins
+# zsh plugins
 zinit light zsh-users/zsh-syntax-highlighting
 zinit light zsh-users/zsh-completions
 zinit light zsh-users/zsh-autosuggestions
 zinit light Aloxaf/fzf-tab
-[ -z $DEVPOD ] && zinit light kutsan/zsh-system-clipboard
+running_in_docker || zinit light kutsan/zsh-system-clipboard
 
-# Add in snippets
+# snippets
 zinit snippet OMZP::git
 zinit snippet OMZP::sudo
 zinit snippet OMZP::archlinux
-# zinit snippet OMZP::aws
-# zinit snippet OMZP::kubectl
-# zinit snippet OMZP::kubectx
+zinit snippet OMZP::kubectl
 zinit snippet OMZP::command-not-found
 
 # Load completions
@@ -63,10 +54,9 @@ zinit cdreplay -q
 # To customize prompt, run `p10k configure` or edit ~/.config/zsh/.p10k.zsh.
 [[ ! -f ~/.config/zsh/.p10k.zsh ]] || source ~/.config/zsh/.p10k.zsh
 
-
 # History
 HISTSIZE=5000
-HISTFILE=~/.zsh_history
+HISTFILE=${ZDOTDIR}/.zsh_history
 SAVEHIST=$HISTSIZE
 HISTDUP=erase
 setopt appendhistory
@@ -95,13 +85,4 @@ alias c='clear'
 # Shell integrations
 eval "$(fzf --zsh)"
 eval "$(zoxide init --cmd cd zsh)"
-[ -z $DEVPOD ] && eval "$(pyenv init - --no-rehash)"
-
-# FIXME: haskell stuff 
-export PATH="$PATH:$HOME/.ghcup/bin"
-
-# deduplicate path. keep at the bottom
-typeset -U PATH
-
-# auto start os stuff
-source "${ZDOTDIR}/autostart"
+command -v pyenv 2>&1 /dev/null && eval "$(pyenv init - --no-rehash)"
