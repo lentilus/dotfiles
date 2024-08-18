@@ -9,6 +9,9 @@ telescope.setup({
         -- xettelkasten = {},
         git_worktree = {},
     },
+    pickers = {
+        find_files = { hidden = true }
+    }
 })
 -- telescope.load_extension("xettelkasten")
 telescope.load_extension("git_worktree")
