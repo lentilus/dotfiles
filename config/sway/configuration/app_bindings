@@ -40,6 +40,7 @@ bindsym {
     $mod+e workspace 5; exec $term --title=ranger ranger
 
 	$mod+m workspace 4; exec $term --title=neomutt neomutt
+    $mod+z workspace 7; exec mpv $(find $HOME/music -maxdepth 1 -mindepth 1 | rofi -dmenu)
 }
 
 
