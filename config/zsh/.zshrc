@@ -85,4 +85,4 @@ alias c='clear'
 # Shell integrations
 eval "$(fzf --zsh)"
 eval "$(zoxide init --cmd cd zsh)"
-command -v pyenv 2>&1 /dev/null && eval "$(pyenv init - --no-rehash)"
+command -v pyenv > /dev/null && eval "$(pyenv init - --no-rehash)"
