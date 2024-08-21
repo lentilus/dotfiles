@@ -16,6 +16,16 @@
         home-manager.follows = "home-manager";
       };
     };
+    nixgl = {
+      # needed for wrapping gui apps
+      url = "github:nix-community/nixGL";
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+        flake-utils.follows = "flake-utils";
+      };
+    };
+
+    stylix.url = "github:danth/stylix";
   };
 
   outputs = {
@@ -23,7 +33,9 @@
     nixpkgs,
     home-manager,
     home-manager-shell,
+    stylix,
     flake-utils,
+    nixgl,
     ...
   } @ inputs: let
     inherit (self) outputs;
@@ -79,19 +91,19 @@
       ];
     });
 
-    homeConfigurations = forAllUsers (user: 
-        home-manager.lib.homeManagerConfiguration
-        {
-        pkgs = let
-            system=deployments.${user}.sys;
-        in
-        nixpkgs.legacyPackages.${system};
+    homeConfigurations = forAllUsers (user:
+      home-manager.lib.homeManagerConfiguration {
+        pkgs = import nixpkgs {
+          system = deployments.${user}.sys;
+          overlays = [nixgl.overlay];
+        };
 
         extraSpecialArgs = {
-            inherit inputs outputs sources;
+          inherit inputs outputs sources nixgl;
         };
 
         modules = [
+          stylix.homeManagerModules.stylix
           (
             if builtins.pathExists ./hosts/${user}/home.nix
             then ./hosts/${user}/home.nix
@@ -102,8 +114,7 @@
             home.username = "${user}";
             home.homeDirectory = "/home/${user}";
           }
-
         ];
-    });
+      });
   };
 }

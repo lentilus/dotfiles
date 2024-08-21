@@ -9,16 +9,15 @@
   };
 
   config = lib.mkIf config.ranger.enable {
+    home.packages = [
+      pkgs.ranger
+    ];
 
-  home.packages = [
-    pkgs.ranger
-  ];
-
-  home.file = {
-    "${config.xdg.configHome}/ranger" = {
-      source = ../../config/ranger;
-      recursive = true;
+    home.file = {
+      "${config.xdg.configHome}/ranger" = {
+        source = ../../config/ranger;
+        recursive = true;
+      };
     };
-  };
   };
 }

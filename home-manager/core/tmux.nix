@@ -9,17 +9,17 @@
   };
 
   config = lib.mkIf config.tmux.enable {
-      home.packages = [
-        # tpm dependencies
-        pkgs.gawk
-        pkgs.gnused
-        pkgs.git
+    home.packages = [
+      # tpm dependencies
+      pkgs.gawk
+      pkgs.gnused
+      pkgs.git
 
-        pkgs.tmux
-      ];
+      pkgs.tmux
+    ];
 
-      home.file = {
-        "${config.xdg.configHome}/tmux".source = ../../config/tmux;
-      };
+    home.file = {
+      "${config.xdg.configHome}/tmux".source = ../../config/tmux;
+    };
   };
 }
