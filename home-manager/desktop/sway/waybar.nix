@@ -3,17 +3,9 @@
   config,
   ...
 }: {
-  options = {
-    waybar.enable = lib.mkEnableOption "foo";
-  };
-
-  config = lib.mkIf config.waybar.enable {
+  config = lib.mkIf config.sway.enable {
     programs.waybar = {
       enable = true;
-      systemd = {
-        enable = true;
-        target = "sway-session.target";
-      };
       settings.mainBar = {
         spacing = 4;
         modules-left = ["sway/workspaces" "backlight" "idle_inhibitor"];

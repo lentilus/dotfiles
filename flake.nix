@@ -94,8 +94,12 @@
     homeConfigurations = forAllUsers (user:
       home-manager.lib.homeManagerConfiguration {
         pkgs = import nixpkgs {
+          config.allowUnfree = true;
           system = deployments.${user}.sys;
-          overlays = [nixgl.overlay];
+          overlays = [
+            nixgl.overlay
+            (final: prev: {qutebrowser = prev.qutebrowser.override {enableWideVine = true;};})
+          ];
         };
 
         extraSpecialArgs = {

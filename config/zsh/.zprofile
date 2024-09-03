@@ -1,12 +1,16 @@
 # sourced after .zshenv but before .zshrc
 
-if [ -z "$WAYLAND_DISPLAY" ] && [ "$XDG_VTNR" -eq 1 ]; then
-    # start ssh-agent
-    # eval $(ssh-agent -s)
-    # trap 'kill $SSH_AGENT_PID' EXIT
+emulate sh
+. ~/.profile
+emulate zsh
 
-    # start gpg-agent
-    # eval $(gpg-agent -s)
-
-    exec nixGLIntel sway
-fi
+# if [ -z "$WAYLAND_DISPLAY" ] && [ "$XDG_VTNR" -eq 1 ]; then
+#     # start ssh-agent
+#     # eval $(ssh-agent -s)
+#     # trap 'kill $SSH_AGENT_PID' EXIT
+#
+#     # start gpg-agent
+#     # eval $(gpg-agent -s)
+#
+#     exec nixGLIntel sway
+# fi

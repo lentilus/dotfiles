@@ -5,114 +5,128 @@
   sources,
   ...
 }: {
-  options = {
-    sway.enable = lib.mkEnableOption "foo";
-  };
-
   config = lib.mkIf config.sway.enable {
-    home.packages = [
-      # desktop dependencies
-      pkgs.nixgl.nixGLIntel
-      pkgs.dunst
-      pkgs.pipewire
-    ];
-    programs.swayr = {
-        enable = true;
-        systemd.enable = true;
-        systemd.target = "sway-session.target";
-
-    };
-    programs.foot = {
-      enable = true;
-      server.enable = true;
-    };
-    programs.rofi = {
-      enable = true;
-      package = pkgs.rofi-wayland;
-    };
-
-    programs.qutebrowser = {
-      enable = true;
-      settings = {
-        tabs.show = "never";
-        scrolling.bar = "never";
-        content.blocking.method = "both";
-      };
-      keyBindings.normal = {
-       "<Space>ff" = "cmd-set-text -s :tab-select";
-       "<Space>g" = ":tab-give";
-       "<Ctrl+o>" = ":tab-prev";
-       "<Tab>" = ":tab-next";
-       };
-    };
-
-    home.file.".config/qutebrowser/blocked-hosts".text = "www.youtube.com";
-
-    services.gnome-keyring.enable = true;
-    services.gpg-agent = {
-      enable = true;
-      # enableExtraSocket = true; # for GPG-Agent forwarding?
-      # enableSshSupport = true;
-    };
-    services.ssh-agent.enable = true;
-
     wayland.windowManager.sway = {
       enable = true;
-      systemd.enable = true;
       config = let
-
-
         #super key
         mod = "Mod4";
 
         # utils
-        # bar = "${pkgs.waybar}/bin/waybar";
         launcher = "${pkgs.rofi-wayland}/bin/rofi -show drun -G";
+        nm = "${pkgs.networkmanager_dmenu}/bin/networkmanager_dmenu -i";
         screenshot = "${pkgs.grim}/bin/grim -g \"$(${pkgs.slurp}/bin/slurp)\" - | ${pkgs.wl-clipboard}/bin/wl-copy";
         exit = "swaynag -t warning -m 'Exit sway?' -B 'yes' 'swaymsg exit'";
 
         # desktop apps
         terminal = "${pkgs.foot}/bin/footclient";
-        xk_command = '' ':lua require("telescope") require("xettelkasten.zettel").find()' '';
+        xk_command = ''':lua require("telescope") require("xettelkasten.zettel").find()' '';
         # xk = "${terminal} --title=xk ${pkgs.neovim}/bin/nvim -c ${xk_command}";
         mail = "${terminal} --title=mail ${pkgs.neomutt}/bin/neomutt";
         files = "${terminal} --title=files ${pkgs.ranger}/bin/ranger";
         music = "${pkgs.mpv}/bin/mpv $(find $HOME/music -maxdepth 1 -mindepth 1 | ${pkgs.rofi-wayland}/bin/rofi -dmenu)";
 
-        focus = {bin, criteria, workspace}:
-        ''exec ${pkgs.swayr}/bin/swayr next-matching-window '[&& ${criteria} workspace="${workspace}"]' || swaymsg "workspace ${workspace}; exec ${bin}" '';
-        focus_terminal = focus { bin ="${pkgs.foot}/bin/footclient"; criteria=''app_id="footclient"''; workspace="1";};
-        focus_browser = focus { bin="${pkgs.qutebrowser}/bin/qutebrowser"; criteria=''app_id="qutebrowser"''; workspace="2";};
+        focus = {
+          bin,
+          criteria,
+          workspace,
+        }: ''exec ${pkgs.swayr}/bin/swayr next-matching-window '[&& ${criteria} workspace="${workspace}"]' || swaymsg "workspace ${workspace}; exec ${bin}" '';
+        focus_terminal = focus {
+          bin = "${pkgs.foot}/bin/footclient";
+          criteria = ''app_id="footclient"'';
+          workspace = "1";
+        };
+        focus_browser = focus {
+          bin = "${pkgs.qutebrowser}/bin/qutebrowser";
+          criteria = ''app_id="qutebrowser"'';
+          workspace = "2";
+        };
         # focus_xk = focus {bin=xk; criteria=''title="xk"''; workspace="3";};
-        focus_mail = focus {bin=mail; criteria=''title="mail"''; workspace="4";};
-        focus_files = focus {bin=files; criteria=''title="files"''; workspace="5";};
-
+        focus_mail = focus {
+          bin = mail;
+          criteria = ''title="mail"'';
+          workspace = "4";
+        };
+        focus_files = focus {
+          bin = files;
+          criteria = ''title="files"'';
+          workspace = "5";
+        };
       in {
         inherit terminal;
         modifier = "${mod}";
-        # bars = [{command = "${bar}";}];
         bars = [];
 
+        startup = let
+          autostart = pkgs.writeShellScriptBin "sway-autostart" ''
+            procs=""
+            cleanup() {
+                notify-send "killing $procs"
+                kill $procs || exit;
+            }
+
+            trap "cleanup" EXIT
+
+            # trigger the traps of previous instances
+            kill $(pgrep sway-autostart | grep -v $$$) || true
+
+            notify-send "pid: $$$"
+
+            sleep 1 # wait for sway to get ready
+
+            # bar
+            ${pkgs.waybar}/bin/waybar &
+            procs+=" $!"
+
+            # nm-applet
+            ${pkgs.networkmanagerapplet}/bin/nm-applet &
+            procs+=" $!"
+
+            # foot server
+            ${pkgs.foot}/bin/foot --server &
+            procs+=" $!"
+
+            # autotiling
+            ${pkgs.autotiling-rs}/bin/autotiling-rs -w 1 3 4 5 6 7 8 &
+            procs+=" $!"
+
+            # kanshi
+            ${pkgs.kanshi}/bin/kanshi &
+            procs+=" $!"
+
+            notify-send "autostart done"
+
+            # we keep the script alive so we can use its traps.
+            sleep infinity
+          '';
+        in [
+          # {
+          #   command = "${autostart}/bin/sway-autostart";
+          #   always = true;
+          # }
+        ];
+
         ### styling ###
-        gaps = {
-          inner = 8;
-          outer = 0;
-          smartBorders = "on";
-          smartGaps = true;
-        };
+        gaps.smartBorders = "on";
+        # gaps = {
+        #   # inner = 0;
+        #   # outer = 0;
+        #   smartBorders = "on";
+        #   # smartGaps = true;
+        # };
         colors = let
-            colors = config.stylix.base16Scheme;
-            black = "#${colors.base00}";
-            white = "#${colors.base05}";
+          colors = config.stylix.base16Scheme;
+          black = "#${colors.base00}";
+          white = "#${colors.base05}";
         in {
-            focused = {
-                border = lib.mkForce white;
-                childBorder = lib.mkForce white;
-            };
-            unfocused =  {
-                border = lib.mkForce black;
-                childBorder = lib.mkForce black;
-            };
+          focused = {
+            border = lib.mkForce white;
+            childBorder = lib.mkForce white;
+          };
+          unfocused = {
+            border = lib.mkForce black;
+            childBorder = lib.mkForce black;
+          };
         };
         window = {
           border = 2;
@@ -124,16 +138,6 @@
             hide_cursor = "when-typing enable";
           };
         };
-        startup = [
-          {
-            command = "sleep 2; systemctl --user restart kanshi.service";
-            always = true;
-          }
-          {
-            command = "${pkgs.autotiling-rs}/bin/autotiling-rs -w 1 3 4 5 6 7 8";
-            always = true;
-          }
-        ];
         input = {
           # for possible inputs check swaymsg -t get_inputs
           "type:touchpad" = {
@@ -204,6 +208,7 @@
           "${mod}+Space" = "exec ${launcher}";
           "${mod}+Shift+t" = "exec ${screenshot}";
           "${mod}+Shift+q" = "exec ${exit} exit";
+          "${mod}+n" = "exec ${nm}";
 
           "${mod}+Return" = "workspace 1; exec ${terminal}";
           # "${mod}+w" = "workspace 2; exec ${browser}";
