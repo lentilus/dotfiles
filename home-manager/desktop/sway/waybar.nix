@@ -4,13 +4,20 @@
   ...
 }: {
   config = lib.mkIf config.sway.enable {
+
+    programs.waybar.systemd = {
+        enable = true;
+        target = "sway-session.target";
+    };
+    stylix.targets.waybar.enable = false;
     programs.waybar = {
       enable = true;
       settings.mainBar = {
+        position = "bottom";
         spacing = 4;
-        modules-left = ["sway/workspaces" "backlight" "idle_inhibitor"];
-        modules-center = ["sway/window"];
-        modules-right = ["pulseaudio" "cpu" "temperature" "memory" "battery#time" "battery#bat0" "tray" "clock"];
+        modules-left = ["sway/workspaces" "idle_inhibitor"];
+        modules-center = [];
+        modules-right = ["network" "battery" "pulseaudio" "cpu" "memory"  "clock" "tray"];
         "sway/workspaces" = {
           disable-scroll = true;
           format = "{icon}";
@@ -24,52 +31,73 @@
             "7" = "o";
             "8" = "p";
           };
-          persistent_workspaces = {
-            "1" = "[]";
-            "2" = "[]";
-            "3" = "[]";
-            "4" = "[]";
-            "5" = "[]";
-            "6" = "[]";
-            "7" = "[]";
-            "8" = "[]";
-          };
         };
+
+        "network" = {
+            format-wifi =  "W {essid} ({signalStrength}) ";
+            format-ethernet =  "E {cidr} ";
+            format-disconnected =  "offline";
+        };
+
+        "pulseaudio" = {
+            format-muted = "-";
+            format = "VOL {volume} ";
+        };
+        "battery" = {
+            format = "BAT {capacity}% ";
+        };
+
+        "cpu" = {
+            format = "CPU {usage}% ";
+        };
+
+        "memory" = {
+            format = "RAM {usage} GiB ";
+        };
+
+        "clock" = {
+            format = "{:%H:%M %d.%m.%y}";
+        };
+
+        "idle_inhibitor" = {
+            format = "{icon}";
+            format-icons = {
+                activated = "caffeine";
+                deactivated = "-.-";
+            };
+        };
+
       };
       style = let
         colors = config.stylix.base16Scheme;
         font = config.stylix.fonts.monospace.name;
         black = "#${colors.base00}";
-        white = "#${colors.base05}";
+        white = "#${colors.base04}";
       in ''
         * {
             font-family: ${font};
             font-size: 14px;
-            border-bottom-right-radius: 0;
-            border-bottom-left-radius: 0;
-            border-top-right-radius: 0;
-            border-top-left-radius: 0;
-            margin-left: 0;
-            margin-right: 0;
-            transition-duration: 0.0s;
+            border: none;
+            margin: 0;
+            border-radius: 0;
+        }
+
+        window#waybar {
+            background-color: ${black};
+            color: ${white};
         }
 
         #workspaces button {
-          padding: 0 0px;
-          color: ${white};
-          background-color: transparent;
-        }
-
-        #workspaces button.persistent {
-          background-color: transparent;
-          color: transparent;
+            padding: 0 0px;
+            color: ${white};
         }
 
         #workspaces button.focused {
-          background-color: ${white};
-          color: ${black};
+            background-color: ${white};
+            color: ${black};
         }
-      '';
+
+        '';
     };
   };
 }

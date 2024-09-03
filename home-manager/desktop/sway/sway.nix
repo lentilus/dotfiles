@@ -54,66 +54,9 @@
         };
       in {
         inherit terminal;
-        modifier = "${mod}";
         bars = [];
-
-        startup = let
-          autostart = pkgs.writeShellScriptBin "sway-autostart" ''
-            procs=""
-            cleanup() {
-                notify-send "killing $procs"
-                kill $procs || exit;
-            }
-
-            trap "cleanup" EXIT
-
-            # trigger the traps of previous instances
-            kill $(pgrep sway-autostart | grep -v $$$) || true
-
-            notify-send "pid: $$$"
-
-            sleep 1 # wait for sway to get ready
-
-            # bar
-            ${pkgs.waybar}/bin/waybar &
-            procs+=" $!"
-
-            # nm-applet
-            ${pkgs.networkmanagerapplet}/bin/nm-applet &
-            procs+=" $!"
-
-            # foot server
-            ${pkgs.foot}/bin/foot --server &
-            procs+=" $!"
-
-            # autotiling
-            ${pkgs.autotiling-rs}/bin/autotiling-rs -w 1 3 4 5 6 7 8 &
-            procs+=" $!"
-
-            # kanshi
-            ${pkgs.kanshi}/bin/kanshi &
-            procs+=" $!"
-
-            notify-send "autostart done"
-
-            # we keep the script alive so we can use its traps.
-            sleep infinity
-          '';
-        in [
-          # {
-          #   command = "${autostart}/bin/sway-autostart";
-          #   always = true;
-          # }
-        ];
-
-        ### styling ###
+        modifier = "${mod}";
         gaps.smartBorders = "on";
-        # gaps = {
-        #   # inner = 0;
-        #   # outer = 0;
-        #   smartBorders = "on";
-        #   # smartGaps = true;
-        # };
         colors = let
           colors = config.stylix.base16Scheme;
           black = "#${colors.base00}";

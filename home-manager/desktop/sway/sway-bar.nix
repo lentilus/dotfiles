@@ -35,6 +35,7 @@
 
         battery all {
                 format = "%status %percentage %remaining"
+                last_full_capacity = true
         }
 
         disk "/" {

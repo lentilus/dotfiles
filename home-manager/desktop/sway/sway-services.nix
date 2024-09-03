@@ -25,10 +25,6 @@
       ];
     };
 
-    # programs.waybar.systemd = {
-    #     enable = true;
-    #     target = "sway-session.target";
-    # };
 
     programs.swayr = {
       enable = true;

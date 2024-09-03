@@ -8,8 +8,8 @@
     ./sway.nix
     ./sway-services.nix
     ./kanshi.nix
-    ./sway-bar.nix
-    # ./waybar.nix
+    # ./sway-bar.nix
+    ./waybar.nix
   ];
 
   options = {
