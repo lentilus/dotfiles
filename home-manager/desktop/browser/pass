@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 
+# modifyied by lentilus
+# A big Thank-You to Chris Braun!
+
 # SPDX-FileCopyrightText: Chris Braun (cryzed) <cryzed@googlemail.com>
 # SPDX-License-Identifier: GPL-3.0-or-later
-# --> modifyied by lentilus
 
 import argparse
 import enum
@@ -17,7 +19,6 @@ from urllib.parse import urlparse
 
 # additional dependency
 import tldextract
-
 
 USAGE = """The domain of the site has to appear as a segment in the pass path,
 for example: "github.com/cryzed" or "websites/github.com". Alternatively the

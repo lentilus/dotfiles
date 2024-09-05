@@ -15,9 +15,9 @@
       settings.mainBar = {
         position = "bottom";
         spacing = 4;
-        modules-left = ["sway/workspaces" "idle_inhibitor"];
+        modules-left = [ "sway/workspaces" "idle_inhibitor" ];
         modules-center = [];
-        modules-right = ["network" "battery" "pulseaudio" "cpu" "memory"  "clock" "tray"];
+        modules-right = ["network" "battery" "pulseaudio" "cpu" "memory" "clock" "tray"];
         "sway/workspaces" = {
           disable-scroll = true;
           format = "{icon}";
@@ -36,13 +36,14 @@
         "network" = {
             format-wifi =  "W {essid} ({signalStrength}) ";
             format-ethernet =  "E {cidr} ";
-            format-disconnected =  "offline";
+            format-disconnected =  "offline ";
         };
 
         "pulseaudio" = {
-            format-muted = "-";
+            format-muted = "muted ";
             format = "VOL {volume} ";
         };
+
         "battery" = {
             format = "BAT {capacity}% ";
         };
@@ -52,7 +53,7 @@
         };
 
         "memory" = {
-            format = "RAM {usage} GiB ";
+            format = "RAM {used}G ";
         };
 
         "clock" = {
@@ -62,8 +63,8 @@
         "idle_inhibitor" = {
             format = "{icon}";
             format-icons = {
-                activated = "caffeine";
-                deactivated = "-.-";
+                activated = " O.O ";
+                deactivated = " -.- ";
             };
         };
 
@@ -73,6 +74,10 @@
         font = config.stylix.fonts.monospace.name;
         black = "#${colors.base00}";
         white = "#${colors.base04}";
+        red = "#${colors.base08}";
+        brightWhite = "#${colors.base07}";
+        yellow = "#${colors.base0A}";
+        green =  "#${colors.base0B}";
       in ''
         * {
             font-family: ${font};
@@ -95,6 +100,22 @@
         #workspaces button.focused {
             background-color: ${white};
             color: ${black};
+        }
+
+        #network.disconnected {
+            color: ${red};
+        }
+
+        #network:not(.disconnected) {
+            color: ${green};
+        }
+
+        #idle_inhibitor.activated {
+            color: ${brightWhite};
+        }
+
+        #pulseaudio.muted {
+            color: ${yellow};
         }
 
         '';

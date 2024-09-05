@@ -2,7 +2,6 @@
   config,
   pkgs,
   lib,
-  sources,
   ...
 }: {
   options = {
@@ -19,7 +18,7 @@
           ]))
       ];
       dontUnpack = true;
-      installPhase = "install -Dm755 ${./userscripts/pass} $out/bin/pass";
+      installPhase = "install -Dm755 ${./pass} $out/bin/pass";
     };
   in
     lib.mkIf config.browser.enable {
@@ -37,6 +36,8 @@
           "<Ctrl+o>" = ":tab-prev";
           "<Tab>" = ":tab-next";
           "<Space><p>" = ":spawn --userscript ${qutePass}/bin/pass  --username-target secret --username-pattern 'user: (.+)'";
+          "<Space><u><p>" = ":spawn --userscript ${qutePass}/bin/pass --username-only --username-target secret --username-pattern 'user: (.+)'";
+          "<Space><j><p>" = ":spawn --userscript ${qutePass}/bin/pass --password-only --username-target secret --username-pattern 'user: (.+)'";
         };
       };
 

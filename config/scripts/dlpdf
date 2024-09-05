@@ -1,0 +1,7 @@
+#!/bin/bash
+
+# -t sorts by time (latest first)
+selection="$(ls -t "$HOME/Downloads" | grep ".pdf" | rofi -dmenu -i)" 
+
+[ -z "$selection" ] && exit
+zathura "$HOME/Downloads/$selection"

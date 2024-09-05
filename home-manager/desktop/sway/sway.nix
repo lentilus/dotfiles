@@ -20,9 +20,9 @@
 
         # desktop apps
         terminal = "${pkgs.foot}/bin/footclient";
-        xk_command = ''':lua require("telescope") require("xettelkasten.zettel").find()' '';
-        # xk = "${terminal} --title=xk ${pkgs.neovim}/bin/nvim -c ${xk_command}";
-        mail = "${terminal} --title=mail ${pkgs.neomutt}/bin/neomutt";
+        xk_command = ''':lua require(\"telescope\") require(\"xettelkasten.zettel\").find()' '';
+        xk = "${terminal} --title=xk zsh -c \"${pkgs.neovim}/bin/nvim -c ${xk_command}\"";
+        mail = "${terminal} --title=mail zsh -c ${pkgs.neomutt}/bin/neomutt";
         files = "${terminal} --title=files ${pkgs.ranger}/bin/ranger";
         music = "${pkgs.mpv}/bin/mpv $(find $HOME/music -maxdepth 1 -mindepth 1 | ${pkgs.rofi-wayland}/bin/rofi -dmenu)";
 
@@ -118,6 +118,13 @@
           "${mod}+Tab" = "fullscreen";
           "${mod}+r" = "reload";
 
+          # system controls
+	      "XF86AudioRaiseVolume" = "exec pactl set-sink-volume @DEFAULT_SINK@ +5%";
+	      "XF86AudioLowerVolume" =  "exec pactl set-sink-volume @DEFAULT_SINK@ -5%";
+          "XF86AudioMute" = "exec pactl set-sink-mute @DEFAULT_SINK@ toggle";
+	      "XF86MonBrightnessUp" = "exec light -A 5";
+	      "XF86MonBrightnessDown" =  "exec light -U 5";
+
           "${mod}+h" = "focus left";
           "${mod}+j" = "focus down";
           "${mod}+k" = "focus up";
@@ -152,10 +159,13 @@
           "${mod}+Shift+t" = "exec ${screenshot}";
           "${mod}+Shift+q" = "exec ${exit} exit";
           "${mod}+n" = "exec ${nm}";
+          "${mod}+g" = "exec dlpdf";
+
+
 
           "${mod}+Return" = "workspace 1; exec ${terminal}";
           # "${mod}+w" = "workspace 2; exec ${browser}";
-          # "${mod}+x" = "workspace 3; exec ${xk}";
+          "${mod}+x" = "workspace 3; exec ${xk}";
           # "${mod}+m" = "workspace 4; exec ${mail}";
           # "${mod}+e" = "workspace 5; exec ${files}";
           # "${mod}+z" = "workspace 7; exec ${music}";

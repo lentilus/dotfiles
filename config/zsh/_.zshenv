@@ -14,6 +14,10 @@ export LANGUAGE="C.UTF-8"
 export LC_ALL="C.UTF-8"
 # export PAGER="foo"
 export EDITOR="nvim"
+export BROWSER="qutebrowser"
+
+# otherwise terminal waits 1s to check for escape sequence
+export ESCDELAY=0
 
 export PASSWORD_STORE_DIR="$HOME/git/password-store"
 
