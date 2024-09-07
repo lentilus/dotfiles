@@ -8,47 +8,24 @@
     mail.enable = lib.mkEnableOption "enable mutt mail client";
   };
 
-  config = lib.mkIf config.mail.enable {
-    # only to exposed the config
-    # responsible for reading settings from email.acconts
-    programs.mbsync = {
+    
+  config =  lib.mkIf config.mail.enable {
+
+    # we need pass enable to retrieve imap secrets
+    programs.mbsync = assert config.pass.enable == true; { 
       enable = true;
     };
 
-    # systemd service
-    services.mbsync = {
+    services.mbsync = { # systemd service
         enable = true;
         postExec = ''
-        ${pkgs.notmuch}/bin/notmuch new
+            ${pkgs.notmuch}/bin/notmuch new
         '';
     };
 
-    home.packages = [
-        pkgs.urlscan
-    ];
-
-
-    programs.neomutt = {
+    programs.msmtp = {
       enable = true;
-      # vimKeys = true;
-      sidebar = {
-        enable = true;
-      };
-      extraConfig = builtins.readFile ./neomuttrc;
-
-      binds = [
-        # {
-        #   map = [ "attach" ];
-        #   key = "<return>";
-        #   action = "view-mailcap";
-        # }
-      ];
     };
-
-    home.file.".mailcap".text = ''
-        text/html; lynx -assume_charset=%{charset} -display_charset=utf-8 -dump -width=1024 %s; nametemplate=%s.html; copiousoutput;
-        text/plain; cat %s; copiousoutput
-    '';
 
     programs.notmuch = {
         enable = true;
@@ -64,6 +41,30 @@
         };
     };
 
+    home.file.aercNmQueries = {
+        target = "${config.xdg.configHome}/aerc/nm-qmap";
+        text = ''
+            INBOX = tag:inbox and not tag:archived
+            unread = tag:unread
+            lentilus = tag:lentilus
+            linus = tag:linus
+            shopping = tag:shopping
+        '';
+    };
+
+    programs.aerc = {
+        enable = true;
+        # we don't store any credentials, so this is fine!
+        extraConfig.general.unsafe-accounts-conf = true;
+        extraAccounts.mailboxtest = {
+            source = "notmuch://~/Maildir";
+            from = "lentilus <lentilus@mailbox.org>";
+            query-map = "~/${config.home.file.aercNmQueries.target}";
+            outgoing = "${pkgs.msmtp}/bin/msmtp";
+            # maildir-store = "~/Maildir";
+        };
+    };
+
     accounts.email.accounts.mailbox = {
       address = "linus.preusser@mailbox.org";
       realName = "lentilus";
@@ -73,7 +74,8 @@
       smtp.host = "smtp.mailbox.org";
 
       maildir.path = "mailbox";
-      passwordCommand = "PASSWORD_STORE_DIR=~/git/password-store; pass show communication/mailbox";
+      # passwordCommand = "PASSWORD_STORE_DIR=~/git/password-store; pass show communication/mailbox";
+      passwordCommand = "${pkgs.pass}/bin/pass show communication/mailbox";
       primary = true;
 
       aliases = [
@@ -89,33 +91,9 @@
             timeout = 3600;
         };
       };
-      neomutt = {
-        enable = true;
-      };
-      notmuch = {
-        enable = true;
-        neomutt = {
-            enable = true;
-            virtualMailboxes = [
-                {
-                    name = "unread";
-                    query = "tag:unread";
-                }
-                {
-                    name = "shopping";
-                    query = "tag:shopping";
-                }
-                {
-                    name = "lentilus";
-                    query = "tag:lentilus";
-                }
-                {
-                    name = "linus";
-                    query = "tag:linus";
-                }
-            ];
-        };
-      };
+
+      notmuch.enable = true;
+      msmtp.enable = true;
     };
   };
 }

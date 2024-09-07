@@ -8,6 +8,10 @@
   config = lib.mkIf config.sway.enable {
     wayland.windowManager.sway = {
       enable = true;
+      extraConfig = ''
+        # added here, for lowest priority, as we use foot for other apps like ranger as well. 
+        assign [app_id="foot"] workspace number 1
+      '';
       config = let
         #super key
         mod = "Mod4";
@@ -26,37 +30,20 @@
         files = "${terminal} --title=files ${pkgs.ranger}/bin/ranger";
         music = "${pkgs.mpv}/bin/mpv $(find $HOME/music -maxdepth 1 -mindepth 1 | ${pkgs.rofi-wayland}/bin/rofi -dmenu)";
 
-        focus = {
-          bin,
-          criteria,
-          workspace,
-        }: ''exec ${pkgs.swayr}/bin/swayr next-matching-window '[&& ${criteria} workspace="${workspace}"]' || swaymsg "workspace ${workspace}; exec ${bin}" '';
-        focus_terminal = focus {
-          bin = "${pkgs.foot}/bin/footclient";
-          criteria = ''app_id="footclient"'';
-          workspace = "1";
-        };
-        focus_browser = focus {
-          bin = "${pkgs.qutebrowser}/bin/qutebrowser";
-          criteria = ''app_id="qutebrowser"'';
-          workspace = "2";
-        };
-        # focus_xk = focus {bin=xk; criteria=''title="xk"''; workspace="3";};
-        focus_mail = focus {
-          bin = mail;
-          criteria = ''title="mail"'';
-          workspace = "4";
-        };
-        focus_files = focus {
-          bin = files;
-          criteria = ''title="files"'';
-          workspace = "5";
-        };
+        focus = bin: ca: ws: ''exec ${pkgs.swayr}/bin/swayr next-matching-window '[&& ${ca} workspace="${ws}"]' || swaymsg "workspace ${ws}; exec ${bin}" '';
+        focus_terminal = focus "${pkgs.foot}/bin/footclient" ''app_id="footclient"'';
+        focus_browser = focus "${pkgs.qutebrowser}/bin/qutebrowser" ''app_id="qutebrowser"'';
+        focus_xk = focus xk ''title="xk"'';
+        focus_mail = focus mail ''title="mail"'';
+        focus_files = focus files ''title="files"'';
       in {
         inherit terminal;
         bars = [];
         modifier = "${mod}";
         gaps.smartBorders = "on";
+        focus.newWindow = "urgent"; # focus is broken...
+        workspaceAutoBackAndForth = true;
+        # we run a script to focus windows on urgent
         colors = let
           colors = config.stylix.base16Scheme;
           black = "#${colors.base00}";
@@ -144,12 +131,15 @@
           "${mod}+Shift+o" = "move container to workspace number 7";
           "${mod}+Shift+p" = "move container to workspace number 8";
 
-          "${mod}+a" = focus_terminal;
-          "${mod}+s" = focus_browser;
-          # "${mod}+d" = focus_xk;
+          "${mod}+a" = focus_terminal "1";
+          "${mod}+s" = focus_browser "2";
+          # "${mod}+a" = "workspace number 1";
+          # "${mod}+s" = "workspace number 2";
+
+          # "${mod}+d" = focus_xk {ws = 3;};
           "${mod}+d" = "workspace number 3";
-          "${mod}+f" = focus_mail;
-          "${mod}+u" = focus_files;
+          "${mod}+f" = focus_mail "4";
+          "${mod}+u" = focus_files "5";
           "${mod}+i" = "workspace number 6";
           "${mod}+o" = "workspace number 7";
           "${mod}+p" = "workspace number 8";
@@ -161,9 +151,8 @@
           "${mod}+n" = "exec ${nm}";
           "${mod}+g" = "exec dlpdf";
 
-
-
-          "${mod}+Return" = "workspace 1; exec ${terminal}";
+          # "${mod}+Return" = "workspace 1; exec ${terminal}";
+          "${mod}+Return" = "exec ${terminal}";
           # "${mod}+w" = "workspace 2; exec ${browser}";
           "${mod}+x" = "workspace 3; exec ${xk}";
           # "${mod}+m" = "workspace 4; exec ${mail}";

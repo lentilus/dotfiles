@@ -7,7 +7,7 @@ export XDG_CACHE_HOME="${XDG_CACHE_HOME:-$HOME/.cache}"
 # PATH
 export PATH="$HOME/.local/bin:$PATH"
 export PATH="$HOME/.local/scripts:$PATH"
-export PATH="$PATH:$HOME/.ghcup/bin"
+# export PATH="$PATH:$HOME/.ghcup/bin"
 typeset -U PATH
 
 export LANGUAGE="C.UTF-8"
@@ -19,7 +19,7 @@ export BROWSER="qutebrowser"
 # otherwise terminal waits 1s to check for escape sequence
 export ESCDELAY=0
 
-export PASSWORD_STORE_DIR="$HOME/git/password-store"
+# export PASSWORD_STORE_DIR="$HOME/git/password-store"
 
 # move zsh config out of home
 ZDOTDIR="${XDG_CONFIG_HOME}/zsh"

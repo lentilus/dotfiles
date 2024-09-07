@@ -58,6 +58,55 @@
     # attribute maps
     forAllSystems = nixpkgs.lib.genAttrs systems;
     forAllUsers = nixpkgs.lib.genAttrs users;
+
+    hmProfileShell = user: {
+        pkgs = import nixpkgs {
+          config.allowUnfree = true;
+          system = deployments.${user}.sys;
+          overlays = [
+            nixgl.overlay
+            (final: prev: {qutebrowser = prev.qutebrowser.override {enableWideVine = true;};})
+          ];
+        };
+
+        imports = [
+          stylix.homeManagerModules.stylix
+          (
+            if builtins.pathExists ./hosts/${user}/home.nix
+            then ./hosts/${user}/home.nix
+            else ./hosts/default/home.nix
+          )
+        ];
+      };
+
+    hmProfile = user: {
+        pkgs = import nixpkgs {
+          config.allowUnfree = true;
+          system = deployments.${user}.sys;
+          overlays = [
+            nixgl.overlay
+            (final: prev: {qutebrowser = prev.qutebrowser.override {enableWideVine = true;};})
+          ];
+        };
+
+        extraSpecialArgs = {
+          # inherit inputs outputs sources nixgl;
+          inherit inputs sources nixgl;
+        };
+
+        modules = [
+          stylix.homeManagerModules.stylix
+          (
+            if builtins.pathExists ./hosts/${user}/home.nix
+            then ./hosts/${user}/home.nix
+            else ./hosts/default/home.nix
+          )
+           {
+             home.username = "${user}";
+             home.homeDirectory = "/home/${user}";
+           }
+        ];
+      };
   in {
     formatter = forAllSystems (sys: nixpkgs.legacyPackages.${sys}.alejandra);
 
@@ -70,8 +119,10 @@
             inherit self system;
             args.extraSpecialArgs = {
               # inherit nixgl;
-              inherit sources;
+              # inherit inputs outputs sources nixgl;
+              inherit inputs sources stylix nixgl;
             };
+
           };
         };
       }
@@ -81,44 +132,11 @@
     # that we want in tmp-shell
     # NOTE: we don't want/have to include everything from hm here!
 
-    homeManagerProfiles = forAllUsers (user: {
-      imports = [
-        (
-          if builtins.pathExists ./hosts/${user}/home.nix
-          then ./hosts/${user}/home.nix
-          else ./hosts/default/home.nix
-        )
-      ];
-    });
+    homeManagerProfiles = forAllUsers (user: hmProfileShell);
 
     homeConfigurations = forAllUsers (user:
-      home-manager.lib.homeManagerConfiguration {
-        pkgs = import nixpkgs {
-          config.allowUnfree = true;
-          system = deployments.${user}.sys;
-          overlays = [
-            nixgl.overlay
-            (final: prev: {qutebrowser = prev.qutebrowser.override {enableWideVine = true;};})
-          ];
-        };
-
-        extraSpecialArgs = {
-          inherit inputs outputs sources nixgl;
-        };
-
-        modules = [
-          stylix.homeManagerModules.stylix
-          (
-            if builtins.pathExists ./hosts/${user}/home.nix
-            then ./hosts/${user}/home.nix
-            else ./hosts/default/home.nix
-          )
-
-          {
-            home.username = "${user}";
-            home.homeDirectory = "/home/${user}";
-          }
-        ];
-      });
+      home-manager.lib.homeManagerConfiguration
+        (hmProfile user)
+      );
   };
 }

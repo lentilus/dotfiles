@@ -10,6 +10,7 @@
     ./browser
     # ./calendar # TODO
     ./stylix.nix
+    ./pass.nix
   ];
 
   options = {
@@ -25,6 +26,7 @@
 
     browser.enable = lib.mkDefault true;
     mail.enable = lib.mkDefault true;
+    pass.enable = lib.mkDefault true;
     sway.enable = lib.mkDefault true;
     stylix.enable = lib.mkDefault true;
   };

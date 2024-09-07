@@ -34,8 +34,8 @@
         };
 
         "network" = {
-            format-wifi =  "W {essid} ({signalStrength}) ";
-            format-ethernet =  "E {cidr} ";
+            format-wifi =  "{signalStrength}: {essid}";
+            format-ethernet =  "eth: {cidr} ";
             format-disconnected =  "offline ";
         };
 
@@ -46,6 +46,7 @@
 
         "battery" = {
             format = "BAT {capacity}% ";
+            format-charging = "charging {capacity}% ";
         };
 
         "cpu" = {

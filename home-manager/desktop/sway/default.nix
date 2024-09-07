@@ -18,6 +18,8 @@
 
   config = lib.mkIf config.sway.enable {
     # we source .profile on login in .zprofile
+    kanshi.enable = lib.mkDefault true;
+
     home.file.".profile".text = ''
       # start sway if not running
       if [ -z "$WAYLAND_DISPLAY" ] && [ "$XDG_VTNR" -eq 1 ]; then
