@@ -57,7 +57,7 @@
       homeManagerModules = import ./modules/home-manager;
 
       homeConfigurations = {
-
+        # must be built --impure as it needs access to $HOME, $USER
         default = home-manager.lib.homeManagerConfiguration {
           pkgs = nixpkgs.legacyPackages.x86_64-linux;
           extraSpecialArgs = {inherit inputs outputs;};
