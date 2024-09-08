@@ -1,7 +1,7 @@
 {
   config,
   pkgs,
-  sources,
+  outputs,
   lib,
   ...
 }: {
@@ -21,7 +21,7 @@
 
     home.file = {
       "${config.xdg.configHome}/nvim" = {
-        source = "${sources.dotfiles}/nvim";
+        source = "${outputs.sources.dotfiles}/nvim";
         recursive = true;
         onChange = ''
           echo "copying lazy-lock file"

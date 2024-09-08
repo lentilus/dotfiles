@@ -30,6 +30,9 @@ fi
 # Source/Load zinit
 source "${ZINIT_HOME}/zinit.zsh"
 
+# better vim keybindings
+zinit ice depth=1; zinit light jeffreytse/zsh-vi-mode
+
 # Add in Powerlevel10k
 zinit ice depth=1; zinit light romkatv/powerlevel10k
 
@@ -75,15 +78,19 @@ zstyle ':completion:*' menu no
 zstyle ':fzf-tab:complete:cd:*' fzf-preview 'ls --color $realpath'
 zstyle ':fzf-tab:complete:__zoxide_z:*' fzf-preview 'ls --color $realpath'
 
-# # Keybindings
-bindkey -v # vim keybindings
+# bindkey -v # we use a plugin instead
 
 # Aliases
 alias ls='ls -A --color'
 alias vi='nvim'
 alias c='clear'
 
-# Shell integrations
+# # Shell integrations
 eval "$(fzf --zsh)"
+
+# better cd
 eval "$(zoxide init --cmd cd zsh)"
-command -v pyenv > /dev/null && eval "$(pyenv init - --no-rehash)"
+
+# if pyenv is available, initialize it
+command -v pyenv >/dev/null && \
+    eval "$(pyenv init - --no-rehash)"

@@ -9,7 +9,7 @@
     wayland.windowManager.sway = {
       enable = true;
       extraConfig = ''
-        # added here, for lowest priority, as we use foot for other apps like ranger as well. 
+        # added here, for lowest priority, as we use foot for other apps like ranger as well.
         assign [app_id="foot"] workspace number 1
       '';
       config = let
@@ -26,7 +26,7 @@
         terminal = "${pkgs.foot}/bin/footclient";
         xk_command = ''':lua require(\"telescope\") require(\"xettelkasten.zettel\").find()' '';
         xk = "${terminal} --title=xk zsh -c \"${pkgs.neovim}/bin/nvim -c ${xk_command}\"";
-        mail = "${terminal} --title=mail zsh -c ${pkgs.neomutt}/bin/neomutt";
+        mail = "${terminal} --title=mail zsh -c ${pkgs.aerc}/bin/aerc";
         files = "${terminal} --title=files ${pkgs.ranger}/bin/ranger";
         music = "${pkgs.mpv}/bin/mpv $(find $HOME/music -maxdepth 1 -mindepth 1 | ${pkgs.rofi-wayland}/bin/rofi -dmenu)";
 
@@ -106,11 +106,11 @@
           "${mod}+r" = "reload";
 
           # system controls
-	      "XF86AudioRaiseVolume" = "exec pactl set-sink-volume @DEFAULT_SINK@ +5%";
-	      "XF86AudioLowerVolume" =  "exec pactl set-sink-volume @DEFAULT_SINK@ -5%";
+          "XF86AudioRaiseVolume" = "exec pactl set-sink-volume @DEFAULT_SINK@ +5%";
+          "XF86AudioLowerVolume" = "exec pactl set-sink-volume @DEFAULT_SINK@ -5%";
           "XF86AudioMute" = "exec pactl set-sink-mute @DEFAULT_SINK@ toggle";
-	      "XF86MonBrightnessUp" = "exec light -A 5";
-	      "XF86MonBrightnessDown" =  "exec light -U 5";
+          "XF86MonBrightnessUp" = "exec light -A 5";
+          "XF86MonBrightnessDown" = "exec light -U 5";
 
           "${mod}+h" = "focus left";
           "${mod}+j" = "focus down";

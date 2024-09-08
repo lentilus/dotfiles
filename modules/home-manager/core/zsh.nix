@@ -2,6 +2,7 @@
   config,
   pkgs,
   lib,
+  outputs,
   ...
 }: {
   options = {
@@ -23,10 +24,10 @@
 
     home.file = {
       "${config.xdg.configHome}/zsh" = {
-        source = ../../config/zsh;
+        source = "${outputs.sources.dotfiles}/zsh";
         recursive = true;
       };
-      ".zshenv".source = ../../config/zsh/_.zshenv;
+      ".zshenv".source = "${outputs.sources.dotfiles}/zsh/_.zshenv";
     };
   };
 }

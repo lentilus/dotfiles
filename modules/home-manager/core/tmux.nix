@@ -2,6 +2,7 @@
   config,
   pkgs,
   lib,
+  outputs,
   ...
 }: {
   options = {
@@ -19,7 +20,7 @@
     ];
 
     home.file = {
-      "${config.xdg.configHome}/tmux".source = ../../config/tmux;
+      "${config.xdg.configHome}/tmux".source = "${outputs.sources.dotfiles}/tmux";
     };
   };
 }

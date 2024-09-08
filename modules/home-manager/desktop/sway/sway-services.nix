@@ -25,7 +25,6 @@
       ];
     };
 
-
     programs.swayr = {
       enable = true;
       systemd.enable = true;
@@ -69,9 +68,9 @@
 
       Service = {
         ExecStart = ''
-            sh -c "sleep 1 && ${pkgs.sway}/bin/swaymsg -mt subscribe '[\"window\"]' | \
-            ${pkgs.jq}/bin/jq --unbuffered 'select(.change == \"urgent\").container.id' | \
-            xargs -I{} ${pkgs.sway}/bin/swaymsg '[con_id={} urgent=latest]' focus >/dev/null"
+          sh -c "sleep 1 && ${pkgs.sway}/bin/swaymsg -mt subscribe '[\"window\"]' | \
+          ${pkgs.jq}/bin/jq --unbuffered 'select(.change == \"urgent\").container.id' | \
+          xargs -I{} ${pkgs.sway}/bin/swaymsg '[con_id={} urgent=latest]' focus >/dev/null"
         '';
       };
     };

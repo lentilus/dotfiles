@@ -42,7 +42,7 @@
       };
 
       home.file.".config/qutebrowser/blocked-hosts".text = ''
-        www.youtube.com
       '';
+      # www.youtube.com
     };
 }

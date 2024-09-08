@@ -1,7 +1,7 @@
 {
   config,
   pkgs,
-  sources,
+  outputs,
   lib,
   ...
 }: {
@@ -23,7 +23,7 @@
     ];
 
     home.file = {
-      "${config.xdg.configHome}/git".source = "${sources.dotfiles}/git";
+      "${config.xdg.configHome}/git".source = "${outputs.sources.dotfiles}/git";
     };
   };
 }

@@ -2,7 +2,7 @@
   config,
   lib,
   pkgs,
-  sources,
+  outputs,
   ...
 }: {
   imports = [
@@ -18,6 +18,6 @@
   ranger.enable = lib.mkDefault true;
 
   home.file = {
-    "${config.home.homeDirectory}/.local/scripts".source = sources.scripts;
+    "${config.home.homeDirectory}/.local/scripts".source = outputs.sources.scripts;
   };
 }

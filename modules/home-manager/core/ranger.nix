@@ -2,6 +2,7 @@
   config,
   pkgs,
   lib,
+  outputs,
   ...
 }: {
   options = {
@@ -15,7 +16,7 @@
 
     home.file = {
       "${config.xdg.configHome}/ranger" = {
-        source = ../../config/ranger;
+        source = "${outputs.sources.dotfiles}/ranger";
         recursive = true;
       };
     };

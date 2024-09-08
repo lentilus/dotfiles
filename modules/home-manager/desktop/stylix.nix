@@ -6,7 +6,7 @@
 }: {
   stylix = {
     polarity = "dark";
-    image = ../../wallpaper.jpg;
+    image = ../../../wallpaper.jpg;
     # base16Scheme = "${pkgs.base16-schemes}/share/themes/catppuccin-mocha.yaml";
 
     # by hardcoding we can access the colors elsewhere

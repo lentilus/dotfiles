@@ -32,111 +32,49 @@
     self,
     nixpkgs,
     home-manager,
-    home-manager-shell,
-    stylix,
-    flake-utils,
-    nixgl,
     ...
   } @ inputs: let
     inherit (self) outputs;
 
-    deployments = {
-      "lentilus" = {sys = "x86_64-linux";};
-      "foo" = {sys = "x86_64-linux";};
-      "vscode" = {sys = "x86_64-linux";}; # for devcontainers
-    };
+    systems = [
+      "x86_64-linux"
+      # "aarch64-darwin"
+      # "x86_64-darwin"
+    ];
 
-    # needed for resolving imports
+    forAllSystems = nixpkgs.lib.genAttrs systems;
+
     sources = {
       dotfiles = ./config;
       scripts = ./config/scripts;
     };
+  in
+     {
+      inherit sources;
 
-    systems = nixpkgs.lib.mapAttrsToList (_: conf: conf.sys) deployments;
-    users = nixpkgs.lib.mapAttrsToList (usr: _: usr) deployments;
+      formatter = forAllSystems (system: nixpkgs.legacyPackages.${system}.alejandra);
 
-    # attribute maps
-    forAllSystems = nixpkgs.lib.genAttrs systems;
-    forAllUsers = nixpkgs.lib.genAttrs users;
+      homeManagerModules = import ./modules/home-manager;
 
-    hmProfileShell = user: {
-        pkgs = import nixpkgs {
-          config.allowUnfree = true;
-          system = deployments.${user}.sys;
-          overlays = [
-            nixgl.overlay
-            (final: prev: {qutebrowser = prev.qutebrowser.override {enableWideVine = true;};})
+      homeConfigurations = {
+
+        default = home-manager.lib.homeManagerConfiguration {
+          pkgs = nixpkgs.legacyPackages.x86_64-linux;
+          extraSpecialArgs = {inherit inputs outputs;};
+          modules = [
+            ./home-manager
           ];
         };
 
-        imports = [
-          stylix.homeManagerModules.stylix
-          (
-            if builtins.pathExists ./hosts/${user}/home.nix
-            then ./hosts/${user}/home.nix
-            else ./hosts/default/home.nix
-          )
-        ];
-      };
-
-    hmProfile = user: {
-        pkgs = import nixpkgs {
-          config.allowUnfree = true;
-          system = deployments.${user}.sys;
-          overlays = [
-            nixgl.overlay
-            (final: prev: {qutebrowser = prev.qutebrowser.override {enableWideVine = true;};})
+        "lentilus@fedora" = home-manager.lib.homeManagerConfiguration {
+          pkgs = nixpkgs.legacyPackages.x86_64-linux;
+          extraSpecialArgs = {inherit inputs outputs;};
+          modules = [
+            ./home-manager/lentilus.nix
+            # ./hosts/lentilus/home.nix
           ];
         };
 
-        extraSpecialArgs = {
-          # inherit inputs outputs sources nixgl;
-          inherit inputs sources nixgl;
-        };
-
-        modules = [
-          stylix.homeManagerModules.stylix
-          (
-            if builtins.pathExists ./hosts/${user}/home.nix
-            then ./hosts/${user}/home.nix
-            else ./hosts/default/home.nix
-          )
-           {
-             home.username = "${user}";
-             home.homeDirectory = "/home/${user}";
-           }
-        ];
       };
-  in {
-    formatter = forAllSystems (sys: nixpkgs.legacyPackages.${sys}.alejandra);
-
-    apps = forAllSystems (
-      system: {
-        # creates a shell in a temporary home uses
-        # config from homeManagerProfiles
-        tmp-shell = flake-utils.lib.mkApp {
-          drv = home-manager-shell.lib {
-            inherit self system;
-            args.extraSpecialArgs = {
-              # inherit nixgl;
-              # inherit inputs outputs sources nixgl;
-              inherit inputs sources stylix nixgl;
-            };
-
-          };
-        };
-      }
-    );
-
-    # import everything interesting from home-manager
-    # that we want in tmp-shell
-    # NOTE: we don't want/have to include everything from hm here!
-
-    homeManagerProfiles = forAllUsers (user: hmProfileShell);
-
-    homeConfigurations = forAllUsers (user:
-      home-manager.lib.homeManagerConfiguration
-        (hmProfile user)
-      );
-  };
+    };
 }

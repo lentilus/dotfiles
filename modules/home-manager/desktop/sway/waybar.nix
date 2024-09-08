@@ -4,10 +4,9 @@
   ...
 }: {
   config = lib.mkIf config.sway.enable {
-
     programs.waybar.systemd = {
-        enable = true;
-        target = "sway-session.target";
+      enable = true;
+      target = "sway-session.target";
     };
     stylix.targets.waybar.enable = false;
     programs.waybar = {
@@ -15,7 +14,7 @@
       settings.mainBar = {
         position = "bottom";
         spacing = 4;
-        modules-left = [ "sway/workspaces" "idle_inhibitor" ];
+        modules-left = ["sway/workspaces" "idle_inhibitor"];
         modules-center = [];
         modules-right = ["network" "battery" "pulseaudio" "cpu" "memory" "clock" "tray"];
         "sway/workspaces" = {
@@ -34,41 +33,40 @@
         };
 
         "network" = {
-            format-wifi =  "{signalStrength}: {essid}";
-            format-ethernet =  "eth: {cidr} ";
-            format-disconnected =  "offline ";
+          format-wifi = "{signalStrength}: {essid}";
+          format-ethernet = "eth: {cidr} ";
+          format-disconnected = "offline ";
         };
 
         "pulseaudio" = {
-            format-muted = "muted ";
-            format = "VOL {volume} ";
+          format-muted = "muted ";
+          format = "VOL {volume} ";
         };
 
         "battery" = {
-            format = "BAT {capacity}% ";
-            format-charging = "charging {capacity}% ";
+          format = "BAT {capacity}% ";
+          format-charging = "charging {capacity}% ";
         };
 
         "cpu" = {
-            format = "CPU {usage}% ";
+          format = "CPU {usage}% ";
         };
 
         "memory" = {
-            format = "RAM {used}G ";
+          format = "RAM {used}G ";
         };
 
         "clock" = {
-            format = "{:%H:%M %d.%m.%y}";
+          format = "{:%H:%M %d.%m.%y}";
         };
 
         "idle_inhibitor" = {
-            format = "{icon}";
-            format-icons = {
-                activated = " O.O ";
-                deactivated = " -.- ";
-            };
+          format = "{icon}";
+          format-icons = {
+            activated = " O.O ";
+            deactivated = " -.- ";
+          };
         };
-
       };
       style = let
         colors = config.stylix.base16Scheme;
@@ -78,7 +76,7 @@
         red = "#${colors.base08}";
         brightWhite = "#${colors.base07}";
         yellow = "#${colors.base0A}";
-        green =  "#${colors.base0B}";
+        green = "#${colors.base0B}";
       in ''
         * {
             font-family: ${font};
@@ -119,7 +117,7 @@
             color: ${yellow};
         }
 
-        '';
+      '';
     };
   };
 }
