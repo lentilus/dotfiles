@@ -33,7 +33,7 @@
     settings.experimental-features = ["nix-command" "flakes"];
   };
 
-  home.username = "lentiluspreusser";
+  home.username = "linuspreusser";
   home.homeDirectory = "/Users/linuspreusser";
 
   programs.home-manager.enable = true;
