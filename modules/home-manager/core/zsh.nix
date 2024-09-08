@@ -15,7 +15,7 @@
       pkgs.coreutils
 
       pkgs.locale
-      pkgs.glibcLocales
+      # pkgs.glibcLocales
       pkgs.git
       pkgs.zsh
       pkgs.fzf

@@ -93,4 +93,4 @@ eval "$(zoxide init --cmd cd zsh)"
 
 # if pyenv is available, initialize it
 command -v pyenv >/dev/null && \
-    eval "$(pyenv init - --no-rehash)"
+    eval "$(pyenv init - zsh --no-rehash)"

@@ -38,7 +38,7 @@
 
     systems = [
       "x86_64-linux"
-      # "aarch64-darwin"
+      "aarch64-darwin"
       # "x86_64-darwin"
     ];
 
@@ -71,6 +71,16 @@
           extraSpecialArgs = {inherit inputs outputs;};
           modules = [
             ./home-manager/lentilus.nix
+            # ./hosts/lentilus/home.nix
+          ];
+        };
+
+        # for work
+        linuspreusser = home-manager.lib.homeManagerConfiguration {
+          pkgs = nixpkgs.legacyPackages.aarch64-darwin;
+          extraSpecialArgs = {inherit inputs outputs;};
+          modules = [
+            ./home-manager/macos.nix
             # ./hosts/lentilus/home.nix
           ];
         };
