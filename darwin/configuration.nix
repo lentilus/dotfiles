@@ -6,5 +6,6 @@
   pkgs,
   ...
 }: {
+    service.nix-daemon.enable = true;
     nixpkgs.hostPlatform = "aarch64-darwin";
 }
