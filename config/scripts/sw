@@ -1,0 +1,7 @@
+#!/bin/bash
+
+# a script for swtiching git worktrees
+
+path="$(git worktree list | fzf | awk '{print $1;}')"
+cd "$path" || echo failed
+

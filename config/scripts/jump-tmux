@@ -4,6 +4,8 @@
 # Heavily inspired by ThePrimagen's tmux sessionizer
 #
 
+selecthook='git rev-parse --is-bare-repository && sw; nvim -c "normal -"; $SHELL'
+
 targets="$HOME/git $HOME/git/dotfiles.git/master/desktop $HOME/git/dotfiles.git/master/dev-dotfiles/"
 
 if [[ $# -eq 1 ]]; then
@@ -23,7 +25,7 @@ fi
 selected_name=$(basename "$selected" | tr . _)
 
 if ! tmux has-session -t="$selected_name" 2> /dev/null; then
-    tmux new-session -ds "$selected_name" -c "$selected" 'nvim -c "normal -"; $SHELL'
+    tmux new-session -ds "$selected_name" -c "$selected" "$selecthook"
 fi
 
 tmux switch-client -t "$selected_name"
