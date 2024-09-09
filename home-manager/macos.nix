@@ -7,15 +7,16 @@
   ...
 }: {
   imports = [
-    # inputs.stylix.homeManagerModules.stylix
+    inputs.stylix.homeManagerModules.stylix
     outputs.homeManagerModules.core
-    # outputs.homeManagerModules.dev
-    # outputs.homeManagerModules.desktop
+    outputs.homeManagerModules.dev
+    outputs.homeManagerModules.desktop
+    outputs.homeManagerModules.darwinDesktop
   ];
 
-  # desktop.enable = false;
-  # browser.enable = true;
-  # dev.enable = true;
+  desktop.enable = false;
+  dev.enable = true;
+  stylix.enable = true;
 
   nixpkgs = {
     # overlays = [
