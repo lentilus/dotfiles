@@ -10,8 +10,9 @@ export PATH="$HOME/.local/scripts:$PATH"
 # export PATH="$PATH:$HOME/.ghcup/bin"
 typeset -U PATH
 
-export LANGUAGE="C.UTF-8"
-export LC_ALL="C.UTF-8"
+# export LANGUAGE="C.UTF-8"
+# export LC_ALL="C.UTF-8"
+#
 # export PAGER="foo"
 export EDITOR="nvim"
 export BROWSER="qutebrowser"
