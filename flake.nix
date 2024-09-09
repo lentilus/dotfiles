@@ -4,10 +4,17 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.05";
     flake-utils.url = "github:numtide/flake-utils";
+
+    darwin = {
+        url = "github:lnl7/nix-darwin/master";
+        inputs.nixpkgs.follows = "nixpkgs";
+     };
+
     home-manager = {
       url = "github:nix-community/home-manager/release-24.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
     home-manager-shell = {
       url = "sourcehut:~dermetfan/home-manager-shell/release-24.05";
       inputs = {
@@ -16,6 +23,7 @@
         home-manager.follows = "home-manager";
       };
     };
+    
     nixgl = {
       # needed for wrapping gui apps
       url = "github:nix-community/nixGL";
@@ -86,5 +94,13 @@
         };
 
       };
+
+      darwinConfigurations."JAAI-MBP-LP" = inputs.darwin.lib.darwinSystem {
+        modules = [
+            ./darwin/configuration.nix
+        ];
+        specialArgs = {inherit inputs outputs;};
+      };
+
     };
 }
