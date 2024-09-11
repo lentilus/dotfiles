@@ -8,6 +8,7 @@
 }: {
   imports = [
     inputs.stylix.homeManagerModules.stylix
+    inputs.mac-app-util.homeManagerModules.default
     outputs.homeManagerModules.core
     outputs.homeManagerModules.dev
     outputs.homeManagerModules.desktop
