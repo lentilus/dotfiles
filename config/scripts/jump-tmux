@@ -4,9 +4,8 @@
 # Heavily inspired by ThePrimagen's tmux sessionizer
 #
 
-selecthook='sw; nvim -c "normal -"; $SHELL'
-
-targets="$HOME/git $HOME/git/dotfiles.git/master/desktop $HOME/git/dotfiles.git/master/dev-dotfiles/"
+targets="$HOME/git"
+selecthook='nvim -c "normal -"; $SHELL'
 
 if [[ $# -eq 1 ]]; then
     selected=$1
