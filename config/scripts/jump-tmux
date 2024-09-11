@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/bash
 
 #
 # Heavily inspired by ThePrimagen's tmux sessionizer
