@@ -12,7 +12,8 @@
   services.skhd = {
     enable = true;
     skhdConfig = ''
-        cmd + shift - return : open -n -a "kitty"
+        cmd + a : open -n -a "kitty"
+        cmd + s : open -n -a "qutebrowser"
     '';
   };
 }
