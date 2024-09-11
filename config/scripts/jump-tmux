@@ -4,18 +4,19 @@
 # Heavily inspired by ThePrimagen's tmux sessionizer
 #
 
-targets="$HOME/git"
+target="$HOME/git"
 selecthook='nvim -c "normal -"; $SHELL'
 
 if [[ $# -eq 1 ]]; then
     selected=$1
 else
-    cd || exit
+    cd "$HOME/git" || exit
     # we want word splitting here
-    selected=$(find $targets -maxdepth 1 -type d -exec sh -c \
-        'i="$1"; realpath -s --relative-to=. "$i"' shell {} \; | fzf)
-fi
+    # selected=$(find $targets -maxdepth 1 -type d -exec sh -c \
+    #     'i="$1"; realpath -s --relative-to=. "$i"' shell {} \; | fzf)
 
+    selected=$(find $target -maxdepth 1 -type d -printf '%P\n' | fzf)
+fi
 
 if [[ -z $selected ]]; then
     exit 0
