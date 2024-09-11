@@ -8,10 +8,17 @@
 }: {
   imports = [
     inputs.stylix.homeManagerModules.stylix
+    inputs.sops-nix.homeManagerModules.sops
     outputs.homeManagerModules.core
     outputs.homeManagerModules.dev
     outputs.homeManagerModules.desktop
+    outputs.homeManagerModules.ssh
   ];
+
+  # sops = {
+  #   defaultSopsFile = ../secrets/secrets.yaml;
+  #   format = "yaml";
+  # };
 
   nixpkgs = {
     overlays = [
@@ -37,4 +44,5 @@
 
   programs.home-manager.enable = true;
   home.stateVersion = "24.05"; # dont just change
+  targets.genericLinux.enable = true;
 }

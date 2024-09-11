@@ -3,4 +3,5 @@
   dev = import ./dev;
   desktop = import ./desktop;
   darwinDesktop = import ./darwinDesktop;
+  ssh = import ./ssh;
 }

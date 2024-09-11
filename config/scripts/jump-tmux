@@ -4,7 +4,7 @@
 # Heavily inspired by ThePrimagen's tmux sessionizer
 #
 
-selecthook='git rev-parse --is-bare-repository && sw; nvim -c "normal -"; $SHELL'
+selecthook='sw; nvim -c "normal -"; $SHELL'
 
 targets="$HOME/git $HOME/git/dotfiles.git/master/desktop $HOME/git/dotfiles.git/master/dev-dotfiles/"
 
