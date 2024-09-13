@@ -48,7 +48,8 @@
           tmux switch-client -t "$selected_name"
         '';
       in ''
-        unbind C-f bind-key -n C-f run-shell "tmux neww ${jump}/bin/jump-tmux"
+        unbind C-f
+        bind-key -n C-f run-shell "tmux neww ${jump}/bin/jump-tmux"
         bind -n M-H split-window -h -c "#{pane_current_path}"
         bind -n M-V split-window -v -c "#{pane_current_path}"
 
