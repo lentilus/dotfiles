@@ -53,9 +53,10 @@
         bind -n M-H split-window -h -c "#{pane_current_path}"
         bind -n M-V split-window -v -c "#{pane_current_path}"
 
-        set -g default-terminal "tmux-256color"
-        set -as terminal-overrides ",tmux*:Tc"
+        set -g default-terminal "xterm-256color"
+        set-option -ga terminal-overrides ",xterm-256color:Tc
       '';
+        # set -as terminal-overrides ",tmux*:Tc"
     };
   };
 }
