@@ -54,7 +54,17 @@
     programs.aerc = {
       enable = true;
       # we don't store any credentials, so this is fine!
-      extraConfig.general.unsafe-accounts-conf = true;
+      extraConfig = {
+        general.unsafe-accounts-conf = true;
+        filters = {
+          "text/plain" = "colorize";
+          "text/calendar" = "calendar";
+          "message/delivery-status" = "colorize";
+          "message/rfc822" = "colorize";
+          "text/html" = "w3m -T text/html -cols $(tput cols) -dump -o display_image=false -o display_link_number=true";
+        };
+      };
+
       extraAccounts.mailboxtest = {
         source = "notmuch://~/Maildir";
         from = "lentilus <lentilus@mailbox.org>";
