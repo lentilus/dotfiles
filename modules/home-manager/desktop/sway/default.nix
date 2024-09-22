@@ -16,7 +16,6 @@
   };
 
   config = lib.mkIf config.sway.enable {
-
     # start sway on tty login
     programs.zsh.profileExtra = ''
       # start sway if not running
@@ -27,6 +26,5 @@
 
     # we source .profile on login in .zprofile
     kanshi.enable = lib.mkDefault true;
-
   };
 }

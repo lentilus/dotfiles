@@ -15,6 +15,7 @@
       keyMode = "vi";
       prefix = "C-Space";
       shell = "${pkgs.zsh}/bin/zsh";
+      terminal = "screen-256color";
       newSession = true;
       escapeTime = 0;
       plugins = [
@@ -24,14 +25,13 @@
         jump = pkgs.writeShellScriptBin "jump-tmux" ''
           #!/bin/bash
           # Heavily inspired by ThePrimagen's tmux sessionizer
-
           target="$HOME/git"
           selecthook='nvim -c "normal -"; $SHELL'
+          cd "$HOME/git" || exit
 
           if [[ $# -eq 1 ]]; then
               selected=$1
           else
-              cd "$HOME/git" || exit
               selected=$(${pkgs.findutils}/bin/find $target -maxdepth 1 -type d -printf '%P\n' | fzf)
           fi
 
@@ -48,15 +48,14 @@
           tmux switch-client -t "$selected_name"
         '';
       in ''
+        # enable RGB capabilities for all terminals
+        set -ag terminal-overrides ",*:RGB"
+
         unbind C-f
         bind-key -n C-f run-shell "tmux neww ${jump}/bin/jump-tmux"
         bind -n M-H split-window -h -c "#{pane_current_path}"
         bind -n M-V split-window -v -c "#{pane_current_path}"
-
-        set -g default-terminal "xterm-256color"
-        set-option -ga terminal-overrides ",xterm-256color:Tc
       '';
-        # set -as terminal-overrides ",tmux*:Tc"
     };
   };
 }

@@ -40,7 +40,7 @@
 
     # fix spotlight and stuff on darwin
     mac-app-util = {
-        url = "github:hraban/mac-app-util";
+      url = "github:hraban/mac-app-util";
     };
 
     stylix.url = "github:danth/stylix";

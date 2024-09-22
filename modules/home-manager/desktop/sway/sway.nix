@@ -138,7 +138,8 @@
 
           # "${mod}+d" = focus_xk {ws = 3;};
           "${mod}+d" = "workspace number 3";
-          "${mod}+f" = focus_mail "4";
+          # "${mod}+f" = focus_mail "4";
+          "${mod}+f" = "workspace number 4";
           "${mod}+u" = focus_files "5";
           "${mod}+i" = "workspace number 6";
           "${mod}+o" = "workspace number 7";
