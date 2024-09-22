@@ -32,11 +32,11 @@
 
       ### not working ... ###
       shellAliases = {
-            vi = "nvim";
-            c = "clear";
-            ls = "ls -A --color"; 
-            sw = "cd $(git worktree list | fzf | awk '{print $1;}')";
-          };
+        vi = "nvim";
+        c = "clear";
+        ls = "ls -A --color";
+        sw = "cd $(git worktree list | fzf | awk '{print $1;}')";
+      };
 
       plugins = [
         {

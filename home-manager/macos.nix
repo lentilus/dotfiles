@@ -19,6 +19,14 @@
   dev.enable = true;
   stylix.enable = true;
 
+  browser.enable = true;
+
+  # just provide some silly alternative i.e. hello
+  programs.qutebrowser.package = pkgs.hello;
+  home.packages = [
+    # pkgs.rofi
+  ];
+
   nixpkgs = {
     # overlays = [
     #   inputs.nixgl.overlay
@@ -30,13 +38,13 @@
     };
   };
 
-  nix = {
-    package = pkgs.nix;
-    settings.experimental-features = ["nix-command" "flakes"];
-  };
+  # nix = {
+  #   package = pkgs.nix;
+  #   settings.experimental-features = ["nix-command" "flakes"];
+  # };
 
-  home.username = "linuspreusser";
-  home.homeDirectory = "/Users/linuspreusser";
+  # home.username = "linuspreusser";
+  # home.homeDirectory = "/Users/linuspreusser";
 
   programs.home-manager.enable = true;
   home.stateVersion = "24.05"; # dont just change

@@ -40,7 +40,7 @@
 
     # fix spotlight and stuff on darwin
     mac-app-util = {
-        url = "github:hraban/mac-app-util";
+      url = "github:hraban/mac-app-util";
     };
 
     stylix.url = "github:danth/stylix";
@@ -106,8 +106,17 @@
     darwinConfigurations."JAAI-MBP-LP" = inputs.darwin.lib.darwinSystem {
       modules = [
         ./darwin/configuration.nix
+        inputs.home-manager.darwinModules.home-manager
+        {
+          home-manager.useGlobalPkgs = true;
+          home-manager.useUserPackages = true;
+          home-manager.users.linuspreusser = import ./home-manager/macos.nix;
+          home-manager.extraSpecialArgs = {inherit inputs outputs;};
+        }
       ];
       specialArgs = {inherit inputs outputs;};
     };
+
+    # darwinPackages = self.darwinConfigurations."JAAI-MBP-LP".pkgs;
   };
 }
