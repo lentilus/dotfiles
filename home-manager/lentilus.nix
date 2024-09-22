@@ -15,11 +15,6 @@
     outputs.homeManagerModules.ssh
   ];
 
-  # sops = {
-  #   defaultSopsFile = ../secrets/secrets.yaml;
-  #   format = "yaml";
-  # };
-
   nixpkgs = {
     overlays = [
       inputs.nixgl.overlay
@@ -43,6 +38,5 @@
   home.homeDirectory = "/home/lentilus";
 
   programs.home-manager.enable = true;
-  home.stateVersion = "24.05"; # dont just change
   targets.genericLinux.enable = true;
 }

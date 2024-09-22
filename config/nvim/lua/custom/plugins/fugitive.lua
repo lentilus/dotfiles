@@ -13,7 +13,7 @@ return {
             group = Fugitive,
             pattern = "*",
             callback = function()
-                print("hello from fugitive")
+                -- print("hello from fugitive")
                 if vim.bo.ft ~= "fugitive" then
                     return
                 end

@@ -29,6 +29,8 @@
           tabs.background = false;
           scrolling.bar = "never";
           content.blocking.method = "both";
+          window.hide_decoration = true;
+          content.javascript.clipboard = "access";
         };
         keyBindings.normal = {
           "<Space>ff" = "cmd-set-text -s :tab-select";
