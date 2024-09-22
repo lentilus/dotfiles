@@ -18,5 +18,5 @@
   home.username = builtins.getEnv "USER";
   home.homeDirectory = builtins.getEnv "HOME";
 
-  home.stateVersion = "24.05"; # dont just change
+  # home.stateVersion = "24.05"; # dont just change
 }

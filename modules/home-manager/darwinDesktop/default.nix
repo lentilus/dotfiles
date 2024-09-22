@@ -8,7 +8,7 @@
 }: {
   programs.kitty = {
     extraConfig = ''
-        hide_window_decorations yes
+      hide_window_decorations yes
     '';
     enable = true;
   };

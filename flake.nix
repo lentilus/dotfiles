@@ -79,7 +79,7 @@
         pkgs = nixpkgs.legacyPackages.x86_64-linux;
         extraSpecialArgs = {inherit inputs outputs;};
         modules = [
-          ./home-manager
+          ./home-manager/default
         ];
       };
 
@@ -88,7 +88,6 @@
         extraSpecialArgs = {inherit inputs outputs;};
         modules = [
           ./home-manager/lentilus.nix
-          # ./hosts/lentilus/home.nix
         ];
       };
 
@@ -98,7 +97,6 @@
         extraSpecialArgs = {inherit inputs outputs;};
         modules = [
           ./home-manager/macos.nix
-          # ./hosts/lentilus/home.nix
         ];
       };
     };
@@ -116,7 +114,5 @@
       ];
       specialArgs = {inherit inputs outputs;};
     };
-
-    # darwinPackages = self.darwinConfigurations."JAAI-MBP-LP".pkgs;
   };
 }

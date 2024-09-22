@@ -16,47 +16,31 @@
   programs.zsh.enable = true;
   system.defaults.universalaccess.reduceMotion = true;
 
-
   # make macos usable xD
   services.skhd = let
-  picker = pkgs.writeShellScriptBin "mofi" ''
-    #!/bin/bash
+    # a little rofi alternative
+    picker = pkgs.writeShellScriptBin "mofi" ''
+      #!/bin/bash
 
-    # Create a temporary file to store the input and the selection
-    inputfile=$(mktemp)
-    tempfile=$(mktemp)
+      inputfile=$(mktemp)
+      tempfile=$(mktemp)
 
-    # Write input to the temporary file
-    cat <&0 | sed 's/\x1b\[[0-9;]*m//g' > "$inputfile"
-
-    # Launch `fzf` in a new foot terminal window
-    foot sh -c "fzf < $inputfile > $tempfile"
-
-    # Wait for the foot process to complete
-    wait
-
-    # Retrieve the selection from the temporary file
-    selected=$(cat "$tempfile")
-
-    # Clean up the temporary files
-    rm "$inputfile"
-    rm "$tempfile"
-
-    # Use the selected value
-    if [ -n "$selected" ]; then
-        echo "$selected"
-    fi
-  '';
-in
-  {
+      cat <&0 | sed 's/\x1b\[[0-9;]*m//g' > "$inputfile"
+      kitty sh -c "fzf < $inputfile > $tempfile"
+      wait
+      selected=$(cat "$tempfile")
+      rm "$inputfile"
+      rm "$tempfile"
+      if [ -n "$selected" ]; then
+          echo "$selected"
+      fi
+    '';
+  in {
     enable = true;
     skhdConfig = ''
-        cmd - a : open -a "kitty"
-        cmd - s : open -a "qutebrowser" 
-        cmd - d : open -a "Microsoft Teams"
+      cmd - a : open -a "kitty"
+      cmd - s : open -a "qutebrowser"
+      cmd - d : open -a "Microsoft Teams"
     '';
   };
-
-
-
 }
