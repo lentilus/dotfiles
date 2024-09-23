@@ -1,6 +1,7 @@
 {
   lib,
   config,
+  pkgs,
   ...
 }: {
   config = lib.mkIf config.sway.enable {
@@ -11,12 +12,19 @@
     stylix.targets.waybar.enable = false;
     programs.waybar = {
       enable = true;
+
       settings.mainBar = {
         position = "bottom";
         spacing = 4;
-        modules-left = ["sway/workspaces" "idle_inhibitor"];
+        modules-left = ["sway/workspaces" "idle_inhibitor" "custom/mail"];
         modules-center = [];
         modules-right = ["network" "battery" "pulseaudio" "cpu" "memory" "clock" "tray"];
+        "custom/mail" = {
+            exec = "${pkgs.notmuch}/bin/notmuch count tag:unread";
+            interval = 60;
+            format = "MAIL {}";
+            tooltip = true;
+          };
         "sway/workspaces" = {
           disable-scroll = true;
           format = "{icon}";
