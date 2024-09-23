@@ -60,5 +60,10 @@
 
     programs.zoxide.enable = true;
     programs.pyenv.enable = true;
+
+    home.sessionVariables = {
+      EDITOR = "nvim";
+      VISUAL = "nvim";
+    };
   };
 }
