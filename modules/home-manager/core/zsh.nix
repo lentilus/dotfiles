@@ -19,7 +19,6 @@
       pkgs.git
       pkgs.zsh
       pkgs.fzf
-      pkgs.zoxide
     ];
 
     # shell
@@ -30,7 +29,6 @@
       syntaxHighlighting.enable = true;
       defaultKeymap = "viins"; # nice vim mode
 
-      ### not working ... ###
       shellAliases = {
         vi = "nvim";
         c = "clear";
@@ -49,17 +47,15 @@
           };
         }
       ];
+      initExtraFirst = ''
+        fpath+=(${pkgs.pure-prompt}/share/zsh/site-functions)
+        autoload -U promptinit; promptinit
+        prompt pure
+      '';
 
       initExtra = ''
         path+="$HOME/.local/scripts"
       '';
-    };
-
-    # pure prompt
-    programs.starship.enable = true;
-    xdg.configFile."starship.toml".source = pkgs.fetchurl {
-      url = "https://starship.rs/presets/toml/pure-preset.toml";
-      sha256 = "sha256-VNXJnddygda7TYuyA/2+fFs12AMwmf33Gs2PLBixIvE=";
     };
 
     programs.zoxide.enable = true;
