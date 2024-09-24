@@ -60,7 +60,7 @@
         if [[ -n "$DEVPOD" && -z "$TMUX" ]]; then
             export LC_ALL="en_US.UTF-8"
             export LANG="en_US.UTF-8"
-            ${pkgs.tmux}/bin/tmux -u attach || ${pkgs.tmux}/bin/tmux -u
+            # ${pkgs.tmux}/bin/tmux -u attach || ${pkgs.tmux}/bin/tmux -u
         fi
       '';
     };
