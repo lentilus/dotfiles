@@ -18,10 +18,6 @@ in {
 
   home.file."${sshConfigDir}/hm_config" = {
     text = ''
-      Host github.com
-        HostName github.com
-        IdentityFile ${sshConfigDir}/github
-
       Host *
         ForwardAgent yes
         AddKeysToAgent no
@@ -33,6 +29,10 @@ in {
         ControlMaster no
         ControlPath ~/.ssh/master-%r@%n:%p
         ControlPersist no
+
+      Host github.com
+        HostName github.com
+        IdentityFile ${sshConfigDir}/github
     '';
     onChange = ''
       res=$(cat ${sshConfigDir}/config | grep "Include hm_config")
