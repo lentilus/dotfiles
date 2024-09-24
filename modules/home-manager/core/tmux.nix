@@ -18,6 +18,7 @@
       terminal = "screen-256color";
       newSession = true;
       escapeTime = 0;
+      aggressiveResize = true;
       plugins = [
         pkgs.tmuxPlugins.vim-tmux-navigator
       ];
