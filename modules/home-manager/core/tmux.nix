@@ -49,8 +49,9 @@
           tmux switch-client -t "$selected_name"
         '';
       in ''
-        # enable RGB capabilities for all terminals
-        set -ag terminal-overrides ",*:RGB"
+        # enable true color for all terminals
+        set -ag terminal-overrides ",*:Tc"
+        set -ag terminal-overrides ',*:cud1=\E[1B'
 
         unbind C-f
         bind-key -n C-f run-shell "tmux neww ${jump}/bin/jump-tmux"
