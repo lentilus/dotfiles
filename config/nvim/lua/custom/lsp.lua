@@ -12,7 +12,7 @@ require("mason-lspconfig").setup({
         "lua_ls",
         "pyright",
         "bashls",
-        "gopls",
+        -- "gopls",
     },
     handlers = {
         function(server_name) -- default handler (optional)
