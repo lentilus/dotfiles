@@ -13,6 +13,8 @@ vim.opt.backup = false
 vim.opt.compatible = false
 vim.opt.expandtab = true
 vim.opt.scrolloff = 8
+vim.opt.termguicolors = true
+vim.opt.undofile = true
 
 -- indentation
 vim.opt.tabstop = 4
