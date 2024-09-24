@@ -55,6 +55,13 @@
 
       initExtra = ''
         path+="$HOME/.local/scripts"
+
+        # launch tmux in devpod
+        if [[ -n "$DEVPOD" ]]; then
+            if [[ -z "$TMUX" ]]; then
+                ${pkgs.tmux}/bin/tmux attach || ${pkgs.tmux}/bin/tmux
+            fi
+        fi
       '';
     };
 
