@@ -18,6 +18,7 @@
       pkgs.fzf
       pkgs.git
       pkgs.lean4
+      pkgs.kubectl
       # pkgs.haskellPackages.ghcup
       (pkgs.nerdfonts.override {fonts = ["JetBrainsMono"];})
     ];
