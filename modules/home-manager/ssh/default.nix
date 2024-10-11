@@ -30,6 +30,10 @@ in {
         ControlPath ~/.ssh/master-%r@%n:%p
         ControlPersist no
 
+      # Host *.devpod
+      #   RequestTTY yes
+      #   RemoteCommand /home/vscode/.nix-profile/bin/zsh -c /home/vscode/.nix-profile/bin/tmux
+
       Host github.com
         HostName github.com
         IdentityFile ${sshConfigDir}/github
@@ -46,6 +50,11 @@ in {
 
   services.gpg-agent = {
     enable = true;
-    enableSshSupport = true;
+    # enableSshSupport = true;
+  };
+
+  # temporary
+  services.ssh-agent = {
+    enable = true;
   };
 }
