@@ -20,11 +20,11 @@
         modules-center = [];
         modules-right = ["network" "battery" "pulseaudio" "cpu" "memory" "clock" "tray"];
         "custom/mail" = {
-            exec = "${pkgs.notmuch}/bin/notmuch count tag:unread";
-            interval = 60;
-            format = "MAIL {}";
-            tooltip = true;
-          };
+          exec = "${pkgs.notmuch}/bin/notmuch count tag:unread";
+          interval = 60;
+          format = "MAIL {}";
+          tooltip = true;
+        };
         "sway/workspaces" = {
           disable-scroll = true;
           format = "{icon}";
@@ -54,6 +54,10 @@
         "battery" = {
           format = "BAT {capacity}% ";
           format-charging = "charging {capacity}% ";
+          states = {
+            warning = 30;
+            critical = 15;
+          };
         };
 
         "cpu" = {
@@ -125,6 +129,22 @@
             color: ${yellow};
         }
 
+        @keyframes blink {
+            to {
+                background-color: #ffffff;
+                color: #000000;
+            }
+        }
+
+        #battery.critical:not(.charging) {
+            background-color: #f53c3c;
+            color: #ffffff;
+            animation-name: blink;
+            animation-duration: 0.5s;
+            animation-timing-function: steps(12);
+            animation-iteration-count: infinite;
+            animation-direction: alternate;
+        }
       '';
     };
   };
