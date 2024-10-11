@@ -17,6 +17,7 @@
 
   nixpkgs = {
     overlays = [
+      inputs.xk.overlay 
       inputs.nixgl.overlay
       (final: prev: {qutebrowser = prev.qutebrowser.override {enableWideVine = true;};})
     ];
@@ -28,6 +29,7 @@
 
   desktop.enable = true;
   dev.enable = true;
+  xk.enable = true;
 
   nix = {
     package = pkgs.nix;

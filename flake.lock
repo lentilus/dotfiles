@@ -438,7 +438,8 @@
         "nixgl": "nixgl",
         "nixpkgs": "nixpkgs_2",
         "sops-nix": "sops-nix",
-        "stylix": "stylix"
+        "stylix": "stylix",
+        "xk": "xk"
       }
     },
     "sops-nix": {
@@ -517,6 +518,27 @@
       "original": {
         "owner": "nix-systems",
         "repo": "default",
+        "type": "github"
+      }
+    },
+    "xk": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1728652832,
+        "narHash": "sha256-yA0XDJiSmyi6LQf2KfqRUz80O9N35ssNlgoueapCHCw=",
+        "owner": "lentilus",
+        "repo": "xk",
+        "rev": "4cafd691b5ef5763005ff81b5e3373c2ef397a01",
+        "type": "github"
+      },
+      "original": {
+        "owner": "lentilus",
+        "ref": "develop",
+        "repo": "xk",
         "type": "github"
       }
     }
