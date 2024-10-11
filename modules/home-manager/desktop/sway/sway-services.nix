@@ -32,6 +32,7 @@
     };
 
     programs.foot = {
+      settings.main.term = "xterm-256color";
       enable = true;
       server.enable = true; # we start it from sway
     };
