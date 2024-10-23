@@ -7,6 +7,14 @@ local capabilities = vim.tbl_deep_extend(
 )
 
 require("mason").setup()
+require("mason-tool-installer").setup({
+    ensure_installed = {
+        "black",
+        "stylua",
+    },
+    run_on_start = true,
+}
+)
 require("mason-lspconfig").setup({
     ensure_installed = {
         "lua_ls",
