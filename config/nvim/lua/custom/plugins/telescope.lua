@@ -1,17 +1,18 @@
 return {
-    {
-        'nvim-telescope/telescope.nvim',
-        branch = '0.1.x',
-        dependencies = {
-            'nvim-lua/plenary.nvim',
-            'ThePrimeagen/git-worktree.nvim',
-            { dir = "~/git/xettelkasten.nvim" }
-        },
-        config = function()
-            require("custom.telescope")
-        end
-    },
-    --[[
+	{
+		"nvim-telescope/telescope.nvim",
+		branch = "0.1.x",
+		dependencies = {
+			"nvim-lua/plenary.nvim",
+			"ThePrimeagen/git-worktree.nvim",
+			{ dir = "~/git/xk.nvim.git/develop" },
+		},
+		config = function()
+			require("custom.telescope")
+			require("xettelkasten")
+		end,
+	},
+	--[[
     {
         dir = "~/git/xettelkasten.nvim",
         config = function()
