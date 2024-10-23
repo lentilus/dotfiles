@@ -528,11 +528,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1728652832,
-        "narHash": "sha256-yA0XDJiSmyi6LQf2KfqRUz80O9N35ssNlgoueapCHCw=",
+        "lastModified": 1729705433,
+        "narHash": "sha256-iqbglqK4pfotSSuZzvRJ5sGwhQrzJg41mLQp5Pz3bdY=",
         "owner": "lentilus",
         "repo": "xk",
-        "rev": "4cafd691b5ef5763005ff81b5e3373c2ef397a01",
+        "rev": "dde02339dc455200f578ad4a9c4a0dca62cd13ac",
         "type": "github"
       },
       "original": {
