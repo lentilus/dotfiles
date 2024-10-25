@@ -19,6 +19,7 @@
       newSession = true;
       escapeTime = 0;
       aggressiveResize = true;
+      secureSocket = false; # to survive logout
       plugins = [
         pkgs.tmuxPlugins.vim-tmux-navigator
       ];
@@ -54,8 +55,10 @@
 
         unbind C-f
         bind-key -n C-f run-shell "tmux neww ${jump}/bin/jump-tmux"
+        bind-key -n M-Space previous-window
         bind -n M-H split-window -h -c "#{pane_current_path}"
         bind -n M-V split-window -v -c "#{pane_current_path}"
+        bind  c  new-window      -c "#{pane_current_path}"
       '';
     };
   };
