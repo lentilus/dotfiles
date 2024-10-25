@@ -150,7 +150,7 @@
           "${mod}+Shift+t" = "exec ${screenshot}";
           "${mod}+Shift+q" = "exec ${exit} exit";
           "${mod}+n" = "exec ${nm}";
-          "${mod}+g" = "exec dlpdf";
+          "${mod}+g" = "exec ${config.home.homeDirectory}/.local/scripts/dlpdf";
 
           # "${mod}+Return" = "workspace 1; exec ${terminal}";
           "${mod}+Return" = "exec ${terminal}";
