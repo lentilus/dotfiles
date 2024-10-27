@@ -6,37 +6,49 @@
   ...
 }: {
   config = lib.mkIf config.sway.enable {
-    wayland.windowManager.sway = {
+    wayland.windowManager.sway = let
+        mod = "Mod4";
+        debouncedLauncher = pkgs.stdenv.mkDerivation {
+          name = "debounced_launch";
+          dontUnpack = true;
+          installPhase = "install -Dm755 ${./utils/debounced_launch} $out/bin/debounced_launch";
+        };
+        start="${debouncedLauncher}/bin/debounced_launch";
+
+        focus = workspace: bin: criteria:  ''
+            exec ${pkgs.swayr}/bin/swayr next-matching-window \
+            '[&& ${criteria} workspace="${workspace}"]' \
+            || swaymsg "workspace ${workspace}; exec ${start} '${criteria}' ${bin}"'';
+
+        # utils
+        launcher = "${pkgs.rofi-wayland}/bin/rofi -show drun -G";
+        nm = "${pkgs.networkmanager_dmenu}/bin/networkmanager_dmenu -i";
+        exit = "swaynag -t warning -m 'Exit sway?' -B 'yes' 'swaymsg exit'";
+        screenshot = ''${pkgs.grim}/bin/grim -g\
+            "$(${pkgs.slurp}/bin/slurp)" - \
+            | ${pkgs.wl-clipboard}/bin/wl-copy'';
+
+        # desktop apps
+        terminal = "${pkgs.foot}/bin/footclient";
+        xk = '' '${terminal} --title=xk zsh -c "${pkgs.neovim}/bin/nvim"' '';
+        mail = '' '${terminal} --title=aerc zsh -c "${pkgs.aerc}/bin/aerc"' '';
+        files = '' '${terminal} --title=files "${pkgs.ranger}/bin/ranger"' '';
+        music = "${pkgs.mpv}/bin/mpv $(find $HOME/music -maxdepth 1 -mindepth 1 | ${pkgs.rofi-wayland}/bin/rofi -dmenu)";
+        downloads = "zsh -c dlpdf";
+
+        # workspace bindings
+        wsA = focus "1" "${pkgs.foot}/bin/footclient" ''app_id="footclient"'';
+        wsS = focus "2" "${pkgs.qutebrowser}/bin/qutebrowser" ''app_id="qutebrowser"'';
+        wsD = focus "3" xk ''title="xk"'';
+        wsF = focus "4" files ''title="files"'';
+        wsU = focus "5" mail ''title="aerc"'';
+      in {
       enable = true;
       extraConfig = ''
         # added here, for lowest priority, as we use foot for other apps like ranger as well.
         assign [app_id="foot"] workspace number 1
       '';
-      config = let
-        #super key
-        mod = "Mod4";
-
-        # utils
-        launcher = "${pkgs.rofi-wayland}/bin/rofi -show drun -G";
-        nm = "${pkgs.networkmanager_dmenu}/bin/networkmanager_dmenu -i";
-        screenshot = "${pkgs.grim}/bin/grim -g \"$(${pkgs.slurp}/bin/slurp)\" - | ${pkgs.wl-clipboard}/bin/wl-copy";
-        exit = "swaynag -t warning -m 'Exit sway?' -B 'yes' 'swaymsg exit'";
-
-        # desktop apps
-        terminal = "${pkgs.foot}/bin/footclient";
-        xk_command = ''':lua require(\"telescope\") require(\"xettelkasten.zettel\").find()' '';
-        xk = "${terminal} --title=xk zsh -c \"${pkgs.neovim}/bin/nvim -c ${xk_command}\"";
-        mail = "${terminal} --title=mail zsh -c ${pkgs.aerc}/bin/aerc";
-        files = "${terminal} --title=files ${pkgs.ranger}/bin/ranger";
-        music = "${pkgs.mpv}/bin/mpv $(find $HOME/music -maxdepth 1 -mindepth 1 | ${pkgs.rofi-wayland}/bin/rofi -dmenu)";
-
-        focus = bin: ca: ws: ''exec ${pkgs.swayr}/bin/swayr next-matching-window '[&& ${ca} workspace="${ws}"]' || swaymsg "workspace ${ws}; exec ${bin}" '';
-        focus_terminal = focus "${pkgs.foot}/bin/footclient" ''app_id="footclient"'';
-        focus_browser = focus "${pkgs.qutebrowser}/bin/qutebrowser" ''app_id="qutebrowser"'';
-        focus_xk = focus xk ''title="xk"'';
-        focus_mail = focus mail ''title="mail"'';
-        focus_files = focus files ''title="files"'';
-      in {
+      config  = {
         inherit terminal;
         bars = [];
         modifier = "${mod}";
@@ -84,20 +96,14 @@
           };
         };
         assigns = {
+          # "1" = [{app_id = "footclient";}]; # managed via extraConfig
           "2" = [{title = "qutebrowser";}];
           "3" = [{title = "xk";}];
-          "4" = [
-            {title = "Signal";}
-            {title = "mail";}
-          ];
-          "5" = [
-            {title = "Anki";}
-            {title = "files";}
-            {app_id = "com.github.xournalpp.xournalpp";}
-          ];
+          "4" = [{title = "files";}];
+          "5" = [{title = "aerc";} {title = "Signal";}];
+          "6" = [{title = "Anki";}];
           "7" = [{title = "mpv$";}];
-          # keep at bottom for lowest prio ! not working
-          # "1" = [{app_id = "foot";}];
+          # "8" = []
         };
         keybindings = lib.mkForce {
           ### sway stuff ###
@@ -131,16 +137,11 @@
           "${mod}+Shift+o" = "move container to workspace number 7";
           "${mod}+Shift+p" = "move container to workspace number 8";
 
-          "${mod}+a" = focus_terminal "1";
-          "${mod}+s" = focus_browser "2";
-          # "${mod}+a" = "workspace number 1";
-          # "${mod}+s" = "workspace number 2";
-
-          # "${mod}+d" = focus_xk {ws = 3;};
-          "${mod}+d" = "workspace number 3";
-          # "${mod}+f" = focus_mail "4";
-          "${mod}+f" = "workspace number 4";
-          "${mod}+u" = focus_files "5";
+          "${mod}+a" = wsA;
+          "${mod}+s" = wsS;
+          "${mod}+d" = wsD;
+          "${mod}+f" = wsF;
+          "${mod}+u" = wsU;
           "${mod}+i" = "workspace number 6";
           "${mod}+o" = "workspace number 7";
           "${mod}+p" = "workspace number 8";
@@ -150,15 +151,8 @@
           "${mod}+Shift+t" = "exec ${screenshot}";
           "${mod}+Shift+q" = "exec ${exit} exit";
           "${mod}+n" = "exec ${nm}";
-          "${mod}+g" = "exec ${config.home.homeDirectory}/.local/scripts/dlpdf";
-
-          # "${mod}+Return" = "workspace 1; exec ${terminal}";
+          "${mod}+g" = "exec ${downloads}";
           "${mod}+Return" = "exec ${terminal}";
-          # "${mod}+w" = "workspace 2; exec ${browser}";
-          "${mod}+x" = "workspace 3; exec ${xk}";
-          # "${mod}+m" = "workspace 4; exec ${mail}";
-          # "${mod}+e" = "workspace 5; exec ${files}";
-          # "${mod}+z" = "workspace 7; exec ${music}";
           "${mod}+z" = "exec ${music}";
         };
       };
