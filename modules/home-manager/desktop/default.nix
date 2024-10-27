@@ -8,8 +8,6 @@
     ./sway
     ./mail
     ./browser
-    # ./calendar # TODO
-    ./xk.nix
     ./stylix.nix
     ./pass.nix
     ./mimetypes.nix
@@ -23,19 +21,15 @@
     home.packages = [
       pkgs.poppler_utils
       pkgs.signal-desktop
+      pkgs.xk
     ];
-    programs.zathura = {
-      enable = true;
-      options = {
-        # sandbox = "none";
-      };
-    };
+
+    programs.zathura.enable = true;
 
     browser.enable = lib.mkDefault true;
     mail.enable = lib.mkDefault true;
     pass.enable = lib.mkDefault true;
     sway.enable = lib.mkDefault true;
     stylix.enable = lib.mkDefault true;
-    xk.enable = lib.mkDefault false;
   };
 }

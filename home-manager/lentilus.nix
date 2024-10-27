@@ -29,7 +29,6 @@
 
   desktop.enable = true;
   dev.enable = true;
-  xk.enable = true;
 
   nix = {
     package = pkgs.nix;
