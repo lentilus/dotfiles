@@ -7,8 +7,8 @@
 }: {
   imports = [
     ./zsh.nix
-    ./tmux.nix
     ./nvim.nix
+    ./tmux
   ];
 
   zsh.enable = lib.mkDefault true;
