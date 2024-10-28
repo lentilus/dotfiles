@@ -21,7 +21,7 @@
       enable = true;
       keyMode = "vi";
       prefix = "C-Space";
-      shell = "${pkgs.zsh}/bin/zsh";
+      # shell = "${pkgs.zsh}/bin/zsh"; # broken, see https://github.com/nix-community/home-manager/issues/5952
       terminal = "screen-256color";
       newSession = true;
       escapeTime = 0;
@@ -33,6 +33,10 @@
       extraConfig = ''
         set -ag terminal-overrides ",*:Tc" # true color
         set -ag terminal-overrides ',*:cud1=\E[1B' # fix splits in ssh
+
+        # https://github.com/nix-community/home-manager/issues/5952
+        set -gu default-command
+        set -g default-shell "${pkgs.zsh}/bin/zsh"
 
         unbind C-f
         bind-key -n C-f run-shell "tmux neww ${jump}/bin/jumptmux"
