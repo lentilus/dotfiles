@@ -1,23 +1,27 @@
 #!/bin/bash
+
+#
 # Heavily inspired by ThePrimagen's tmux sessionizer
+#
+
 target="$HOME/git"
 selecthook='nvim -c "normal -"; $SHELL'
-cd "$HOME/git" || exit
 
 if [[ $# -eq 1 ]]; then
-  selected=$1
+    selected=$1
 else
-  selected=$(find $target -maxdepth 1 -type d -printf '%P\n' | fzf)
+    cd "$HOME/git" || exit
+    selected=$(find "$target" -maxdepth 1 -type d -exec basename {} \; | fzf)
 fi
 
 if [[ -z $selected ]]; then
-  exit 0
+    exit 0
 fi
 
 selected_name=$(basename "$selected" | tr . _)
 
 if ! tmux has-session -t="$selected_name" 2> /dev/null; then
-  tmux new-session -ds "$selected_name" -c "$selected" "$selecthook"
+    tmux new-session -ds "$selected_name" -c "$target/$selected" "$selecthook"
 fi
 
 tmux switch-client -t "$selected_name"
