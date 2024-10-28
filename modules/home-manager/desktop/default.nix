@@ -31,5 +31,6 @@
     pass.enable = lib.mkDefault true;
     sway.enable = lib.mkDefault true;
     stylix.enable = lib.mkDefault true;
+    mimeapps.enable = lib.mkDefault false;
   };
 }
