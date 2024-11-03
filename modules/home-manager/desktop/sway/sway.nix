@@ -12,8 +12,7 @@
           name = "debounced_launch";
           dontUnpack = true;
           installPhase = "install -Dm755 ${./utils/debounced_launch} $out/bin/debounced_launch";
-        };
-        start="${debouncedLauncher}/bin/debounced_launch";
+        }; start="${debouncedLauncher}/bin/debounced_launch";
 
         focus = workspace: bin: criteria:  ''
             exec ${pkgs.swayr}/bin/swayr next-matching-window \
@@ -24,20 +23,22 @@
         launcher = "${pkgs.rofi-wayland}/bin/rofi -show drun -G";
         nm = "${pkgs.networkmanager_dmenu}/bin/networkmanager_dmenu -i";
         exit = "swaynag -t warning -m 'Exit sway?' -B 'yes' 'swaymsg exit'";
+        chnageXK = "${pkgs.xk}/bin/xk script changekasten";
         screenshot = ''${pkgs.grim}/bin/grim -g\
             "$(${pkgs.slurp}/bin/slurp)" - \
             | ${pkgs.wl-clipboard}/bin/wl-copy'';
 
         # desktop apps
         terminal = "${pkgs.foot}/bin/footclient";
+        tmuxTerminal = '' '${terminal} ${pkgs.zsh}/bin/zsh -c "tmux a"' '';
         xk = '' '${terminal} --title=xk zsh -c "${pkgs.neovim}/bin/nvim"' '';
         mail = '' '${terminal} --title=aerc zsh -c "${pkgs.aerc}/bin/aerc"' '';
         files = '' '${terminal} --title=files "${pkgs.ranger}/bin/ranger"' '';
         music = "${pkgs.mpv}/bin/mpv $(find $HOME/music -maxdepth 1 -mindepth 1 | ${pkgs.rofi-wayland}/bin/rofi -dmenu)";
-        downloads = "zsh -c dlpdf";
+        downloads = "${pkgs.zsh}/bin/zsh -c dlpdf";
 
         # workspace bindings
-        wsA = focus "1" "${pkgs.foot}/bin/footclient" ''app_id="footclient"'';
+        wsA = focus "1" tmuxTerminal ''app_id="footclient"'';
         wsS = focus "2" "${pkgs.qutebrowser}/bin/qutebrowser" ''app_id="qutebrowser"'';
         wsD = focus "3" xk ''title="xk"'';
         wsF = focus "4" files ''title="files"'';
@@ -154,6 +155,7 @@
           "${mod}+g" = "exec ${downloads}";
           "${mod}+Return" = "exec ${terminal}";
           "${mod}+z" = "exec ${music}";
+          "${mod}+b" = "exec ${chnageXK}";
         };
       };
     };
