@@ -43,11 +43,19 @@
     home.file.aercNmQueries = {
       target = "${config.xdg.configHome}/aerc/nm-qmap";
       text = ''
-        INBOX = tag:inbox and not tag:archived
-        unread = tag:unread
+        NEW = tag:unread
+        INBOX = folder:mailbox/Inbox
+        SENT = folder:mailbox/Sent
         lentilus = tag:lentilus
         linus = tag:linus
         shopping = tag:shopping
+      '';
+    };
+
+    home.file.aercFolderMap = {
+      target = "${config.xdg.configHome}/aerc/folders.map";
+      text = ''
+      m = mailbox*
       '';
     };
 
@@ -67,16 +75,22 @@
 
       extraAccounts.mailboxtest = {
         source = "notmuch://~/Maildir";
-        from = "lentilus <lentilus@mailbox.org>";
-        query-map = "~/${config.home.file.aercNmQueries.target}";
         outgoing = "${pkgs.msmtp}/bin/msmtp";
-        # maildir-store = "~/Maildir";
+        from = "Linus Preusser <linus.preusser@mailbox.org>";
+        default = "NEW";
+        folders-sort = "NEW, INBOX, SENT";
+        query-map = "${config.home.homeDirectory}/${config.home.file.aercNmQueries.target}";
+        folders-exclude = "~mailbox*";
+        aliases = "Linus Preusser <linus.preusser@mailbox.org>, Lentilus <lentilus@mailbox.org>, Linus <linus.shopping@mailbox.org>";
+        maildir-store = "~/Maildir";
+        copy-to = "mailbox/Sent";
       };
     };
 
-    accounts.email.accounts.mailbox = {
+    accounts.email.accounts = {
+    mailbox = {
       address = "linus.preusser@mailbox.org";
-      realName = "lentilus";
+      realName = "Linus Preusser";
 
       userName = "linus.preusser@mailbox.org";
       imap.host = "imap.mailbox.org";
@@ -99,10 +113,12 @@
           PipelineDepth = 20;
           timeout = 3600;
         };
+        expunge = "both";
       };
 
       notmuch.enable = true;
       msmtp.enable = true;
     };
+  };
   };
 }
