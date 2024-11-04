@@ -19,6 +19,7 @@
       pkgs.git
       pkgs.lean4
       pkgs.kubectl
+      pkgs.aider-chat
       # pkgs.haskellPackages.ghcup
       (pkgs.nerdfonts.override {fonts = ["JetBrainsMono"];})
     ];
