@@ -26,7 +26,7 @@ require("lazy").setup({ import = "custom/plugins" }, {
 	},
 	dev = {
 		path = "~/git",
-		patterns = {},
-		fallback = false,
+		patterns = { "lentilus" },
+		fallback = true,
 	},
 })

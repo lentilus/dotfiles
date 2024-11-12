@@ -5,10 +5,7 @@ return {
 		dependencies = {
 			"nvim-lua/plenary.nvim",
 			"ThePrimeagen/git-worktree.nvim",
-			{
-				"lentilus/xk.nvim",
-				{ dev = true },
-			},
+			"lentilus/xk.nvim",
 		},
 		config = function()
 			require("custom.telescope")
