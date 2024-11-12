@@ -35,7 +35,7 @@
         mail = '' '${terminal} --title=aerc zsh -c "${pkgs.aerc}/bin/aerc"' '';
         files = '' '${terminal} --title=files "${pkgs.ranger}/bin/ranger"' '';
         music = "${pkgs.mpv}/bin/mpv $(find $HOME/music -maxdepth 1 -mindepth 1 | ${pkgs.rofi-wayland}/bin/rofi -dmenu)";
-        downloads = "${pkgs.zsh}/bin/zsh -c dlpdf";
+        downloads = "${config.home.homeDirectory}/.local/scripts/dlpdf";
 
         # workspace bindings
         wsA = focus "1" tmuxTerminal ''app_id="footclient"'';
