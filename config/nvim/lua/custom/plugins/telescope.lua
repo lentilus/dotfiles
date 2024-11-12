@@ -5,11 +5,13 @@ return {
 		dependencies = {
 			"nvim-lua/plenary.nvim",
 			"ThePrimeagen/git-worktree.nvim",
-			{ dir = "~/git/xk.nvim.git/develop" },
+			{
+				"lentilus/xk.nvim",
+				{ dev = true },
+			},
 		},
 		config = function()
 			require("custom.telescope")
-			require("xettelkasten")
 		end,
 	},
 	--[[
