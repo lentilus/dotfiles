@@ -37,7 +37,10 @@ return {
 				auto_install = true,
 				highlight = {
 					enable = true,
-					disable = { "latex" },
+					disable = {
+						"latex",
+						-- "typst",
+					},
 					additional_vim_regex_highlighting = false,
 				},
 			})

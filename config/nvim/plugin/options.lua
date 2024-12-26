@@ -1,11 +1,8 @@
---
--- miscelaneous options
-
 vim.opt.number = true
 vim.opt.relativenumber = true
-vim.opt.mouse = ''
+vim.opt.mouse = ""
 vim.opt.showmode = false
-vim.opt.clipboard = 'unnamedplus'
+vim.opt.clipboard = "unnamedplus"
 vim.opt.ignorecase = true
 vim.opt.smartcase = true
 vim.opt.swapfile = false
