@@ -32,6 +32,7 @@
           window.hide_decoration = true;
           content.javascript.clipboard = "access";
           url.start_pages = ["about:blank"];
+          colors.webpage.darkmode.enabled = false;
         };
         searchEngines = lib.mkDefault {
                 DEFAULT = "https://www.duckduckgo.com/?q={}";
