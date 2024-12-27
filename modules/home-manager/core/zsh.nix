@@ -55,7 +55,7 @@
 
       initExtra = ''
         path+="$HOME/.local/scripts"
-        [ -f $HOME/.extrazsh ] && source .extrazsh
+        [ -f $HOME/.extrazsh ] && source "$HOME/.extrazsh"
       '';
       loginExtra = ''
         # launch tmux in devpod
