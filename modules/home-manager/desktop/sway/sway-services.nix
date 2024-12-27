@@ -57,25 +57,6 @@
       };
     };
 
-    systemd.user.services.autofocus = {
-      Unit = {
-        Description = "sway autofocus";
-        PartOf = ["sway-session.target"];
-        After = ["sway-session.target"];
-      };
-      Install = {
-        WantedBy = ["sway-session.target"];
-      };
-
-      Service = {
-        ExecStart = ''
-          sh -c "sleep 1 && ${pkgs.sway}/bin/swaymsg -mt subscribe '[\"window\"]' | \
-          ${pkgs.jq}/bin/jq --unbuffered 'select(.change == \"urgent\").container.id' | \
-          xargs -I{} ${pkgs.sway}/bin/swaymsg '[con_id={} urgent=latest]' focus >/dev/null"
-        '';
-      };
-    };
-
     # services.gnome-keyring.enable = true;
     # services.gpg-agent = {
     #   enable = true; # we start it from sway
