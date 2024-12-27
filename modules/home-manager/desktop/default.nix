@@ -21,6 +21,7 @@
     home.packages = [
       pkgs.poppler_utils
       pkgs.signal-desktop
+      pkgs.firefox
       pkgs.typst
       pkgs.xk
     ];
