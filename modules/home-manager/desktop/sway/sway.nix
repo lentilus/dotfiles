@@ -94,7 +94,7 @@
             repeat_delay = "300";
             repeat_rate = "30";
             xkb_layout = "us";
-            xkb_options = "caps:swapescape";
+            # xkb_options = "caps:swapescape";
           };
         };
         assigns = {

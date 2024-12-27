@@ -8,6 +8,7 @@
     ./sway
     ./mail
     ./browser
+    ./kanata.nix
     ./stylix.nix
     ./pass.nix
     ./mimetypes.nix
@@ -34,5 +35,6 @@
     sway.enable = lib.mkDefault true;
     stylix.enable = lib.mkDefault true;
     mimeapps.enable = lib.mkDefault false;
+    homeRowMods.enable = lib.mkDefault true;
   };
 }
