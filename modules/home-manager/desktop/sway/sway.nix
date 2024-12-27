@@ -48,6 +48,7 @@
       extraConfig = ''
         # added here, for lowest priority, as we use foot for other apps like ranger as well.
         assign [app_id="foot"] workspace number 1
+        for_window [class="Firefox"] focus none
       '';
       config  = {
         inherit terminal;
