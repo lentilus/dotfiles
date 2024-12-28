@@ -7,50 +7,51 @@
 }: {
   config = lib.mkIf config.sway.enable {
     wayland.windowManager.sway = let
-        mod = "Mod4";
-        debouncedLauncher = pkgs.stdenv.mkDerivation {
-          name = "debounced_launch";
-          dontUnpack = true;
-          installPhase = "install -Dm755 ${./utils/debounced_launch} $out/bin/debounced_launch";
-        }; start="${debouncedLauncher}/bin/debounced_launch";
+      mod = "Mod4";
+      debouncedLauncher = pkgs.stdenv.mkDerivation {
+        name = "debounced_launch";
+        dontUnpack = true;
+        installPhase = "install -Dm755 ${./utils/debounced_launch} $out/bin/debounced_launch";
+      };
+      start = "${debouncedLauncher}/bin/debounced_launch";
 
-        focus = workspace: bin: criteria:  ''
-            exec ${pkgs.swayr}/bin/swayr next-matching-window \
-            '[&& ${criteria} workspace="${workspace}"]' \
-            || swaymsg "workspace ${workspace}; exec ${start} '${criteria}' ${bin}"'';
+      focus = workspace: bin: criteria: ''
+        exec ${pkgs.swayr}/bin/swayr next-matching-window \
+        '[&& ${criteria} workspace="${workspace}"]' \
+        || swaymsg "workspace ${workspace}; exec ${start} '${criteria}' ${bin}"'';
 
-        # utils
-        launcher = "${pkgs.rofi-wayland}/bin/rofi -show drun -G";
-        nm = "${pkgs.networkmanager_dmenu}/bin/networkmanager_dmenu -i";
-        exit = "swaynag -t warning -m 'Exit sway?' -B 'yes' 'swaymsg exit'";
-        chnageXK = "${pkgs.xk}/bin/xk script changekasten";
-        screenshot = ''${pkgs.grim}/bin/grim -g\
-            "$(${pkgs.slurp}/bin/slurp)" - \
-            | ${pkgs.wl-clipboard}/bin/wl-copy'';
+      # utils
+      launcher = "${pkgs.rofi-wayland}/bin/rofi -show drun -G";
+      nm = "${pkgs.networkmanager_dmenu}/bin/networkmanager_dmenu -i";
+      exit = "swaynag -t warning -m 'Exit sway?' -B 'yes' 'swaymsg exit'";
+      chnageXK = "${pkgs.xk}/bin/xk script changekasten";
+      screenshot = ''        ${pkgs.grim}/bin/grim -g\
+                    "$(${pkgs.slurp}/bin/slurp)" - \
+                    | ${pkgs.wl-clipboard}/bin/wl-copy'';
 
-        # desktop apps
-        terminal = "${pkgs.foot}/bin/footclient";
-        tmuxTerminal = '' '${terminal} ${pkgs.zsh}/bin/zsh -c "tmux a"' '';
-        xk = '' '${terminal} --title=xk zsh -c "${pkgs.neovim}/bin/nvim"' '';
-        mail = '' '${terminal} --title=aerc zsh -c "${pkgs.aerc}/bin/aerc"' '';
-        files = '' '${terminal} --title=files "${pkgs.ranger}/bin/ranger"' '';
-        music = "${pkgs.mpv}/bin/mpv $(find $HOME/music -maxdepth 1 -mindepth 1 | ${pkgs.rofi-wayland}/bin/rofi -dmenu)";
-        downloads = "${config.home.homeDirectory}/.local/scripts/dlpdf";
+      # desktop apps
+      terminal = "${pkgs.foot}/bin/footclient";
+      tmuxTerminal = '''${terminal} ${pkgs.zsh}/bin/zsh -c "tmux a"' '';
+      xk = '''${terminal} --title=xk zsh -c "${pkgs.neovim}/bin/nvim"' '';
+      mail = '''${terminal} --title=aerc zsh -c "${pkgs.aerc}/bin/aerc"' '';
+      files = '''${terminal} --title=files "${pkgs.ranger}/bin/ranger"' '';
+      music = "${pkgs.mpv}/bin/mpv $(find $HOME/music -maxdepth 1 -mindepth 1 | ${pkgs.rofi-wayland}/bin/rofi -dmenu)";
+      downloads = "${config.home.homeDirectory}/.local/scripts/dlpdf";
 
-        # workspace bindings
-        wsA = focus "1" tmuxTerminal ''app_id="footclient"'';
-        wsS = focus "2" "${pkgs.qutebrowser}/bin/qutebrowser" ''app_id="qutebrowser"'';
-        wsD = focus "3" xk ''title="xk"'';
-        wsF = focus "4" files ''title="files"'';
-        wsU = focus "5" mail ''title="aerc"'';
-      in {
+      # workspace bindings
+      wsA = focus "1" tmuxTerminal ''app_id="footclient"'';
+      wsS = focus "2" "${pkgs.qutebrowser}/bin/qutebrowser" ''app_id="qutebrowser"'';
+      wsD = focus "3" xk ''title="xk"'';
+      wsF = focus "4" files ''title="files"'';
+      wsU = focus "5" mail ''title="aerc"'';
+    in {
       enable = true;
       extraConfig = ''
         # added here, for lowest priority, as we use foot for other apps like ranger as well.
         assign [app_id="foot"] workspace number 1
         for_window [class="Firefox"] focus none
       '';
-      config  = {
+      config = {
         inherit terminal;
         bars = [];
         modifier = "${mod}";

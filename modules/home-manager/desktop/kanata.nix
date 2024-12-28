@@ -18,6 +18,5 @@
     home.file = {
       "${config.xdg.configHome}/kanata".source = "${outputs.sources.dotfiles}/kanata";
     };
-
   };
 }

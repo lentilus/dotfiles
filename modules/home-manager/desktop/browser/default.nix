@@ -35,14 +35,14 @@
           colors.webpage.darkmode.enabled = false;
         };
         searchEngines = lib.mkDefault {
-                DEFAULT = "https://www.duckduckgo.com/?q={}";
-                g = "https://www.google.com/search?q={}";
-                w = "https://en.wikipedia.org/wiki/Special:Search?search={}&go=Go&ns0=1";
-                hm = "https://home-manager-options.extranix.com/?query={}&release=master";
-                np = "https://search.nixos.org/packages?channel=unstable&from=0&size=50&sort=relevance&type=packages&query={}";
-                yt = "https://www.youtube.com/results?search_query={}";
-                gpt = "https://chatgpt.com/?q={}";
-                gh = "https://github.com/search?q=user:lentilus {}";
+          DEFAULT = "https://www.duckduckgo.com/?q={}";
+          g = "https://www.google.com/search?q={}";
+          w = "https://en.wikipedia.org/wiki/Special:Search?search={}&go=Go&ns0=1";
+          hm = "https://home-manager-options.extranix.com/?query={}&release=master";
+          np = "https://search.nixos.org/packages?channel=unstable&from=0&size=50&sort=relevance&type=packages&query={}";
+          yt = "https://www.youtube.com/results?search_query={}";
+          gpt = "https://chatgpt.com/?q={}";
+          gh = "https://github.com/search?q=user:lentilus {}";
         };
         keyBindings.normal = {
           "<Space>ff" = "cmd-set-text -s :tab-select";

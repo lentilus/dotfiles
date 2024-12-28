@@ -17,7 +17,7 @@
 
   nixpkgs = {
     overlays = [
-      inputs.xk.overlay 
+      inputs.xk.overlay
       inputs.nixgl.overlay
       (final: prev: {qutebrowser = prev.qutebrowser.override {enableWideVine = true;};})
     ];

@@ -55,7 +55,7 @@
     home.file.aercFolderMap = {
       target = "${config.xdg.configHome}/aerc/folders.map";
       text = ''
-      m = mailbox*
+        m = mailbox*
       '';
     };
 
@@ -88,37 +88,37 @@
     };
 
     accounts.email.accounts = {
-    mailbox = {
-      address = "linus.preusser@mailbox.org";
-      realName = "Linus Preusser";
+      mailbox = {
+        address = "linus.preusser@mailbox.org";
+        realName = "Linus Preusser";
 
-      userName = "linus.preusser@mailbox.org";
-      imap.host = "imap.mailbox.org";
-      smtp.host = "smtp.mailbox.org";
+        userName = "linus.preusser@mailbox.org";
+        imap.host = "imap.mailbox.org";
+        smtp.host = "smtp.mailbox.org";
 
-      maildir.path = "mailbox";
-      # passwordCommand = "PASSWORD_STORE_DIR=~/git/password-store; pass show communication/mailbox";
-      passwordCommand = "${pkgs.pass}/bin/pass show communication/mailbox";
-      primary = true;
+        maildir.path = "mailbox";
+        # passwordCommand = "PASSWORD_STORE_DIR=~/git/password-store; pass show communication/mailbox";
+        passwordCommand = "${pkgs.pass}/bin/pass show communication/mailbox";
+        primary = true;
 
-      aliases = [
-        "lentilus@mailbox.org"
-        "linus.shopping@mailbox.org"
-      ];
+        aliases = [
+          "lentilus@mailbox.org"
+          "linus.shopping@mailbox.org"
+        ];
 
-      mbsync = {
-        enable = true;
-        create = "both";
-        extraConfig.account = {
-          PipelineDepth = 20;
-          timeout = 3600;
+        mbsync = {
+          enable = true;
+          create = "both";
+          extraConfig.account = {
+            PipelineDepth = 20;
+            timeout = 3600;
+          };
+          expunge = "both";
         };
-        expunge = "both";
-      };
 
-      notmuch.enable = true;
-      msmtp.enable = true;
+        notmuch.enable = true;
+        msmtp.enable = true;
+      };
     };
-  };
   };
 }

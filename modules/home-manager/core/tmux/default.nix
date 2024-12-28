@@ -11,12 +11,12 @@
 
   config = lib.mkIf config.tmux.enable {
     programs.tmux = let
-        jump = pkgs.stdenv.mkDerivation {
-          name = "jumptmux";
-          propagatedBuildInputs = [pkgs.findutils];
-          dontUnpack = true;
-          installPhase = "install -Dm755 ${./jump} $out/bin/jumptmux";
-        };
+      jump = pkgs.stdenv.mkDerivation {
+        name = "jumptmux";
+        propagatedBuildInputs = [pkgs.findutils];
+        dontUnpack = true;
+        installPhase = "install -Dm755 ${./jump} $out/bin/jumptmux";
+      };
     in {
       enable = true;
       keyMode = "vi";

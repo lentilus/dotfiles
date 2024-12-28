@@ -1,4 +1,9 @@
-{pkgs, lib, config, ...}: {
+{
+  pkgs,
+  lib,
+  config,
+  ...
+}: {
   options = {
     mimeapps.enable = lib.mkEnableOption "enable mime type app association";
   };
