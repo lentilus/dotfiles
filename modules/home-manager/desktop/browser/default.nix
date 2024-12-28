@@ -23,6 +23,7 @@
   in
     lib.mkIf config.browser.enable {
       programs.qutebrowser = {
+        package = pkgs.unstable.qutebrowser;
         enable = true;
         settings = {
           tabs.show = "never";

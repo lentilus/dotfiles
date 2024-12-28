@@ -8,7 +8,6 @@
 }: {
   imports = [
     inputs.stylix.homeManagerModules.stylix
-    inputs.sops-nix.homeManagerModules.sops
     outputs.homeManagerModules.core
     outputs.homeManagerModules.dev
     outputs.homeManagerModules.desktop
@@ -17,9 +16,9 @@
 
   nixpkgs = {
     overlays = [
-      inputs.xk.overlay
       inputs.nixgl.overlay
-      (final: prev: {qutebrowser = prev.qutebrowser.override {enableWideVine = true;};})
+      outputs.overlays.modifications
+      outputs.overlays.unstable-packages
     ];
     # Configure your nixpkgs instance
     config = {
@@ -31,7 +30,7 @@
   dev.enable = true;
 
   nix = {
-    package = pkgs.nix;
+    package = pkgs.unstable.nix;
     settings.experimental-features = ["nix-command" "flakes"];
   };
 

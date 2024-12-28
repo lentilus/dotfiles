@@ -24,7 +24,7 @@
       launcher = "${pkgs.rofi-wayland}/bin/rofi -show drun -G";
       nm = "${pkgs.networkmanager_dmenu}/bin/networkmanager_dmenu -i";
       exit = "swaynag -t warning -m 'Exit sway?' -B 'yes' 'swaymsg exit'";
-      chnageXK = "${pkgs.xk}/bin/xk script changekasten";
+      # chnageXK = "${pkgs.xk}/bin/xk script changekasten";
       screenshot = ''        ${pkgs.grim}/bin/grim -g\
                     "$(${pkgs.slurp}/bin/slurp)" - \
                     | ${pkgs.wl-clipboard}/bin/wl-copy'';
@@ -32,7 +32,7 @@
       # desktop apps
       terminal = "${pkgs.foot}/bin/footclient";
       tmuxTerminal = '''${terminal} ${pkgs.zsh}/bin/zsh -c "tmux a"' '';
-      xk = '''${terminal} --title=xk zsh -c "${pkgs.neovim}/bin/nvim"' '';
+      # xk = '''${terminal} --title=xk zsh -c "${pkgs.neovim}/bin/nvim"' '';
       mail = '''${terminal} --title=aerc zsh -c "${pkgs.aerc}/bin/aerc"' '';
       files = '''${terminal} --title=files "${pkgs.ranger}/bin/ranger"' '';
       music = "${pkgs.mpv}/bin/mpv $(find $HOME/music -maxdepth 1 -mindepth 1 | ${pkgs.rofi-wayland}/bin/rofi -dmenu)";
@@ -41,7 +41,7 @@
       # workspace bindings
       wsA = focus "1" tmuxTerminal ''app_id="footclient"'';
       wsS = focus "2" "${pkgs.qutebrowser}/bin/qutebrowser" ''app_id="qutebrowser"'';
-      wsD = focus "3" xk ''title="xk"'';
+      # wsD = focus "3" xk ''title="xk"'';
       wsF = focus "4" files ''title="files"'';
       wsU = focus "5" mail ''title="aerc"'';
     in {
@@ -142,7 +142,7 @@
 
           "${mod}+a" = wsA;
           "${mod}+s" = wsS;
-          "${mod}+d" = wsD;
+          "${mod}+d" = "workspace number 3";
           "${mod}+f" = wsF;
           "${mod}+u" = wsU;
           "${mod}+i" = "workspace number 6";
@@ -157,7 +157,7 @@
           "${mod}+g" = "exec ${downloads}";
           "${mod}+Return" = "exec ${terminal}";
           "${mod}+z" = "exec ${music}";
-          "${mod}+b" = "exec ${chnageXK}";
+          # "${mod}+b" = "exec ${chnageXK}";
         };
       };
     };

@@ -24,7 +24,6 @@
       pkgs.signal-desktop
       pkgs.firefox
       pkgs.typst
-      pkgs.xk
     ];
 
     programs.zathura.enable = true;

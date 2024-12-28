@@ -2,18 +2,9 @@
   description = "lentilus @ nix";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-24.05";
+    nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
     flake-utils.url = "github:numtide/flake-utils";
-
-    sops-nix = {
-      url = "github:Mic92/sops-nix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    xk = {
-      url = "github:lentilus/xk/develop";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
 
     darwin = {
       url = "github:lnl7/nix-darwin/master";
@@ -23,15 +14,6 @@
     home-manager = {
       url = "github:nix-community/home-manager/release-24.05";
       inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    home-manager-shell = {
-      url = "sourcehut:~dermetfan/home-manager-shell/release-24.05";
-      inputs = {
-        nixpkgs.follows = "nixpkgs";
-        flake-utils.follows = "flake-utils";
-        home-manager.follows = "home-manager";
-      };
     };
 
     # fix GL
@@ -74,7 +56,15 @@
   in {
     inherit sources;
 
+    overlays = import ./overlays {inherit inputs;};
+
     formatter = forAllSystems (system: nixpkgs.legacyPackages.${system}.alejandra);
+
+    devShells = forAllSystems (system:
+      import ./shells {
+        inherit system inputs outputs;
+        pkgs = nixpkgs.legacyPackages.${system};
+      });
 
     homeManagerModules = import ./modules/home-manager;
 
@@ -119,35 +109,5 @@
       ];
       specialArgs = {inherit inputs outputs;};
     };
-    devShells = forAllSystems (system: let
-      pkgs = nixpkgs.legacyPackages.${system};
-    in {
-      nvim = pkgs.mkShell {
-        buildInputs = with pkgs; [
-          neovim
-          fd
-          ripgrep
-          nodejs
-          cargo
-        ];
-
-        shellHook = ''
-          # Set isolated XDG paths for Neovim
-          export XDG_CONFIG_HOME=$(mktemp -d)
-          export XDG_DATA_HOME=$(mktemp -d)
-          export XDG_STATE_HOME=$(mktemp -d)
-          export XDG_CACHE_HOME=$(mktemp -d)
-
-          # Link Neovim configuration from flake sources
-          ln -s ${inputs.self.outputs.sources.dotfiles}/nvim $XDG_CONFIG_HOME/nvim
-
-          # Cleanup on exit
-          cleanup() {
-            rm -rf "$XDG_CONFIG_HOME" "$XDG_DATA_HOME" "$XDG_STATE_HOME" "$XDG_CACHE_HOME"
-          }
-          trap cleanup EXIT
-        '';
-      };
-    });
   };
 }

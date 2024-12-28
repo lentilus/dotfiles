@@ -19,9 +19,9 @@
       pkgs.git
       pkgs.lean4
       pkgs.kubectl
-      pkgs.aider-chat
+      pkgs.unstable.aider-chat
       # pkgs.haskellPackages.ghcup
-      pkgs.nerd-fonts.jetbrains-mono
+      pkgs.unstable.nerd-fonts.jetbrains-mono
     ];
 
     home.file = {
