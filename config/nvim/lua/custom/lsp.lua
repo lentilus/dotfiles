@@ -54,6 +54,29 @@ lspconfig.zeta.setup({
 	on_attach = zeta_def,
 })
 
+local flake = "/home/lentilus/git/dotfiles"
+lspconfig.nixd.setup({
+	cmd = { "nixd" },
+	settings = {
+		nixd = {
+			nixpkgs = {
+				expr = "import <nixpkgs> { }",
+			},
+			formatting = {
+				command = { "nixfmt" },
+			},
+			options = {
+				-- nixos = {
+				-- 	expr = '(builtins.getFlake ("git+file://" + toString ./.)).nixosConfigurations."".options',
+				-- },
+				home_manager = {
+					expr = '(builtins.getFlake ("git+file://" + toString ./.)).homeConfigurations."lentilus@fedora".options',
+				},
+			},
+		},
+	},
+})
+
 require("mason-lspconfig").setup({
 	ensure_installed = {
 		"lua_ls",
@@ -99,6 +122,10 @@ require("mason-lspconfig").setup({
 				},
 			})
 		end,
+
+		-- ["nixd"] = function()
+		-- 	lspconfig.nixd.setup()
+		-- end,
 
 		["tinymist"] = function()
 			lspconfig.tinymist.setup({

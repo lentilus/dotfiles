@@ -15,8 +15,11 @@
       pkgs.fd
       pkgs.ripgrep
       pkgs.cargo
-      pkgs.neovim
+      pkgs.unstable.neovim
       pkgs.nodejs # to install LSPs
+
+      # language servers
+      pkgs.nixd
     ];
 
     home.file = {
