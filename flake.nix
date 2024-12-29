@@ -36,7 +36,6 @@
   outputs = {
     self,
     nixpkgs,
-    home-manager,
     ...
   } @ inputs: let
     inherit (self) outputs;
@@ -62,7 +61,7 @@
 
     devShells = forAllSystems (system:
       import ./shells {
-        inherit system inputs outputs;
+        inherit inputs outputs;
         pkgs = nixpkgs.legacyPackages.${system};
       });
 
@@ -71,7 +70,7 @@
     ### for non-nixos hosts
     homeConfigurations = {
       # must be built --impure as it needs access to $HOME, $USER
-      default = home-manager.lib.homeManagerConfiguration {
+      default = inputs.home-manager.lib.homeManagerConfiguration {
         pkgs = nixpkgs.legacyPackages.x86_64-linux;
         extraSpecialArgs = {inherit inputs outputs;};
         modules = [
@@ -79,7 +78,7 @@
         ];
       };
 
-      "lentilus@fedora" = home-manager.lib.homeManagerConfiguration {
+      "lentilus@fedora" = inputs.home-manager.lib.homeManagerConfiguration {
         pkgs = nixpkgs.legacyPackages.x86_64-linux;
         extraSpecialArgs = {inherit inputs outputs;};
         modules = [
