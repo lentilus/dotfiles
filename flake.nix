@@ -68,6 +68,7 @@
 
     homeManagerModules = import ./modules/home-manager;
 
+    ### for non-nixos hosts
     homeConfigurations = {
       # must be built --impure as it needs access to $HOME, $USER
       default = home-manager.lib.homeManagerConfiguration {
@@ -85,17 +86,9 @@
           ./home-manager/lentilus.nix
         ];
       };
-
-      # for work
-      linuspreusser = home-manager.lib.homeManagerConfiguration {
-        pkgs = nixpkgs.legacyPackages.aarch64-darwin;
-        extraSpecialArgs = {inherit inputs outputs;};
-        modules = [
-          ./home-manager/macos.nix
-        ];
-      };
     };
 
+    ### for macos (work)
     darwinConfigurations."JAAI-MBP-LP" = inputs.darwin.lib.darwinSystem {
       modules = [
         ./darwin/configuration.nix
@@ -104,6 +97,21 @@
           home-manager.useGlobalPkgs = true;
           home-manager.useUserPackages = true;
           home-manager.users.linuspreusser = import ./home-manager/macos.nix;
+          home-manager.extraSpecialArgs = {inherit inputs outputs;};
+        }
+      ];
+      specialArgs = {inherit inputs outputs;};
+    };
+
+    ### for nixos
+    nixosConfigurations."nixolas" = inputs.nixpkgs.lib.nixosSystem {
+      modules = [
+        ./nixos/configuration.nix
+        inputs.home-manager.nixosModules.home-manager
+        {
+          home-manager.useGlobalPkgs = true;
+          home-manager.useUserPackages = true;
+          home-manager.users.lentilus = import ./home-manager/lentilus.nix;
           home-manager.extraSpecialArgs = {inherit inputs outputs;};
         }
       ];
