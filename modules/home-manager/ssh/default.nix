@@ -48,13 +48,13 @@ in {
     '';
   };
 
-  services.gpg-agent = {
-    enable = true;
-    # enableSshSupport = true;
-  };
-
-  # temporary
-  services.ssh-agent = {
-    enable = true;
-  };
+  # services.gpg-agent = {
+  #   enable = true;
+  #   # enableSshSupport = true;
+  # };
+  #
+  # # temporary
+  # services.ssh-agent = {
+  #   enable = true;
+  # };
 }
