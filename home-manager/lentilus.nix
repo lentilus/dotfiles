@@ -12,6 +12,8 @@
     outputs.homeManagerModules.dev
     outputs.homeManagerModules.desktop
     outputs.homeManagerModules.ssh
+    outputs.homeManagerModules.homeConfig
+    outputs.homeManagerModules.yubikeyGpg
   ];
 
   nixpkgs = {
@@ -27,10 +29,15 @@
   };
 
   desktop.enable = true;
+  # sway.enable = false;
   dev.enable = true;
 
+  # home.config.target.foo = {
+  #   enable = true;
+  # };
+
   nix = {
-    package = pkgs.unstable.nix;
+    package = lib.mkDefault pkgs.unstable.nix;
     settings.experimental-features = ["nix-command" "flakes"];
   };
 
