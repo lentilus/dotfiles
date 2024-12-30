@@ -54,6 +54,7 @@
 
   programs.git = {
     enable = true;
+    userName = "lentilus";
     userEmail = "lentilus@mailbox.org";
     signing.key = null; # let git decide depending on author
     extraConfig.commit.gpgsign = true;
