@@ -4,9 +4,12 @@
   pkgs,
   ...
 }: {
-
   programs.gpg = {
     enable = true;
+
+    publicKeys = [
+      {source = ../../public-key.txt;}
+    ];
 
     # https://support.yubico.com/hc/en-us/articles/4819584884124-Resolving-GPG-s-CCID-conflicts
     scdaemonSettings = {
@@ -50,8 +53,9 @@
   };
 
   programs.git = {
-    # userEmail = "same as your key identity"
-    signing.key = "$KEYID";
+    enable = true;
+    userEmail = "lentilus@mailbox.org";
+    signing.key = null; # let git decide depending on author
     extraConfig.commit.gpgsign = true;
   };
 }

@@ -8,7 +8,8 @@
 }: {
   # You can import other NixOS modules here
   imports = [
-    # outputs.nixosModules.example
+    outputs.nixosModules.homeRowMods
+    # outputs.nixosModules.yubikeyGpg
 
     # ./users.nix
 
@@ -20,6 +21,7 @@
     # You can add overlays here
     overlays = [
       # outputs.overlays.additions
+      inputs.nixgl.overlay
       outputs.overlays.modifications
       outputs.overlays.unstable-packages
     ];
@@ -49,8 +51,28 @@
     nixPath = lib.mapAttrsToList (n: _: "${n}=flake:${n}") flakeInputs;
   };
 
-  networking.hostName = "your-hostname";
+  networking.hostName = "nixos";
 
+  homeRowMods.enable = true;
+
+  # for yubikey gpg stuff
+  services = {
+    pcscd.enable = true;
+    udev.packages = [pkgs.yubikey-personalization];
+  };
+
+  # Bootloader.
+  boot.loader.systemd-boot.enable = true;
+  boot.loader.efi.canTouchEfiVariables = true;
+
+  programs.hyprland.enable = true;
+
+  # Enable the GNOME Desktop Environment.
+  services.xserver.enable = true;
+  services.xserver.displayManager.gdm.enable = true;
+  services.xserver.desktopManager.gnome.enable = true;
+
+  programs.zsh.enable = true;
   users.users = {
     lentilus = {
       # TODO: You can set an initial password for your user.
@@ -58,7 +80,11 @@
       # Be sure to change it (using passwd) after rebooting!
       initialPassword = "correcthorsebatterystaple";
       isNormalUser = true;
-      extraGroups = ["wheel"];
+      shell = pkgs.zsh;
+      extraGroups = [
+        "wheel"
+        "input" # kanata
+      ];
     };
   };
 
