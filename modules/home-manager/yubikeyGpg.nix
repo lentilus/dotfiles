@@ -3,60 +3,99 @@
   lib,
   pkgs,
   ...
-}: {
-  programs.gpg = {
-    enable = true;
+}: let
+in {
+  options.yubikeyGpg = {
+    enable = lib.mkEnableOption "enable yubi-key based gpg identity";
 
-    publicKeys = [
-      {source = ../../public-key.txt;}
-    ];
-
-    # https://support.yubico.com/hc/en-us/articles/4819584884124-Resolving-GPG-s-CCID-conflicts
-    scdaemonSettings = {
-      disable-ccid = true;
+    publicKeyPath = lib.mkOption {
+      type = lib.types.path;
+      description = "Path to the exported gpg public key";
     };
 
-    # https://github.com/drduh/config/blob/master/gpg.conf
-    settings = {
-      personal-cipher-preferences = "AES256 AES192 AES";
-      personal-digest-preferences = "SHA512 SHA384 SHA256";
-      personal-compress-preferences = "ZLIB BZIP2 ZIP Uncompressed";
-      default-preference-list = "SHA512 SHA384 SHA256 AES256 AES192 AES ZLIB BZIP2 ZIP Uncompressed";
-      cert-digest-algo = "SHA512";
-      s2k-digest-algo = "SHA512";
-      s2k-cipher-algo = "AES256";
-      charset = "utf-8";
-      fixed-list-mode = true;
-      no-comments = true;
-      no-emit-version = true;
-      keyid-format = "0xlong";
-      list-options = "show-uid-validity";
-      verify-options = "show-uid-validity";
-      with-fingerprint = true;
-      require-cross-certification = true;
-      no-symkey-cache = true;
-      use-agent = true;
-      throw-keyids = true;
+    pinentryPackage = lib.mkOption {
+      type = lib.types.package;
+      description = "the pinentry package";
     };
   };
 
-  services.gpg-agent = {
-    enable = true;
+  config = lib.mkIf config.yubikeyGpg.enable {
+    programs.gpg = {
+      enable = true;
 
-    # https://github.com/drduh/config/blob/master/gpg-agent.conf
-    defaultCacheTtl = 60;
-    maxCacheTtl = 120;
-    pinentryPackage = pkgs.pinentry-rofi;
-    extraConfig = ''
-      ttyname $GPG_TTY
+      publicKeys = [
+        {source = config.yubikeyGpg.publicKeyPath;}
+      ];
+      
+      # https://support.yubico.com/hc/en-us/articles/4819584884124-Resolving-GPG-s-CCID-conflicts
+      scdaemonSettings = {
+        disable-ccid = true;
+      };
+
+      # https://github.com/drduh/config/blob/master/gpg.conf
+      settings = {
+        personal-cipher-preferences = "AES256 AES192 AES";
+        personal-digest-preferences = "SHA512 SHA384 SHA256";
+        personal-compress-preferences = "ZLIB BZIP2 ZIP Uncompressed";
+        default-preference-list = "SHA512 SHA384 SHA256 AES256 AES192 AES ZLIB BZIP2 ZIP Uncompressed";
+        cert-digest-algo = "SHA512";
+        s2k-digest-algo = "SHA512";
+        s2k-cipher-algo = "AES256";
+        charset = "utf-8";
+        fixed-list-mode = true;
+        no-comments = true;
+        no-emit-version = true;
+        keyid-format = "0xlong";
+        list-options = "show-uid-validity";
+        verify-options = "show-uid-validity";
+        with-fingerprint = true;
+        require-cross-certification = true;
+        no-symkey-cache = true;
+        use-agent = true;
+        throw-keyids = true;
+      };
+    };
+
+home.activation = {
+    deduplicateGpgInstance = lib.hm.dag.entryAfter ["importGpgKeys"] ''
+      echo "deduplicate gpg"
+      {
+        # echo "running ${pkgs.procps}/bin/pgrep"
+        # ${pkgs.procps}/bin/pgrep keyboxd || echo no process found
+
+        echo "running ${config.programs.gpg.package}/bin/gpgconf --kill gpg-agent"
+        ${config.programs.gpg.package}/bin/gpgconf --kill gpg-agent || echo nothing to do
+
+        pid=${pkgs.procps}/bin/pgrep keyboxd || echo no process found
+        ${pkgs.coreutils}/bin/kill $pid
+
+      } &> /home/lentilus/testing.txt
     '';
   };
 
-  programs.git = {
-    enable = true;
-    userName = "lentilus";
-    userEmail = "lentilus@mailbox.org";
-    signing.key = null; # let git decide depending on author
-    extraConfig.commit.gpgsign = true;
+    services.gpg-agent = {
+      enable = true;
+
+      # https://github.com/drduh/config/blob/master/gpg-agent.conf
+      defaultCacheTtl = 60;
+      maxCacheTtl = 120;
+      pinentryPackage = config.yubikeyGpg.pinentryPackage;
+      extraConfig = ''
+        ttyname $GPG_TTY
+      '';
+
+      # enableZshIntegration = false;
+      enableSshSupport = true;
+    };
+
+    programs.git = {
+      enable = true;
+      userName = "lentilus";
+      userEmail = "lentilus@mailbox.org";
+
+      # let git decide depending on author
+      signing.key = null;
+      extraConfig.commit.gpgsign = true;
+    };
   };
 }
