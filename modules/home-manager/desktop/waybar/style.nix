@@ -1,4 +1,4 @@
-let
+{config, ...}: let
   colors = config.stylix.base16Scheme;
   font = config.stylix.fonts.monospace.name;
   black = "#${colors.base00}";

@@ -1,4 +1,4 @@
-{
+{pkgs, ...}: {
   position = "bottom";
   spacing = 4;
   modules-left = ["sway/workspaces" "idle_inhibitor" "custom/mail"];

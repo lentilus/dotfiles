@@ -51,6 +51,9 @@
         fpath+=(${pkgs.pure-prompt}/share/zsh/site-functions)
         autoload -U promptinit; promptinit
         prompt pure
+
+        # https://unix.stackexchange.com/questions/608842/zshrc-export-gpg-tty-tty-says-not-a-tty
+        # export GPG_TTY=$TTY
       '';
 
       initExtra = ''

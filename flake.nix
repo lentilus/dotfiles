@@ -67,6 +67,8 @@
 
     homeManagerModules = import ./modules/home-manager;
 
+    nixosModules = import ./modules/nixos;
+
     ### for non-nixos hosts
     homeConfigurations = {
       # must be built --impure as it needs access to $HOME, $USER
@@ -103,7 +105,7 @@
     };
 
     ### for nixos
-    nixosConfigurations."nixolas" = inputs.nixpkgs.lib.nixosSystem {
+    nixosConfigurations."nixos" = inputs.nixpkgs.lib.nixosSystem {
       modules = [
         ./nixos/configuration.nix
         inputs.home-manager.nixosModules.home-manager

@@ -16,21 +16,27 @@
     outputs.homeManagerModules.yubikeyGpg
   ];
 
-  nixpkgs = {
-    overlays = [
-      inputs.nixgl.overlay
-      outputs.overlays.modifications
-      outputs.overlays.unstable-packages
-    ];
-    # Configure your nixpkgs instance
-    config = {
-      allowUnfree = true;
-    };
-  };
+  # nixpkgs = {
+  #   overlays = [
+  #     inputs.nixgl.overlay
+  #     outputs.overlays.modifications
+  #     outputs.overlays.unstable-packages
+  #   ];
+  #   # Configure your nixpkgs instance
+  #   config = {
+  #     allowUnfree = true;
+  #   };
+  # };
 
   desktop.enable = true;
   # sway.enable = false;
   dev.enable = true;
+
+  yubikeyGpg = {
+    enable = true;
+    publicKeyPath = ../public-key.txt;
+    pinentryPackage = pkgs.pinentry-rofi;
+  };
 
   # home.config.target.foo = {
   #   enable = true;
@@ -45,5 +51,5 @@
   home.homeDirectory = "/home/lentilus";
 
   programs.home-manager.enable = true;
-  targets.genericLinux.enable = true;
+  # targets.genericLinux.enable = true;
 }

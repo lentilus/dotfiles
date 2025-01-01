@@ -9,7 +9,7 @@
   # You can import other NixOS modules here
   imports = [
     outputs.nixosModules.homeRowMods
-    # outputs.nixosModules.yubikeyGpg
+    outputs.nixosModules.polkitAgent
 
     # ./users.nix
 
@@ -66,6 +66,7 @@
   boot.loader.efi.canTouchEfiVariables = true;
 
   programs.hyprland.enable = true;
+  polkitAgent.enable = true;
 
   # Enable the GNOME Desktop Environment.
   services.xserver.enable = true;

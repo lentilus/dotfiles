@@ -12,6 +12,7 @@
   config = lib.mkIf config.nvim.enable {
     home.packages = [
       # plugin dependencies
+      pkgs.gcc
       pkgs.fd
       pkgs.ripgrep
       pkgs.cargo

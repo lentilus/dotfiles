@@ -6,9 +6,10 @@
 }: {
   imports = [
     ./sway
+    ./waybar
+    ./hypr.nix
     ./mail
     ./browser
-    ./kanata.nix
     ./stylix.nix
     ./pass.nix
     ./mimetypes.nix
@@ -31,9 +32,9 @@
     browser.enable = lib.mkDefault true;
     mail.enable = lib.mkDefault true;
     pass.enable = lib.mkDefault true;
-    sway.enable = lib.mkDefault true;
+    sway.enable = lib.mkDefault false;
+    hypr.enable = lib.mkDefault true;
     stylix.enable = lib.mkDefault true;
     mimeapps.enable = lib.mkDefault false;
-    homeRowMods.enable = lib.mkDefault true;
   };
 }

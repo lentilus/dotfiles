@@ -24,8 +24,8 @@
       pkgs.unstable.nerd-fonts.jetbrains-mono
     ];
 
-    home.file = {
-      "${config.xdg.configHome}/git".source = "${outputs.sources.dotfiles}/git";
-    };
+    # home.file = {
+    #   "${config.xdg.configHome}/git".source = "${outputs.sources.dotfiles}/git";
+    # };
   };
 }
