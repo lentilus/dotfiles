@@ -24,9 +24,12 @@ in {
       enable = true;
 
       publicKeys = [
-        {source = config.yubikeyGpg.publicKeyPath;}
+        {
+          source = config.yubikeyGpg.publicKeyPath;
+          trust = 5;
+        }
       ];
-      
+
       # https://support.yubico.com/hc/en-us/articles/4819584884124-Resolving-GPG-s-CCID-conflicts
       scdaemonSettings = {
         disable-ccid = true;
@@ -53,25 +56,16 @@ in {
         no-symkey-cache = true;
         use-agent = true;
         throw-keyids = true;
+
+        # some additions
+        with-keygrip = true;
       };
     };
 
-home.activation = {
-    deduplicateGpgInstance = lib.hm.dag.entryAfter ["importGpgKeys"] ''
-      echo "deduplicate gpg"
-      {
-        # echo "running ${pkgs.procps}/bin/pgrep"
-        # ${pkgs.procps}/bin/pgrep keyboxd || echo no process found
-
-        echo "running ${config.programs.gpg.package}/bin/gpgconf --kill gpg-agent"
-        ${config.programs.gpg.package}/bin/gpgconf --kill gpg-agent || echo nothing to do
-
-        pid=${pkgs.procps}/bin/pgrep keyboxd || echo no process found
-        ${pkgs.coreutils}/bin/kill $pid
-
-      } &> /home/lentilus/testing.txt
+    # https://github.com/nix-community/home-manager/issues/6067
+    home.file."${config.programs.gpg.homedir}/common.conf".text = ''
+      # use-keyboxd
     '';
-  };
 
     services.gpg-agent = {
       enable = true;
@@ -85,7 +79,10 @@ home.activation = {
       '';
 
       # enableZshIntegration = false;
+      # enableExtraSocket = true;
       enableSshSupport = true;
+      # sshKeys = [ "63952DB05F2B15C30F7FD09B2ACDC80F7FB03AE1" ];
+      sshKeys = [ "0C5B390F0ECDC5446622AE31F0916A3588C5B284" ];
     };
 
     programs.git = {
