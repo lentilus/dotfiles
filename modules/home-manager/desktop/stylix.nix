@@ -8,6 +8,11 @@
     polarity = "dark";
     image = ./wallpaper.jpg;
 
+    targets = {
+        waybar.enable = false;
+        # aerc.enable = false;
+    };
+
     # by hardcoding we can access the colors elsewhere
     base16Scheme = {
       base00 = "1d2021"; # ----
