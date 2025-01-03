@@ -71,8 +71,8 @@ in {
       enable = true;
 
       # https://github.com/drduh/config/blob/master/gpg-agent.conf
-      defaultCacheTtl = 60;
-      maxCacheTtl = 120;
+      defaultCacheTtl = 600; # 1h
+      maxCacheTtl = 7200; # 2h
       pinentryPackage = config.yubikeyGpg.pinentryPackage;
       extraConfig = ''
         ttyname $GPG_TTY
