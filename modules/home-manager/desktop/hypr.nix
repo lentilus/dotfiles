@@ -31,6 +31,9 @@
         # ${pkgs.waybar}/bin/waybar &
         notify-send "Hello from autostart!"
       '';
+
+      workspaceBindings = builtins.map (name: "$mod, ${name}, workspace, ${name}") [ "1" "2" "3" "4" ];
+      moveWorspaceBindings = builtins.map (name: "$mod Shift, ${name}, movetoworkspace, ${name}") [ "1" "2" "3" "4" ];
     in {
       enable = true;
       settings = {
@@ -39,25 +42,37 @@
         misc.disable_hyprland_logo = true;
         input.touchpad.natural_scroll = true;
         windowrulev2 = "suppressevent maximize, class:.*";
-        bind = [
-          # controls
-          "$mod, q, killactive"
-          "$mod Shift, Q, exit"
-          "$mod, Tab, fullscreen"
+        animation = "global, 1, 2, default";
+        bind = lib.concatLists [
+          [
+            # controls
+            "$mod, q, killactive"
+            "$mod Shift, Q, exit"
+            "$mod, Tab, fullscreen"
 
-          # move focus
-          "$mod, H, movefocus, l"
-          "$mod, J, movefocus, d"
-          "$mod, K, movefocus, u"
-          "$mod, L, movefocus, r"
+            # move focus
+            "$mod, H, movefocus, l"
+            "$mod, J, movefocus, d"
+            "$mod, K, movefocus, u"
+            "$mod, L, movefocus, r"
 
-          # utils
-          "$mod, Space, exec, ${config.programs.rofi.package}/bin/rofi -show drun"
+            # move window
+            "$mod Shift, H, movewindow, l"
+            "$mod Shift, J, movewindow, d"
+            "$mod Shift, K, movewindow, u"
+            "$mod Shift, L, movewindow, r"
 
-          # apps
-          "$mod, Return, exec, ${pkgs.foot}/bin/footclient"
+            # utils
+            "$mod, Space, exec, ${config.programs.rofi.package}/bin/rofi -show drun"
+
+            # apps
+            "$mod, Return, exec, ${pkgs.foot}/bin/footclient"
+          ]
+          workspaceBindings
+          moveWorspaceBindings
         ];
       };
     };
   };
 }
+
