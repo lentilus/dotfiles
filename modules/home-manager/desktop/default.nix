@@ -24,7 +24,7 @@
       pkgs.poppler_utils
       pkgs.signal-desktop
       pkgs.firefox
-      pkgs.typst
+      pkgs.unstable.typst
     ];
 
     programs.zathura.enable = true;
