@@ -14,6 +14,7 @@
     outputs.homeManagerModules.ssh
     outputs.homeManagerModules.homeConfig
     outputs.homeManagerModules.yubikeyGpg
+    outputs.homeManagerModules.passwordStore
   ];
 
   # nixpkgs = {
@@ -38,10 +39,12 @@
     pinentryPackage = pkgs.pinentry-rofi;
   };
 
-  # home.config.target.foo = {
-  #   enable = true;
-  # };
+  passwordStore = {
+    enable = true;
+    storePath = "${config.home.homeDirectory}/git/pass";
+  };
 
+    
   nix = {
     package = lib.mkDefault pkgs.unstable.nix;
     settings.experimental-features = ["nix-command" "flakes"];
@@ -52,4 +55,5 @@
 
   programs.home-manager.enable = true;
   # targets.genericLinux.enable = true;
+
 }
