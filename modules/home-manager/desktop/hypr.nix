@@ -64,6 +64,7 @@
 
             # utils
             "$mod, Space, exec, ${config.programs.rofi.package}/bin/rofi -show drun"
+            "$mod, x, exec, ${config.programs.rofi.pass.package}/bin/rofi-pass"
 
             # apps
             "$mod, Return, exec, ${pkgs.foot}/bin/footclient"
