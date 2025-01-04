@@ -29,21 +29,19 @@
       enable = true;
       hypr.enable = true;
     };
+    yubikeyGpg = {
+      enable = true;
+      publicKeyPath = ../public-key.txt;
+      pinentryPackage = pkgs.pinentry-rofi;
+    };
+    passwordStore = {
+      enable = true;
+      storePath = "${config.home.homeDirectory}/git/pass";
+    };
   };
 
   # sway.enable = false;
   dev.enable = true;
-
-  yubikeyGpg = {
-    enable = true;
-    publicKeyPath = ../public-key.txt;
-    pinentryPackage = pkgs.pinentry-rofi;
-  };
-
-  passwordStore = {
-    enable = true;
-    storePath = "${config.home.homeDirectory}/git/pass";
-  };
 
   nix = {
     package = lib.mkDefault pkgs.unstable.nix;

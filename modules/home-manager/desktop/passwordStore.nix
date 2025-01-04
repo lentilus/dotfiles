@@ -4,9 +4,9 @@
   pkgs,
   ...
 }: let
-  cfg = config.passwordStore;
+  cfg = config.desktop.passwordStore;
 in {
-  options.passwordStore = {
+  options.desktop.passwordStore = {
     enable = lib.mkEnableOption "enable gnu password store setup";
     storePath = lib.mkOption {
       type = lib.types.str;

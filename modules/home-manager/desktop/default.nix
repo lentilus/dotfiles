@@ -10,6 +10,8 @@ in {
     ./linux
     ./darwin
     ./browser
+    ./passwordStore.nix
+    ./yubikeyGpg.nix
   ];
 
   options.desktop = {

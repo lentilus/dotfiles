@@ -5,8 +5,6 @@
       ./dev
       ./darwinDesktop
       ./desktop
-      ./yubikeyGpg.nix
-      ./passwordStore.nix
     ];
   };
 }

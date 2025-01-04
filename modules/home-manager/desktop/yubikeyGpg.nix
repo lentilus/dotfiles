@@ -4,8 +4,9 @@
   pkgs,
   ...
 }: let
+  cfg = config.desktop.yubikeyGpg;
 in {
-  options.yubikeyGpg = {
+  options.desktop.yubikeyGpg = {
     enable = lib.mkEnableOption "enable yubi-key based gpg identity";
 
     publicKeyPath = lib.mkOption {
@@ -19,13 +20,13 @@ in {
     };
   };
 
-  config = lib.mkIf config.yubikeyGpg.enable {
+  config = lib.mkIf cfg.enable {
     programs.gpg = {
       enable = true;
 
       publicKeys = [
         {
-          source = config.yubikeyGpg.publicKeyPath;
+          source = cfg.publicKeyPath;
           trust = 5;
         }
       ];
@@ -73,7 +74,7 @@ in {
       # https://github.com/drduh/config/blob/master/gpg-agent.conf
       defaultCacheTtl = 600; # 1h
       maxCacheTtl = 7200; # 2h
-      pinentryPackage = config.yubikeyGpg.pinentryPackage;
+      pinentryPackage = cfg.pinentryPackage;
       extraConfig = ''
         ttyname $GPG_TTY
       '';
@@ -81,7 +82,6 @@ in {
       # enableZshIntegration = false;
       # enableExtraSocket = true;
       enableSshSupport = true;
-      # sshKeys = [ "63952DB05F2B15C30F7FD09B2ACDC80F7FB03AE1" ];
       sshKeys = ["0C5B390F0ECDC5446622AE31F0916A3588C5B284"];
     };
 
