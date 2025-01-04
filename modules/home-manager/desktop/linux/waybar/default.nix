@@ -3,8 +3,13 @@
   config,
   pkgs,
   ...
-}: {
-  config = lib.mkIf config.hypr.enable {
+}: let
+  cfg = config.desktop.linux.waybar;
+in {
+  options.desktop.linux.waybar = {
+    enable = lib.mkEnableOption "Enable Waybar configuration";
+  };
+  config = lib.mkIf cfg.enable {
     programs.waybar = {
       enable = true;
       systemd.enable = true;

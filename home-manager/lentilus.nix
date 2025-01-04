@@ -8,13 +8,7 @@
 }: {
   imports = [
     inputs.stylix.homeManagerModules.stylix
-    outputs.homeManagerModules.core
-    outputs.homeManagerModules.dev
-    outputs.homeManagerModules.desktop
-    outputs.homeManagerModules.ssh
-    outputs.homeManagerModules.homeConfig
-    outputs.homeManagerModules.yubikeyGpg
-    outputs.homeManagerModules.passwordStore
+    outputs.homeManagerModules.custom
   ];
 
   # nixpkgs = {
@@ -29,7 +23,14 @@
   #   };
   # };
 
-  desktop.enable = true;
+  desktop = {
+    enable = true;
+    linux = {
+      enable = true;
+      hypr.enable = true;
+    };
+  };
+
   # sway.enable = false;
   dev.enable = true;
 
@@ -44,7 +45,6 @@
     storePath = "${config.home.homeDirectory}/git/pass";
   };
 
-    
   nix = {
     package = lib.mkDefault pkgs.unstable.nix;
     settings.experimental-features = ["nix-command" "flakes"];
@@ -55,5 +55,4 @@
 
   programs.home-manager.enable = true;
   # targets.genericLinux.enable = true;
-
 }

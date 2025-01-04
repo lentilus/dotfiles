@@ -82,7 +82,7 @@ in {
       # enableExtraSocket = true;
       enableSshSupport = true;
       # sshKeys = [ "63952DB05F2B15C30F7FD09B2ACDC80F7FB03AE1" ];
-      sshKeys = [ "0C5B390F0ECDC5446622AE31F0916A3588C5B284" ];
+      sshKeys = ["0C5B390F0ECDC5446622AE31F0916A3588C5B284"];
     };
 
     programs.git = {

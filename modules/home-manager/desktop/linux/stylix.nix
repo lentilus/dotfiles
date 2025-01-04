@@ -9,8 +9,8 @@
     image = ./wallpaper.jpg;
 
     targets = {
-        waybar.enable = false;
-        # aerc.enable = false;
+      waybar.enable = false;
+      # aerc.enable = false;
     };
 
     # by hardcoding we can access the colors elsewhere

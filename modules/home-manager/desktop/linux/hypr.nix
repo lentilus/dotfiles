@@ -4,12 +4,14 @@
   lib,
   sources,
   ...
-}: {
-  options = {
-    hypr.enable = lib.mkEnableOption "enable sway desktop";
+}: let
+  cfg = config.desktop.linux.hypr;
+in {
+  options.desktop.linux.hypr = {
+    enable = lib.mkEnableOption "enable sway desktop";
   };
 
-  config = lib.mkIf config.hypr.enable {
+  config = lib.mkIf cfg.enable {
     programs.foot = {
       enable = true;
       server.enable = true;
@@ -32,8 +34,8 @@
         notify-send "Hello from autostart!"
       '';
 
-      workspaceBindings = builtins.map (name: "$mod, ${name}, workspace, ${name}") [ "1" "2" "3" "4" ];
-      moveWorspaceBindings = builtins.map (name: "$mod Shift, ${name}, movetoworkspace, ${name}") [ "1" "2" "3" "4" ];
+      workspaceBindings = builtins.map (name: "$mod, ${name}, workspace, ${name}") ["1" "2" "3" "4"];
+      moveWorspaceBindings = builtins.map (name: "$mod Shift, ${name}, movetoworkspace, ${name}") ["1" "2" "3" "4"];
     in {
       enable = true;
       settings = {
@@ -76,4 +78,3 @@
     };
   };
 }
-

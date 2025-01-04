@@ -3,11 +3,13 @@
   lib,
   config,
   ...
-}: {
-  options = {
-    mimeapps.enable = lib.mkEnableOption "enable mime type app association";
+}: let
+  cfg = config.desktop.linux.mimeapps;
+in {
+  options.desktop.linux.mimeapps = {
+    enable = lib.mkEnableOption "enable mime type app association";
   };
-  config = lib.mkIf config.mimeapps.enable {
+  config = lib.mkIf cfg.enable {
     xdg.mimeApps = {
       enable = true;
       associations.added = {

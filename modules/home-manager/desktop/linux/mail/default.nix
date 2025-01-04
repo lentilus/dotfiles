@@ -3,14 +3,15 @@
   config,
   pkgs,
   ...
-}: {
-  options = {
-    mail.enable = lib.mkEnableOption "enable mutt mail client";
+}: let
+  cfg = config.desktop.linux.mail;
+in {
+  options.desktop.linux.mail = {
+    enable = lib.mkEnableOption "enable mutt mail client";
   };
 
-  config = lib.mkIf config.mail.enable {
-    # we need pass enable to retrieve imap secrets
-    programs.mbsync = assert config.pass.enable == config.mail.enable; {
+  config = lib.mkIf cfg.enable {
+    programs.mbsync = {
       enable = true;
     };
 
