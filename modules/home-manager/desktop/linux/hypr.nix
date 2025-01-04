@@ -12,30 +12,47 @@ in {
   };
 
   config = lib.mkIf cfg.enable {
-    programs.foot = {
-      enable = true;
-      server.enable = true;
-      settings.main.term = "xterm-256color";
-    };
-
-    programs.rofi = {
-      enable = true;
-      package = pkgs.rofi-wayland;
-    };
-
-    programs.waybar = {
-      enable = true;
-      systemd.enable = true;
-    };
-
     wayland.windowManager.hyprland = let
       startup = pkgs.pkgs.writeShellScriptBin "start" ''
-        # ${pkgs.waybar}/bin/waybar &
         notify-send "Hello from autostart!"
       '';
+      # map from name to number
+      workspaces = {
+        "1" = "a";
+        "2" = "s";
+        "3" = "d";
+        "4" = "f";
+        "5" = "u";
+        "6" = "i";
+        "7" = "o";
+        "8" = "p";
+      };
 
-      workspaceBindings = builtins.map (name: "$mod, ${name}, workspace, ${name}") ["1" "2" "3" "4"];
-      moveWorspaceBindings = builtins.map (name: "$mod Shift, ${name}, movetoworkspace, ${name}") ["1" "2" "3" "4"];
+      # generate keybinding from workspaces
+      # moves = builtins.concatLists (
+      #   builtins.genList (
+      #     i: let
+      #       ws = builtins.toString (i + 1);
+      #       key = workspaces."${ws}";
+      #     in [
+      #       "$mod, ${key}, workspace, ${ws}"
+      #       "$mod SHIFT, ${key}, movetoworkspace, ${ws}"
+      #     ]
+      #   )
+      #   8
+      # );
+      # Generate keybindings from workspaces
+      moves = builtins.concatLists (
+        builtins.attrValues (
+          builtins.mapAttrs (
+            ws: key: [
+              "$mod, ${key}, workspace, ${ws}"
+              "$mod SHIFT, ${key}, movetoworkspace, ${ws}"
+            ]
+          )
+          workspaces
+        )
+      );
     in {
       enable = true;
       settings = {
@@ -69,10 +86,9 @@ in {
             "$mod, x, exec, ${config.programs.rofi.pass.package}/bin/rofi-pass"
 
             # apps
-            "$mod, Return, exec, ${pkgs.foot}/bin/footclient"
+            "$mod, Return, exec, ${config.programs.foot.package}/bin/footclient"
           ]
-          workspaceBindings
-          moveWorspaceBindings
+          moves
         ];
       };
     };

@@ -8,11 +8,13 @@
 in {
   imports = [
     ./waybar
-    ./hypr.nix
     ./mail
+    ./hypr.nix
     ./mimetypes.nix
     ./stylix.nix
     ./packages.nix
+    ./foot.nix
+    ./rofi.nix
   ];
 
   options.desktop.linux = {

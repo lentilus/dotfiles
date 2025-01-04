@@ -1,7 +1,7 @@
 {pkgs, ...}: {
   position = "bottom";
   spacing = 4;
-  modules-left = ["sway/workspaces" "hypr/workspaces" "idle_inhibitor" "custom/mail"];
+  modules-left = ["sway/workspaces" "hyprland/workspaces" "idle_inhibitor" "custom/mail"];
   modules-center = [];
   modules-right = ["network" "battery" "pulseaudio" "cpu" "memory" "clock" "tray"];
   "custom/mail" = {
