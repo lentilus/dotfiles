@@ -39,6 +39,10 @@ in {
         "<Ctrl+o>" = ":tab-prev";
         "<Ctrl+i>" = ":tab-next";
         "<Tab>" = ":tab-next";
+        ",o" = "spawn xdg-open {url}";
+        ",O" = "hint links spawn xdg-open {url}";
+        ",m" = "spawn ${config.programs.mpv.package}/bin/mpv {url}";
+        ",M" = "hint links spawn ${config.programs.mpv.package}/bin/mpv {url}";
       };
     };
 

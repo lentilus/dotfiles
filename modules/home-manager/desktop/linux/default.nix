@@ -25,6 +25,7 @@ in {
     # options
     stylix.enable = lib.mkDefault true;
     programs.zathura.enable = lib.mkDefault true;
+    programs.mpv.enable = lib.mkDefault true;
 
     # cutom options
     desktop.linux = lib.mkDefault {
