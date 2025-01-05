@@ -21,6 +21,7 @@
 
       # language servers
       pkgs.nixd
+      pkgs.tinymist
     ];
 
     home.file = {
