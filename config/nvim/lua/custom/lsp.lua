@@ -77,6 +77,33 @@ lspconfig.nixd.setup({
 	},
 })
 
+lspconfig.tinymist.setup({
+    cmd = {"tinymist"},
+    single_file_support = true,
+    settings = {
+        tinymist = {
+            outputPath = "$root/$dir/$name", -- Example: store artifacts in a target directory
+            exportPdf = "onType", -- Export PDFs on file save
+            rootPath = "-", -- Use parent directory of the file as root
+            semanticTokens = "enable", -- Enable semantic tokens for syntax highlighting
+            systemFonts = true, -- Load system fonts for Typst compiler
+            fontPaths = { "/usr/share/fonts", "~/custom_fonts" }, -- Custom font paths
+            compileStatus = "disable", -- Disable compile status (default for Neovim)
+            typstExtraArgs = { "--quiet" }, -- Example: Pass additional arguments to typst CLI
+            formatterMode = "typstyle", -- Use typstyle formatter
+            formatterPrintWidth = 100, -- Set print width to 100 characters
+            completion = {
+                triggerOnSnippetPlaceholders = true, -- Trigger completions on snippet placeholders
+                postfix = true, -- Enable postfix code completion
+                postfixUfcs = true, -- Enable UFCS-style completion
+                postfixUfcsLeft = true, -- Enable left-variant UFCS-style completion
+                postfixUfcsRight = true, -- Enable right-variant UFCS-style completion
+            },
+        },
+    },
+    root_dir = require("lspconfig.util").root_pattern(".git", "*.typ"), -- Example root directory logic
+})
+
 require("mason-lspconfig").setup({
 	ensure_installed = {
 		"lua_ls",
@@ -123,36 +150,6 @@ require("mason-lspconfig").setup({
 			})
 		end,
 
-		-- ["nixd"] = function()
-		-- 	lspconfig.nixd.setup()
-		-- end,
-
-		["tinymist"] = function()
-			lspconfig.tinymist.setup({
-				settings = {
-					tinymist = {
-						outputPath = "$root/target/$dir/$name", -- Example: store artifacts in a target directory
-						exportPdf = "onSave", -- Export PDFs on file save
-						rootPath = "-", -- Use parent directory of the file as root
-						semanticTokens = "enable", -- Enable semantic tokens for syntax highlighting
-						systemFonts = true, -- Load system fonts for Typst compiler
-						fontPaths = { "/usr/share/fonts", "~/custom_fonts" }, -- Custom font paths
-						compileStatus = "disable", -- Disable compile status (default for Neovim)
-						typstExtraArgs = { "--quiet" }, -- Example: Pass additional arguments to typst CLI
-						formatterMode = "typstyle", -- Use typstyle formatter
-						formatterPrintWidth = 100, -- Set print width to 100 characters
-						completion = {
-							triggerOnSnippetPlaceholders = true, -- Trigger completions on snippet placeholders
-							postfix = true, -- Enable postfix code completion
-							postfixUfcs = true, -- Enable UFCS-style completion
-							postfixUfcsLeft = true, -- Enable left-variant UFCS-style completion
-							postfixUfcsRight = true, -- Enable right-variant UFCS-style completion
-						},
-					},
-				},
-				root_dir = require("lspconfig.util").root_pattern(".git", "*.typ"), -- Example root directory logic
-			})
-		end,
 	},
 })
 
