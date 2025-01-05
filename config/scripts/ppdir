@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Check if at least one directory is passed as an argument
 if [ "$#" -lt 1 ]; then
@@ -27,7 +27,7 @@ display_contents() {
 # Iterate over each argument passed to the script
 for dir in "$@"; do
     if [ -d "$dir" ]; then
-        echo "Processing directory: $dir"
+        # echo "Processing directory: $dir"
         display_contents "$dir"
     else
         echo "Warning: $dir is not a valid directory."
