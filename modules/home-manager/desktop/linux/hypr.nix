@@ -28,19 +28,6 @@ in {
         "8" = "p";
       };
 
-      # generate keybinding from workspaces
-      # moves = builtins.concatLists (
-      #   builtins.genList (
-      #     i: let
-      #       ws = builtins.toString (i + 1);
-      #       key = workspaces."${ws}";
-      #     in [
-      #       "$mod, ${key}, workspace, ${ws}"
-      #       "$mod SHIFT, ${key}, movetoworkspace, ${ws}"
-      #     ]
-      #   )
-      #   8
-      # );
       # Generate keybindings from workspaces
       moves = builtins.concatLists (
         builtins.attrValues (
@@ -60,9 +47,8 @@ in {
         exec-once = "${startup}/bin/start";
         misc.disable_hyprland_logo = true;
         input.touchpad.natural_scroll = true;
-        windowrulev2 = "suppressevent maximize, class:.*";
         animation = "global, 1, 2, default";
-        bind = lib.concatLists [
+        bind =
           [
             # controls
             "$mod, q, killactive"
@@ -88,7 +74,20 @@ in {
             # apps
             "$mod, Return, exec, ${config.programs.foot.package}/bin/footclient"
           ]
-          moves
+          ++ moves;
+        windowrulev2 = [
+          "suppressevent maximize, class:.*"
+
+          # tags
+          "tag +term, class:footclient"
+          "tag +browser, class:qutebrowser"
+          "tag +preview, class:zathura, workspace:3"
+
+          # rules
+          "workspace 1, tag:term"
+          "workspace 2, tag:browser"
+          "workspace 3, tag:math"
+          "noinitialfocus, tag:preview"
         ];
       };
     };
