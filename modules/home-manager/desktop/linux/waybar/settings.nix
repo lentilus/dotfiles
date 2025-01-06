@@ -2,7 +2,7 @@
   position = "bottom";
   spacing = 4;
   modules-left = ["sway/workspaces" "hyprland/workspaces" "idle_inhibitor" "custom/mail"];
-  modules-center = [];
+  modules-center = ["hyprland/window"];
   modules-right = ["network" "battery" "pulseaudio" "cpu" "memory" "clock" "tray"];
   "custom/mail" = {
     exec = "${pkgs.notmuch}/bin/notmuch count tag:unread";

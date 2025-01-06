@@ -99,7 +99,7 @@ in {
 
         maildir.path = "mailbox";
         # passwordCommand = "PASSWORD_STORE_DIR=~/git/password-store; pass show communication/mailbox";
-        passwordCommand = "${pkgs.pass}/bin/pass show communication/mailbox";
+        passwordCommand = "PASSWORD_STORE_DIR=${config.programs.password-store.settings.PASSWORD_STORE_DIR}; ${pkgs.pass}/bin/pass show communication/mailbox";
         primary = true;
 
         aliases = [

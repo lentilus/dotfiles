@@ -22,6 +22,7 @@
       pkgs.unstable.aider-chat
       # pkgs.haskellPackages.ghcup
       pkgs.unstable.nerd-fonts.jetbrains-mono
+      pkgs.unstable.go
     ];
 
     # home.file = {

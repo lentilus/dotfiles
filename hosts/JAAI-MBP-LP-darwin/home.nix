@@ -9,6 +9,8 @@
   imports = [
     inputs.stylix.homeManagerModules.stylix
     inputs.mac-app-util.homeManagerModules.default
+
+    # TODO:
     outputs.homeManagerModules.core
     outputs.homeManagerModules.dev
     outputs.homeManagerModules.desktop
@@ -30,6 +32,4 @@
   };
 
   nix.settings.experimental-features = ["nix-command" "flakes"];
-
-  programs.home-manager.enable = true;
 }

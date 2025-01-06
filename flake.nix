@@ -2,7 +2,7 @@
   description = "lentilus @ nix";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-24.05";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-24.11";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
     flake-utils.url = "github:numtide/flake-utils";
 
@@ -12,7 +12,7 @@
     };
 
     home-manager = {
-      url = "github:nix-community/home-manager/release-24.05";
+      url = "github:nix-community/home-manager/release-24.11";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -30,7 +30,10 @@
       url = "github:hraban/mac-app-util";
     };
 
-    stylix.url = "github:danth/stylix";
+    stylix = {
+      url = "github:danth/stylix/release-24.11";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = {
@@ -43,7 +46,6 @@
     systems = [
       "x86_64-linux"
       "aarch64-darwin"
-      # "x86_64-darwin"
     ];
 
     forAllSystems = nixpkgs.lib.genAttrs systems;
@@ -56,66 +58,26 @@
     inherit sources;
 
     overlays = import ./overlays {inherit inputs;};
-
     formatter = forAllSystems (system: nixpkgs.legacyPackages.${system}.alejandra);
-
     devShells = forAllSystems (system:
       import ./shells {
         inherit inputs outputs;
         pkgs = nixpkgs.legacyPackages.${system};
       });
 
+    # custom modules
     homeManagerModules = import ./modules/home-manager;
-
     nixosModules = import ./modules/nixos;
 
-    ### for non-nixos hosts
-    homeConfigurations = {
-      # must be built --impure as it needs access to $HOME, $USER
-      default = inputs.home-manager.lib.homeManagerConfiguration {
-        pkgs = nixpkgs.legacyPackages.x86_64-linux;
-        extraSpecialArgs = {inherit inputs outputs;};
-        modules = [
-          ./home-manager
-        ];
-      };
-
-      "lentilus@fedora" = inputs.home-manager.lib.homeManagerConfiguration {
-        pkgs = nixpkgs.legacyPackages.x86_64-linux;
-        extraSpecialArgs = {inherit inputs outputs;};
-        modules = [
-          ./home-manager/lentilus.nix
-        ];
-      };
-    };
-
-    ### for macos (work)
-    darwinConfigurations."JAAI-MBP-LP" = inputs.darwin.lib.darwinSystem {
-      modules = [
-        ./darwin/configuration.nix
-        inputs.home-manager.darwinModules.home-manager
-        {
-          home-manager.useGlobalPkgs = true;
-          home-manager.useUserPackages = true;
-          home-manager.users.linuspreusser = import ./home-manager/macos.nix;
-          home-manager.extraSpecialArgs = {inherit inputs outputs;};
-        }
-      ];
+    # personal
+    nixosConfigurations."P14s-nixos" = inputs.nixpkgs.lib.nixosSystem {
+      modules = [ ./hosts/P14s-nixos/configuration.nix ];
       specialArgs = {inherit inputs outputs;};
     };
 
-    ### for nixos
-    nixosConfigurations."nixos" = inputs.nixpkgs.lib.nixosSystem {
-      modules = [
-        ./nixos/configuration.nix
-        inputs.home-manager.nixosModules.home-manager
-        {
-          home-manager.useGlobalPkgs = true;
-          home-manager.useUserPackages = true;
-          home-manager.users.lentilus = import ./home-manager/lentilus.nix;
-          home-manager.extraSpecialArgs = {inherit inputs outputs;};
-        }
-      ];
+    # work
+    darwinConfigurations."JAAI-MBP-LP" = inputs.darwin.lib.darwinSystem {
+      modules = [ ./hosts/JAAI-MBP-LP-darwin/configuration.nix ];
       specialArgs = {inherit inputs outputs;};
     };
   };

@@ -11,11 +11,18 @@ in {
     enable = lib.mkEnableOption "enable sway desktop";
   };
 
+
   config = lib.mkIf cfg.enable {
+
     wayland.windowManager.hyprland = let
       startup = pkgs.pkgs.writeShellScriptBin "start" ''
-        notify-send "Hello from autostart!"
+        uwsm finalize
+        ${lib.meta.getExe config.services.hyprpaper.package} &
+        ${lib.meta.getExe config.programs.waybar.package} &
+        ${lib.meta.getExe config.programs.foot.package} --server &
       '';
+      screenshot = "${pkgs.grim}/bin/grim -g \"$(${pkgs.slurp}/bin/slurp)\" - | ${pkgs.wl-clipboard}/bin/wl-copy";
+
       # map from name to number
       workspaces = {
         "1" = "a";
@@ -42,6 +49,7 @@ in {
       );
     in {
       enable = true;
+      systemd.enable = false;
       settings = {
         "$mod" = "SUPER";
         exec-once = "${startup}/bin/start";
@@ -52,7 +60,7 @@ in {
           [
             # controls
             "$mod, q, killactive"
-            "$mod Shift, Q, exit"
+            "$mod Shift, Q, exec, uwsm stop"
             "$mod, Tab, fullscreen"
 
             # move focus
@@ -70,9 +78,13 @@ in {
             # utils
             "$mod, Space, exec, ${config.programs.rofi.package}/bin/rofi -show drun"
             "$mod, x, exec, ${config.programs.rofi.pass.package}/bin/rofi-pass"
+            "$mod, t, exec, ${screenshot}"
+
 
             # apps
             "$mod, Return, exec, ${config.programs.foot.package}/bin/footclient"
+            "$mod, E, exec, ${config.programs.foot.package}/bin/footclient --title=zettelkasten zsh -c \"cd ~/git/zettelkasten; zsh\""
+
           ]
           ++ moves;
         windowrulev2 = [
@@ -81,6 +93,7 @@ in {
           # tags
           "tag +term, class:footclient"
           "tag +browser, class:qutebrowser"
+          "tag +math, title:zettelkasten"
           "tag +preview, class:zathura, workspace:3"
 
           # rules

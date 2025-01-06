@@ -1,4 +1,3 @@
 {
-  homeRowMods = import ./homeRowMods.nix;
-  polkitAgent = import ./polkitAgent.nix;
+    custom =  import ./custom;
 }

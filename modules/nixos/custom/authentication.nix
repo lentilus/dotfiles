@@ -4,12 +4,14 @@
   lib,
   outputs,
   ...
-}: {
-  options = {
-    polkitAgent.enable = lib.mkEnableOption "enable graphical polikit agent (polkit-gnome)";
+}: let
+    cfg = config.custom.authentication;
+in{
+  options.custom.authentication = {
+    enable = lib.mkEnableOption "enable graphical polikit agent (polkit-gnome) and yubikey related services";
   };
 
-  config = lib.mkIf config.polkitAgent.enable {
+  config = lib.mkIf cfg.enable {
     security.polkit.enable = true;
 
     systemd.user.services.polkit-gnome-authentication-agent-1 = {
@@ -24,6 +26,12 @@
         RestartSec = 1;
         TimeoutStopSec = 10;
       };
+    };
+    
+    # for yubikey gpg stuff
+    services = {
+        pcscd.enable = true;
+        udev.packages = [pkgs.yubikey-personalization];
     };
   };
 }

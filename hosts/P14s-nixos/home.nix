@@ -11,18 +11,6 @@
     outputs.homeManagerModules.custom
   ];
 
-  # nixpkgs = {
-  #   overlays = [
-  #     inputs.nixgl.overlay
-  #     outputs.overlays.modifications
-  #     outputs.overlays.unstable-packages
-  #   ];
-  #   # Configure your nixpkgs instance
-  #   config = {
-  #     allowUnfree = true;
-  #   };
-  # };
-
   desktop = {
     enable = true;
     linux = {
@@ -31,7 +19,7 @@
     };
     yubikeyGpg = {
       enable = true;
-      publicKeyPath = ../public-key.txt;
+      publicKeyPath = ./public-key.txt;
       pinentryPackage = pkgs.pinentry-rofi;
     };
     passwordStore = {
@@ -40,7 +28,6 @@
     };
   };
 
-  # sway.enable = false;
   dev.enable = true;
 
   nix = {
@@ -48,9 +35,10 @@
     settings.experimental-features = ["nix-command" "flakes"];
   };
 
+  xdg = {
+    enable = true;
+  };
+
   home.username = "lentilus";
   home.homeDirectory = "/home/lentilus";
-
-  programs.home-manager.enable = true;
-  # targets.genericLinux.enable = true;
 }

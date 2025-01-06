@@ -4,12 +4,14 @@
   lib,
   outputs,
   ...
-}: {
-  options = {
-    homeRowMods.enable = lib.mkEnableOption "enable home-row-mods using kanata";
+}: let
+cfg = config.custom.homeRowMods;
+in{
+  options.custom.homeRowMods = {
+    enable = lib.mkEnableOption "enable home-row-mods using kanata";
   };
 
-  config = lib.mkIf config.homeRowMods.enable {
+  config = lib.mkIf cfg.enable {
     services.kanata = {
       enable = true;
       keyboards = {

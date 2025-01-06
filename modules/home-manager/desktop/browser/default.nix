@@ -11,6 +11,10 @@ in {
   };
 
   config = lib.mkIf cfg.enable {
+    home.sessionVariables = {
+      BROWSER = lib.mkDefault "qutebrowser";
+    };
+
     programs.qutebrowser = {
       package = pkgs.unstable.qutebrowser;
       enable = true;

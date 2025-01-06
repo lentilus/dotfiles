@@ -34,7 +34,7 @@ end
 if not configs.zeta then
 	configs.zeta = {
 		default_config = {
-			cmd = { "/home/lentilus/git/zeta.git/graph/bin/zeta" },
+			cmd = { "/home/lentilus/git/zeta.git/dev/bin/zeta" },
 			filetypes = { "typst" },
 			root_dir = function(fname)
 				return lspconfig.util.root_pattern(".zeta")(fname) or nil
