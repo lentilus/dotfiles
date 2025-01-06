@@ -1,6 +1,0 @@
-#!/bin/bash
-# bootsrap home-manager config for devcontainers
-
-# elevated privilleges are necessary for the installation
-sudo ./script/nix-install.sh
-./script/setup-shell.sh # changes shell to zsh
