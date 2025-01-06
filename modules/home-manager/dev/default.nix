@@ -25,8 +25,12 @@
       pkgs.unstable.go
     ];
 
-    # home.file = {
-    #   "${config.xdg.configHome}/git".source = "${outputs.sources.dotfiles}/git";
-    # };
+    programs.pyenv.enable = true;
+
+    programs.git = {
+      enable = true;
+      userName = "lentilus";
+      userEmail = "lentilus@mailbox.org";
+    };
   };
 }

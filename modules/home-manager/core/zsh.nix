@@ -11,13 +11,9 @@
 
   config = lib.mkIf config.zsh.enable {
     home.packages = [
-      # absoulte basic gnu core utils
       pkgs.coreutils
-
       pkgs.locale
-      # pkgs.glibcLocales
       pkgs.git
-      pkgs.zsh
       pkgs.fzf
     ];
 
@@ -27,7 +23,7 @@
       enableCompletion = true;
       autosuggestion.enable = true;
       syntaxHighlighting.enable = true;
-      defaultKeymap = "viins"; # nice vim mode
+      # defaultKeymap = "viins"; # nice vim mode
 
       shellAliases = {
         vi = "nvim";
@@ -53,22 +49,18 @@
         prompt pure
       '';
 
+      # for quick hotfix situations
       initExtra = ''
-        path+="$HOME/.local/scripts"
         [ -f $HOME/.extrazsh ] && source "$HOME/.extrazsh"
-      '';
-      loginExtra = ''
-        # launch tmux in devpod
-        if [[ -n "$DEVPOD" && -z "$TMUX" ]]; then
-            export LC_ALL="en_US.UTF-8"
-            export LANG="en_US.UTF-8"
-            ${pkgs.tmux}/bin/tmux -u attach || ${pkgs.tmux}/bin/tmux -u
-        fi
+        source ${pkgs.zsh-vi-mode}/share/zsh-vi-mode/zsh-vi-mode.plugin.zsh
       '';
     };
 
     programs.zoxide.enable = true;
-    programs.pyenv.enable = true;
+
+    home.sessionPath = [
+      "$HOME/.local/scripts"
+    ];
 
     home.sessionVariables = {
       EDITOR = "nvim";

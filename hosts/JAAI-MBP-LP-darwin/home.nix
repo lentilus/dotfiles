@@ -14,7 +14,7 @@
     outputs.homeManagerModules.core
     outputs.homeManagerModules.dev
     outputs.homeManagerModules.desktop
-    outputs.homeManagerModules.darwinDesktop
+    # outputs.homeManagerModules.darwinDesktop
   ];
 
   desktop.enable = false;

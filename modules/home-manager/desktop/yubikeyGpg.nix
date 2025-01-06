@@ -86,10 +86,6 @@ in {
     };
 
     programs.git = {
-      enable = true;
-      userName = "lentilus";
-      userEmail = "lentilus@mailbox.org";
-
       # let git decide depending on author
       signing.key = null;
       extraConfig.commit.gpgsign = true;

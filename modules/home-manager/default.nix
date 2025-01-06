@@ -3,7 +3,6 @@
     imports = [
       ./core
       ./dev
-      ./darwinDesktop
       ./desktop
     ];
   };
