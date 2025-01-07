@@ -11,7 +11,18 @@
   ];
 
   services.nix-daemon.enable = true;
-  nixpkgs.hostPlatform = "aarch64-darwin";
+
+  nixpkgs = {
+    hostPlatform = "aarch64-darwin";
+    overlays = [
+      # outputs.overlays.additions
+      outputs.overlays.modifications
+      outputs.overlays.unstable-packages
+    ];
+    config = {
+      allowUnfree = true;
+    };
+  };
 
   programs.zsh.enable = true;
   system.defaults.universalaccess.reduceMotion = true;
@@ -37,4 +48,6 @@
       users.linuspreusser = import ./home.nix;
       extraSpecialArgs = {inherit inputs outputs;};
   };
+
+  system.stateVersion = 5;
 }

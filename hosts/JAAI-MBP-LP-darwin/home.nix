@@ -11,25 +11,25 @@
     inputs.mac-app-util.homeManagerModules.default
 
     # TODO:
-    outputs.homeManagerModules.core
-    outputs.homeManagerModules.dev
-    outputs.homeManagerModules.desktop
-    # outputs.homeManagerModules.darwinDesktop
+    outputs.homeManagerModules.custom
   ];
 
-  desktop.enable = false;
-  dev.enable = true;
-  stylix.enable = true;
-  browser.enable = true;
-
-  # some silly alternative until hydra builds again
-  programs.qutebrowser.package = pkgs.hello;
-
-  nixpkgs = {
-    config = {
-      allowUnfree = true;
+  desktop = {
+    enable = true;
+    linux.enable = false;
+    yubikeyGpg = {
+      enable = true;
+      publicKeyPath = ../P14s-nixos/public-key.txt;
+      pinentryPackage = pkgs.pinentry_mac;
     };
   };
+
+  dev.enable = true;
+
+  # some silly alternative until hydra builds again
+  programs.qutebrowser.package = lib.mkForce pkgs.hello;
+  programs.foot.enable = false;
+  programs.rofi.enable = false;
 
   nix.settings.experimental-features = ["nix-command" "flakes"];
 }

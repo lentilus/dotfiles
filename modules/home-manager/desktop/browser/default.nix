@@ -16,7 +16,7 @@ in {
     };
 
     programs.qutebrowser = {
-      package = pkgs.unstable.qutebrowser;
+      package = lib.mkDefault pkgs.unstable.qutebrowser;
       enable = true;
       settings = {
         tabs.show = "never";
