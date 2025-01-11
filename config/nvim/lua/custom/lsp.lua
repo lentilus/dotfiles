@@ -5,18 +5,7 @@ local configs = require("lspconfig.configs")
 local capabilities =
 	vim.tbl_deep_extend("force", {}, vim.lsp.protocol.make_client_capabilities(), cmp_lsp.default_capabilities())
 
-require("mason").setup()
-require("mason-tool-installer").setup({
-	ensure_installed = {
-		"black",
-		"stylua",
-	},
-	run_on_start = true,
-})
-
--- Define `on_attach` function
 local function zeta_def(client, bufnr)
-	-- Define the keybind for "go to definition" scoped to this specific client
 	local opts = { noremap = true, silent = true, buffer = bufnr }
 	vim.keymap.set("n", "<Enter>", function()
 		local params = vim.lsp.util.make_position_params()
@@ -54,7 +43,6 @@ lspconfig.zeta.setup({
 	on_attach = zeta_def,
 })
 
-local flake = "/home/lentilus/git/dotfiles"
 lspconfig.nixd.setup({
 	cmd = { "nixd" },
 	settings = {
@@ -66,9 +54,6 @@ lspconfig.nixd.setup({
 				command = { "nixfmt" },
 			},
 			options = {
-				-- nixos = {
-				-- 	expr = '(builtins.getFlake ("git+file://" + toString ./.)).nixosConfigurations."".options',
-				-- },
 				home_manager = {
 					expr = '(builtins.getFlake ("git+file://" + toString ./.)).homeConfigurations."lentilus@fedora".options',
 				},
@@ -78,78 +63,43 @@ lspconfig.nixd.setup({
 })
 
 lspconfig.tinymist.setup({
-    cmd = {"tinymist"},
-    single_file_support = true,
-    settings = {
-        tinymist = {
-            outputPath = "$root/$dir/$name", -- Example: store artifacts in a target directory
-            exportPdf = "onType", -- Export PDFs on file save
-            rootPath = "-", -- Use parent directory of the file as root
-            semanticTokens = "enable", -- Enable semantic tokens for syntax highlighting
-            systemFonts = true, -- Load system fonts for Typst compiler
-            fontPaths = { "/usr/share/fonts", "~/custom_fonts" }, -- Custom font paths
-            compileStatus = "disable", -- Disable compile status (default for Neovim)
-            typstExtraArgs = { "--quiet" }, -- Example: Pass additional arguments to typst CLI
-            formatterMode = "typstyle", -- Use typstyle formatter
-            formatterPrintWidth = 100, -- Set print width to 100 characters
-            completion = {
-                triggerOnSnippetPlaceholders = true, -- Trigger completions on snippet placeholders
-                postfix = true, -- Enable postfix code completion
-                postfixUfcs = true, -- Enable UFCS-style completion
-                postfixUfcsLeft = true, -- Enable left-variant UFCS-style completion
-                postfixUfcsRight = true, -- Enable right-variant UFCS-style completion
-            },
-        },
-    },
-    root_dir = require("lspconfig.util").root_pattern(".git", "*.typ"), -- Example root directory logic
+	cmd = { "tinymist" },
+	single_file_support = true,
+	settings = {
+		tinymist = {
+			outputPath = "$root/$dir/$name", -- Example: store artifacts in a target directory
+			rootPath = "-", -- Use parent directory of the file as root
+		},
+	},
+	root_dir = require("lspconfig.util").root_pattern(".git", "*.typ"), -- Example root directory logic
 })
 
-require("mason-lspconfig").setup({
-	ensure_installed = {
-		"lua_ls",
-		"pyright",
-		"bashls",
-		-- "gopls",
+lspconfig.lua_ls.setup({
+	capabilities = capabilities,
+	settings = {
+		Lua = {
+			diagnostics = {
+				globals = {
+					"vim",
+					"it",
+					"describe",
+					"before_each",
+					"after_each",
+				},
+			},
+		},
 	},
-	handlers = {
-		function(server_name) -- default handler (optional)
-			require("lspconfig")[server_name].setup({
-				capabilities = capabilities,
-			})
-		end,
+})
 
-		["lua_ls"] = function()
-			lspconfig.lua_ls.setup({
-				capabilities = capabilities,
-				settings = {
-					Lua = {
-						diagnostics = {
-							globals = {
-								"vim",
-								"it",
-								"describe",
-								"before_each",
-								"after_each",
-							},
-						},
-					},
-				},
-			})
-		end,
-		["gopls"] = function()
-			lspconfig.gopls.setup({
-				capabilities = capabilities,
-				cmd = { "gopls" },
-				fileypes = { "go", "gomod", "gowork", "gotmpl" },
-				settings = {
-					gopls = {
-						-- completeUnimportet = true,
-						usePlaceholders = true,
-					},
-				},
-			})
-		end,
-
+lspconfig.gopls.setup({
+	capabilities = capabilities,
+	cmd = { "gopls" },
+	fileypes = { "go", "gomod", "gowork", "gotmpl" },
+	settings = {
+		gopls = {
+			completeUnimportet = true,
+			usePlaceholders = true,
+		},
 	},
 })
 
@@ -159,7 +109,7 @@ vim.diagnostic.config({
 		focusable = false,
 		style = "minimal",
 		border = "rounded",
-		source = "always",
+		source = true,
 		header = "",
 		prefix = "",
 	},
@@ -185,6 +135,3 @@ vim.api.nvim_create_autocmd("LspAttach", {
 		map("gD", vim.lsp.buf.declaration)
 	end,
 })
--- this is necessary so that language servers are actually loaded
--- because we are lazy laoding lsp-config
-vim.api.nvim_exec_autocmds("FileType", {})
