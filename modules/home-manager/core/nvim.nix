@@ -22,6 +22,18 @@
       # language servers
       pkgs.nixd
       pkgs.tinymist
+      pkgs.lua-language-server
+      pkgs.tinymist
+      pkgs.gopls
+
+      # formatters
+      pkgs.typstfmt
+      pkgs.stylua
+      pkgs.black
+      pkgs.gofumpt
+      pkgs.goimports-reviser
+      pkgs.golines
+      pkgs.texlivePackages.latexindent
     ];
 
     home.file = {
