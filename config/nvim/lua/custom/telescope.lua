@@ -2,8 +2,6 @@ local telescope = require("telescope")
 local builtin = require("telescope.builtin")
 local extensions = telescope.extensions
 
-require("git-worktree").setup()
-
 telescope.setup({
 	extensions = {
 		git_worktree = {},
