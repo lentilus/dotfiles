@@ -1,7 +1,7 @@
 return {
 	"neovim/nvim-lspconfig",
-	event = { "BufReadPost", "BufNewFile" },
 	dependencies = { "folke/neodev.nvim" },
+	lazy = false,
 	config = function()
 		require("custom.lsp")
 	end,
