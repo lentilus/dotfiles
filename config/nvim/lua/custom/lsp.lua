@@ -97,7 +97,6 @@ lspconfig.gopls.setup({
 	fileypes = { "go", "gomod", "gowork", "gotmpl" },
 	settings = {
 		gopls = {
-			completeUnimportet = true,
 			usePlaceholders = true,
 		},
 	},
