@@ -12,7 +12,7 @@ in {
   config = lib.mkIf cfg.enable {
     programs.waybar = {
       enable = true;
-      systemd.enable = false; # not working with uwsm
+      systemd.enable = true;
 
       settings.mainBar = import ./settings.nix {inherit pkgs;};
       style = import ./style.nix {inherit config;};

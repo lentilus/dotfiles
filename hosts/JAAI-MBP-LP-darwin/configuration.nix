@@ -43,10 +43,10 @@
   };
 
   home-manager = {
-      useGlobalPkgs = true;
-      useUserPackages = true;
-      users.linuspreusser = import ./home.nix;
-      extraSpecialArgs = {inherit inputs outputs;};
+    useGlobalPkgs = true;
+    useUserPackages = true;
+    users.linuspreusser = import ./home.nix;
+    extraSpecialArgs = {inherit inputs outputs;};
   };
 
   system.stateVersion = 5;

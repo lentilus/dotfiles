@@ -12,46 +12,27 @@
     ./hardware-configuration.nix
   ];
 
-  nixpkgs = {
-    overlays = [
-      inputs.nixgl.overlay
-      # outputs.overlays.additions
-      outputs.overlays.modifications
-      outputs.overlays.unstable-packages
-    ];
-    config = {
-      allowUnfree = true;
-    };
+  # bootloader
+  boot.loader = {
+    systemd-boot.enable = true;
+    efi.canTouchEfiVariables = true;
   };
-
-  # Bootloader.
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
-
-  # display manager
-  services.xserver.enable = true;
-  services.xserver.displayManager.gdm.enable = true;
-  programs.hyprland = {
-    enable = true;
-    withUWSM = true;
-  };
-  # force electron / chromium apps to use wayland
-  environment.sessionVariables.NIXOS_OZONE_WL = "1";
 
   # custom options
   custom = {
+    greeting.enable = true;
     homeRowMods.enable = true;
     authentication.enable = true;
     audio.enable = true;
   };
+
+  programs.zsh.enable = true;
 
   # networking
   networking = {
     hostName = "P14s-nixos";
     networkmanager.enable = true;
   };
-
-  programs.zsh.enable = true;
 
   # home-manager
   home-manager = {
@@ -70,6 +51,20 @@
       "input" # kanata
       "networkmanager"
     ];
+  };
+
+  nixpkgs = {
+    overlays = [
+      inputs.nixgl.overlay
+      inputs.nvim.overlays.default
+
+      # outputs.overlays.additions
+      outputs.overlays.modifications
+      outputs.overlays.unstable-packages
+    ];
+    config = {
+      allowUnfree = true;
+    };
   };
 
   nix = let

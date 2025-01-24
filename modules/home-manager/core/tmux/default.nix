@@ -38,6 +38,9 @@
         set -gu default-command
         set -g default-shell "${pkgs.zsh}/bin/zsh"
 
+        # nvim :checkhealth
+        set-option -g focus-events on
+
         unbind C-f
         bind-key -n C-f run-shell "tmux neww ${jump}/bin/jumptmux"
         bind-key -n M-Space previous-window

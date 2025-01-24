@@ -8,7 +8,7 @@
   cfg = config.custom.greeting;
 in {
   options.custom.greeting = {
-    enable = lib.mkEnableOption "enable greetd and uwsm based session management for hyprland";
+    enable = lib.mkEnableOption "start hyprland via uwsm on tty1-login";
   };
   config = lib.mkIf cfg.enable {
     programs.hyprland = {
@@ -17,28 +17,26 @@ in {
     };
 
     # https://github.com/Vladimir-csp/uwsm
-    programs.uwsm.enable = true;
-    programs.uwsm.waylandCompositors = {};
+    programs.uwsm ={
+        enable = true;
+        waylandCompositors = {};
+    };
+    
 
-    services.greetd = let
+    # auto start Hyprland via uwsm on tty1-login
+    environment.shellInit = let
       uwsm = "${config.programs.uwsm.package}/bin/uwsm";
-      startup = pkgs.pkgs.writeShellScriptBin "start" ''
-        exec ${uwsm} start ${hypr}/bin/Hyprland || exec ${pkgs.zsh}/bin/zsh
-      '';
       hypr = pkgs.pkgs.writeShellScriptBin "Hyprland" ''
         # make hm-variables available to hyprland session
         . "/etc/profiles/per-user/lentilus/etc/profile.d/hm-session-vars.sh"
-
         exec /run/current-system/sw/bin/Hyprland
       '';
-    in {
-      enable = true;
-      settings = {
-        default_session = {
-          command = "${pkgs.greetd.tuigreet}/bin/tuigreet --time --cmd ${startup}/bin/start";
-        };
-      };
-    };
+    in
+    ''
+      if [ "$(tty)" = "/dev/tty1" ] && ${uwsm} check may-start; then
+          exec ${uwsm} start ${hypr}/bin/Hyprland
+      fi
+    '';
 
     environment.sessionVariables = {
       # force electron / chromium apps to use wayland

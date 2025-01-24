@@ -1,3 +1,3 @@
 {
-    custom =  import ./custom;
+  custom = import ./custom;
 }

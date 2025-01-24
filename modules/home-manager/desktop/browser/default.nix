@@ -16,17 +16,20 @@ in {
     };
 
     programs.qutebrowser = {
-      package = lib.mkDefault pkgs.unstable.qutebrowser;
+      # package = lib.mkDefault pkgs.unstable.qutebrowser;
+      package = lib.mkDefault pkgs.qutebrowser;
       enable = true;
       settings = {
         tabs.show = "never";
-        tabs.background = true; # I don't get it, but works (https://github.com/qutebrowser/qutebrowser/issues/3231)
         scrolling.bar = "never";
         content.blocking.method = "both";
         window.hide_decoration = true;
         content.javascript.clipboard = "access";
         url.start_pages = ["about:blank"];
         colors.webpage.darkmode.enabled = false;
+
+        # https://github.com/qutebrowser/qutebrowser/issues/3231
+        tabs.background = true;
       };
       searchEngines = lib.mkDefault {
         DEFAULT = "https://www.duckduckgo.com/?q={}";

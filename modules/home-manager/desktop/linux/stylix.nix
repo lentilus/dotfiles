@@ -10,6 +10,7 @@
 
     targets = {
       waybar.enable = false;
+      hyprland.enable = false;
       # aerc.enable = false;
     };
 

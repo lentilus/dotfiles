@@ -4,7 +4,7 @@
   };
   programs.foot = lib.mkDefault {
     enable = true;
-    server.enable = false; # not working with uwsm
+    server.enable = true;
     settings.main.term = "xterm-256color";
   };
 }

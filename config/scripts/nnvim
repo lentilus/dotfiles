@@ -1,4 +1,0 @@
-#!/bin/bash
-
-
-nvim -u "$HOME/git/dotfiles/config/nvim/init.lua"

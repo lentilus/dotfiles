@@ -5,8 +5,8 @@
   outputs,
   ...
 }: let
-cfg = config.custom.homeRowMods;
-in{
+  cfg = config.custom.homeRowMods;
+in {
   options.custom.homeRowMods = {
     enable = lib.mkEnableOption "enable home-row-mods using kanata";
   };

@@ -5,8 +5,8 @@
   outputs,
   ...
 }: let
-    cfg = config.custom.authentication;
-in{
+  cfg = config.custom.authentication;
+in {
   options.custom.authentication = {
     enable = lib.mkEnableOption "enable graphical polikit agent (polkit-gnome) and yubikey related services";
   };
@@ -27,11 +27,11 @@ in{
         TimeoutStopSec = 10;
       };
     };
-    
+
     # for yubikey gpg stuff
     services = {
-        pcscd.enable = true;
-        udev.packages = [pkgs.yubikey-personalization];
+      pcscd.enable = true;
+      udev.packages = [pkgs.yubikey-personalization];
     };
   };
 }

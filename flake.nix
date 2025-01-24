@@ -12,8 +12,12 @@
     };
 
     home-manager = {
-      url = "github:nix-community/home-manager/release-24.11";
+      url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    nvim = {
+      url =  "github:lentilus/nvim-flake";
     };
 
     # fix GL
@@ -71,13 +75,13 @@
 
     # personal
     nixosConfigurations."P14s-nixos" = inputs.nixpkgs.lib.nixosSystem {
-      modules = [ ./hosts/P14s-nixos/configuration.nix ];
+      modules = [./hosts/P14s-nixos/configuration.nix];
       specialArgs = {inherit inputs outputs;};
     };
 
     # work
     darwinConfigurations."JAAI-MBP-LP" = inputs.darwin.lib.darwinSystem {
-      modules = [ ./hosts/JAAI-MBP-LP-darwin/configuration.nix ];
+      modules = [./hosts/JAAI-MBP-LP-darwin/configuration.nix];
       specialArgs = {inherit inputs outputs;};
     };
   };

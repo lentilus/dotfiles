@@ -70,7 +70,7 @@ in {
           "text/calendar" = "calendar";
           "message/delivery-status" = "colorize";
           "message/rfc822" = "colorize";
-          "text/html" = "w3m -T text/html -cols $(tput cols) -dump -o display_image=false -o display_link_number=true";
+          "text/html" = "${pkgs.w3m}/bin/w3m -T text/html -cols $(tput cols) -dump -o display_image=false -o display_link_number=true";
         };
       };
 
@@ -98,8 +98,7 @@ in {
         smtp.host = "smtp.mailbox.org";
 
         maildir.path = "mailbox";
-        # passwordCommand = "PASSWORD_STORE_DIR=~/git/password-store; pass show communication/mailbox";
-        passwordCommand = "PASSWORD_STORE_DIR=${config.programs.password-store.settings.PASSWORD_STORE_DIR}; ${pkgs.pass}/bin/pass show communication/mailbox";
+        passwordCommand = "pass show communication/mailbox";
         primary = true;
 
         aliases = [
