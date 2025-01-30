@@ -17,11 +17,10 @@ in {
     };
 
     # https://github.com/Vladimir-csp/uwsm
-    programs.uwsm ={
-        enable = true;
-        waylandCompositors = {};
+    programs.uwsm = {
+      enable = true;
+      waylandCompositors = {};
     };
-    
 
     # auto start Hyprland via uwsm on tty1-login
     environment.shellInit = let
@@ -31,8 +30,7 @@ in {
         . "/etc/profiles/per-user/lentilus/etc/profile.d/hm-session-vars.sh"
         exec /run/current-system/sw/bin/Hyprland
       '';
-    in
-    ''
+    in ''
       if [ "$(tty)" = "/dev/tty1" ] && ${uwsm} check may-start; then
           exec ${uwsm} start ${hypr}/bin/Hyprland
       fi

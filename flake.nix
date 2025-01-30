@@ -17,7 +17,7 @@
     };
 
     nvim = {
-      url =  "github:lentilus/nvim-flake";
+      url = "github:lentilus/nvim-flake";
     };
 
     # fix GL

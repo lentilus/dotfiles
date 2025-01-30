@@ -54,11 +54,11 @@
         autoload -Uz vcs_info
         precmd() { vcs_info }
         zstyle ':vcs_info:git:*' formats '(%b)'
-        PROMPT='%F{blue}%~%f ''${vcs_info_msg_0_} ># '
+        PROMPT='%F{blue}%~%f ''${vcs_info_msg_0_} > '
 
         # load completions every 24 hours
         # https://gist.github.com/ctechols/ca1035271ad134841284
-        autoload -Uz compinit 
+        autoload -Uz compinit
         if [[ -n ''${ZDOTDIR}/.zcompdump(#qN.mh+24) ]]; then
             compinit;
         else
