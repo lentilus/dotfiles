@@ -11,85 +11,41 @@ in {
   };
 
   config = lib.mkIf cfg.enable {
-    programs.mbsync = {
-      enable = true;
-    };
+    # sync with mail-server
+    programs.mbsync.enable = true;
+    # send email
+    programs.msmtp.enable = true;
 
     services.mbsync = {
-      # systemd service
       enable = true;
       postExec = ''
-        ${pkgs.notmuch}/bin/notmuch new
-      '';
-    };
-
-    programs.msmtp = {
-      enable = true;
-    };
-
-    programs.notmuch = {
-      enable = true;
-      new = {
-        tags = ["inbox" "unread"];
-      };
-      hooks = {
-        postNew = ''
-          notmuch tag +shopping -- tag:inbox and to:linus.shopping@mailbox.org
-          notmuch tag +lentilus -- tag:inbox and to:lentilus@mailbox.org
-          notmuch tag +linus -- tag:inbox and to:linus.preusser@mailbox.org
-        '';
-      };
-    };
-
-    home.file.aercNmQueries = {
-      target = "${config.xdg.configHome}/aerc/nm-qmap";
-      text = ''
-        NEW = tag:unread
-        INBOX = folder:mailbox/Inbox
-        SENT = folder:mailbox/Sent
-        lentilus = tag:lentilus
-        linus = tag:linus
-        shopping = tag:shopping
-      '';
-    };
-
-    home.file.aercFolderMap = {
-      target = "${config.xdg.configHome}/aerc/folders.map";
-      text = ''
-        m = mailbox*
+        # ${pkgs.notmuch}/bin/notmuch new
       '';
     };
 
     programs.aerc = {
       enable = true;
-      # we don't store any credentials, so this is fine!
       extraConfig = {
-        general.unsafe-accounts-conf = true;
+        # we don't store any credentials, so this is fine!
+        general = {
+          unsafe-accounts-conf = true;
+          pgp-provider = "gpg";
+        };
+
         filters = {
           "text/plain" = "colorize";
           "text/calendar" = "calendar";
           "message/delivery-status" = "colorize";
           "message/rfc822" = "colorize";
-          "text/html" = "${pkgs.w3m}/bin/w3m -T text/html -cols $(tput cols) -dump -o display_image=false -o display_link_number=true";
+          "text/html" = "${pkgs.w3m}/bin/w3m -T text/html -cols $(tput cols)\
+                -dump -o display_image=false -o display_link_number=true";
         };
-      };
-
-      extraAccounts.mailboxtest = {
-        source = "notmuch://~/Maildir";
-        outgoing = "${pkgs.msmtp}/bin/msmtp";
-        from = "Linus Preusser <linus.preusser@mailbox.org>";
-        default = "NEW";
-        folders-sort = "NEW, INBOX, SENT";
-        query-map = "${config.home.homeDirectory}/${config.home.file.aercNmQueries.target}";
-        folders-exclude = "~mailbox*";
-        aliases = "Linus Preusser <linus.preusser@mailbox.org>, Lentilus <lentilus@mailbox.org>, Linus <linus.shopping@mailbox.org>";
-        maildir-store = "~/Maildir";
-        copy-to = "mailbox/Sent";
       };
     };
 
     accounts.email.accounts = {
       mailbox = {
+        primary = true;
         address = "linus.preusser@mailbox.org";
         realName = "Linus Preusser";
 
@@ -99,25 +55,43 @@ in {
 
         maildir.path = "mailbox";
         passwordCommand = "pass show communication/mailbox";
-        primary = true;
 
         aliases = [
           "lentilus@mailbox.org"
           "linus.shopping@mailbox.org"
         ];
 
+        aerc.enable = true;
+        msmtp.enable = true;
         mbsync = {
           enable = true;
           create = "both";
-          extraConfig.account = {
-            PipelineDepth = 20;
-            timeout = 3600;
-          };
           expunge = "both";
         };
+      };
 
-        notmuch.enable = true;
+      uni = {
+        address = "linus.preusser@stud.uni-goettingen.de";
+        realName = "Linus Preusser";
+        userName = ''"ug-student\\linus.preusser"'';
+        imap.host = "email.stud.uni-goettingen.de";
+        smtp = {
+          host = "email.stud.uni-goettingen.de";
+          port = 587;
+          tls.useStartTls = true;
+        };
+
+        maildir.path = "uni";
+        passwordCommand = "pass show uni/ecampus";
+
+        aerc.enable = true;
         msmtp.enable = true;
+        mbsync = {
+          enable = true;
+          create = "both";
+          expunge = "both";
+          extraConfig.account.AuthMechs = "LOGIN";
+        };
       };
     };
   };
