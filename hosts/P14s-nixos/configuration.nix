@@ -28,6 +28,9 @@
 
   programs.zsh.enable = true;
 
+  # power saving
+  services.tlp.enable = true;
+
   # networking
   networking = {
     hostName = "P14s-nixos";
