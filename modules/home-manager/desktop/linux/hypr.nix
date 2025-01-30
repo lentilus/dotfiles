@@ -44,18 +44,30 @@ in {
       );
     in {
       enable = true;
+
+      # for uwsm compatibility
       systemd.enable = false;
+
       settings = {
         "$mod" = "SUPER";
         exec-once = "${startup}/bin/start";
         misc.disable_hyprland_logo = true;
         input.touchpad.natural_scroll = true;
+
+        # https://wiki.hyprland.org/Configuring/Performance
         animation = "global, 0, 0, default";
-        general = {
-            gaps_in = 0;
-            gaps_out = 0;
+        decoration = {
+          blur.enabled = false;
+          shadow.enabled = false;
         };
-        bind = [
+        misc.vfr = true;
+
+        general = {
+          gaps_in = 0;
+          gaps_out = 0;
+        };
+        bind =
+          [
             # controls
             "$mod, q, killactive"
             "$mod Shift, Q, exec, uwsm stop"
