@@ -37,6 +37,7 @@
     networkmanager.enable = true;
   };
 
+  time.timeZone = "Europe/Berlin";
   # home-manager
   home-manager = {
     useGlobalPkgs = true;
@@ -61,7 +62,7 @@
       inputs.nixgl.overlay
       inputs.nvim.overlays.default
 
-      # outputs.overlays.additions
+      outputs.overlays.additions
       outputs.overlays.modifications
       outputs.overlays.unstable-packages
     ];
