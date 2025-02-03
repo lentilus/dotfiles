@@ -7,8 +7,10 @@
   cfg = config.desktop.linux;
 in {
   imports = [
-    ./waybar
     ./mail
+    ./calendar
+    ./contacts
+    ./waybar
     ./hypr.nix
     ./mimetypes.nix
     ./stylix.nix
@@ -24,12 +26,15 @@ in {
   config = lib.mkIf cfg.enable {
     # options
     stylix.enable = lib.mkDefault true;
+    services.dunst.enable = true;
     programs.zathura.enable = lib.mkDefault true;
     programs.mpv.enable = lib.mkDefault true;
 
     # cutom options
     desktop.linux = lib.mkDefault {
       mail.enable = true;
+      calendar.enable = true;
+      contacts.enable = true;
       waybar.enable = true;
       hypr.enable = true;
       mimeapps.enable = true;

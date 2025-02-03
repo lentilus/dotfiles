@@ -1,5 +1,5 @@
 {inputs, ...}: {
-  # additions = final: _prev: import ../pkgs final.pkgs;
+  additions = final: _prev: import ../pkgs final.pkgs;
 
   modifications = final: prev: {
     qutebrowser = prev.qutebrowser.override {enableWideVine = true;};
