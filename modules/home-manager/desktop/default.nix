@@ -19,11 +19,8 @@ in {
   };
 
   config = lib.mkIf cfg.enable {
-    programs.kitty = {
-      enable = true;
-    };
     desktop.linux.enable = lib.mkDefault false;
-    # desktop.darwin.enable = lib.mkDefault false;
+    desktop.darwin.enable = lib.mkDefault false;
     desktop.browser.enable = lib.mkDefault true;
   };
 }
