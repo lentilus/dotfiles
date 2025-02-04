@@ -79,12 +79,6 @@ in {
         ttyname $GPG_TTY
       '';
 
-      # dont fallback to prompting when yubikey not inserted
-      # enableScDaemon = false;
-
-      # enableZshIntegration = false;
-      # enableExtraSocket = true;
-      enableSshSupport = true;
       sshKeys = ["0C5B390F0ECDC5446622AE31F0916A3588C5B284"];
     };
 
