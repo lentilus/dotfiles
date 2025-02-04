@@ -25,9 +25,11 @@ in {
     # auto start Hyprland via uwsm on tty1-login
     environment.shellInit = let
       uwsm = "${config.programs.uwsm.package}/bin/uwsm";
-      hypr = pkgs.pkgs.writeShellScriptBin "Hyprland" ''
+      hypr = pkgs.writeShellScriptBin "Hyprland" ''
         # make hm-variables available to hyprland session
         . "/etc/profiles/per-user/lentilus/etc/profile.d/hm-session-vars.sh"
+        # UWSM_FINALIZE_VARNAMES needs to be seperated with spaces
+        export UWSM_FINALIZE_VARNAMES="$${UWSM_FINALIZE_VARNAMES//:/ }"
         exec /run/current-system/sw/bin/Hyprland
       '';
     in ''
@@ -37,11 +39,14 @@ in {
     '';
 
     environment.sessionVariables = {
-      # force electron / chromium apps to use wayland
-      NIXOS_OZONE_WL = "1";
-
-      # varnames to expose to systemd services via uwsm
-      UWSM_FINALIZE_VARNAMES = "TERMINAL NIXOS_OZONE_WL PASSWORD_STORE_DIR "; # leave a space!!!
+      UWSM_FINALIZE_VARNAMES = [
+        "NIXOS_OZONE_WL"
+        "PASSWORD_STORE_DIR"
+        "TERMINAL"
+        "VISUAL"
+        "EDITOR"
+        "BROWSER"
+      ];
     };
   };
 }
