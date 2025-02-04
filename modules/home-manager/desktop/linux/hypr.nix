@@ -12,9 +12,18 @@ in {
   };
 
   config = lib.mkIf cfg.enable {
+
+    # force electron / chromium apps to use wayland
+    home.sessionVariables = {
+        NIXOS_OZONE_WL = "1";
+    };
+    
     wayland.windowManager.hyprland = let
-      startup = pkgs.pkgs.writeShellScriptBin "start" ''
+      start = pkgs.pkgs.writeShellScriptBin "start" ''
         uwsm finalize
+      '';
+      stop = pkgs.pkgs.writeShellScriptBin "stop" ''
+        uwsm stop
       '';
       screenshot = "${pkgs.grim}/bin/grim -g \"$(${pkgs.slurp}/bin/slurp)\" - | ${pkgs.wl-clipboard}/bin/wl-copy";
 
@@ -50,7 +59,7 @@ in {
 
       settings = {
         "$mod" = "SUPER";
-        exec-once = "${startup}/bin/start";
+        exec-once = "${start}/bin/start";
         misc.disable_hyprland_logo = true;
         input.touchpad.natural_scroll = true;
 
@@ -70,7 +79,7 @@ in {
           [
             # controls
             "$mod, q, killactive"
-            "$mod Shift, Q, exec, uwsm stop"
+            "$mod Shift, Q, exec, ${stop}/bin/stop"
             "$mod, Tab, fullscreen"
 
             # move focus

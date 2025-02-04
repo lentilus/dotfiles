@@ -10,8 +10,6 @@
 
     targets = {
       waybar.enable = false;
-      hyprland.enable = false;
-      # aerc.enable = false;
     };
 
     # by hardcoding we can access the colors elsewhere
