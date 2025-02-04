@@ -26,7 +26,12 @@
     audio.enable = true;
   };
 
-  programs.zsh.enable = true;
+  programs.zsh = {
+    enable = true;
+    enableCompletion = false;
+    autosuggestions.enable = false;
+  };
+
 
   # power saving
   services.tlp.enable = true;

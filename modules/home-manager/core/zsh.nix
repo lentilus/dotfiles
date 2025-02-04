@@ -16,15 +16,18 @@
       pkgs.git
       pkgs.fzf
       pkgs.nvim-pkg
+      pkgs.ripgrep
     ];
 
     # shell
     programs.zsh = {
       enable = true;
-      enableCompletion = false; # we manage it ourselves
+      completionInit = ''
+        # load completions in background
+        autoload -U compinit && compinit -C -u
+      '';
       autosuggestion.enable = true;
       syntaxHighlighting.enable = true;
-      # defaultKeymap = "viins"; # nice vim mode
 
       shellAliases = {
         vi = "nvim";
@@ -33,49 +36,26 @@
         fw = "cd $(git worktree list | fzf | awk '{print $1;}')";
       };
 
-      plugins = [
-        {
-          name = "fzf-tab";
-          src = pkgs.fetchFromGitHub {
-            owner = "Aloxaf";
-            repo = "fzf-tab";
-            rev = "v1.1.2";
-            sha256 = "sha256-Qv8zAiMtrr67CbLRrFjGaPzFZcOiMVEFLg1Z+N6VMhg=";
-          };
-        }
-      ];
-
       initExtraFirst = ''
-        # profiling
-        # zmodload zsh/zprof
-
-        # prompt
+        ### prompt START ###
         setopt prompt_subst
         autoload -Uz vcs_info
         precmd() { vcs_info }
         zstyle ':vcs_info:git:*' formats '(%b)'
         PROMPT='%F{blue}%~%f ''${vcs_info_msg_0_} > '
-
-        # load completions every 24 hours
-        # https://gist.github.com/ctechols/ca1035271ad134841284
-        autoload -Uz compinit
-        if [[ -n ''${ZDOTDIR}/.zcompdump(#qN.mh+24) ]]; then
-            compinit;
-        else
-            compinit -C;
-        fi;
+        ### prompt END ###
       '';
 
       initExtra = ''
+        ### PLUGINS START ###
+        source ${pkgs.zsh-vi-mode}/share/zsh-vi-mode/zsh-vi-mode.plugin.zsh
+        source ${pkgs.zsh-fzf-tab}/share/fzf-tab/fzf-tab.plugin.zsh
+        ### PLUGINS END ###
+
         # for quick hotfix situations
         [ -f $HOME/.extrazsh ] && source "$HOME/.extrazsh"
-        source ${pkgs.zsh-vi-mode}/share/zsh-vi-mode/zsh-vi-mode.plugin.zsh
-
-        # zprof
       '';
     };
-
-    programs.zoxide.enable = true;
 
     home.sessionPath = [
       "$HOME/.local/scripts" # personal scripts
