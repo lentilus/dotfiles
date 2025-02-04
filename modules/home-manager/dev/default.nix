@@ -27,8 +27,6 @@
       pkgs.unstable.go
     ];
 
-    programs.pyenv.enable = true;
-
     programs.git = {
       enable = true;
       userName = "lentilus";
