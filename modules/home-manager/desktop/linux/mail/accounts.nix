@@ -29,6 +29,11 @@ in {
       create = "both";
       expunge = "both";
     };
+
+    gpg = {
+      key = "0x6594ADA13130D0CD";
+      signByDefault = true;
+    };
   };
 
   uni = {
