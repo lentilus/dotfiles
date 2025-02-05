@@ -7,11 +7,16 @@
   cfg = config.desktop.yubikeyGpg;
 in {
   options.desktop.yubikeyGpg = {
-    enable = lib.mkEnableOption "enable yubi-key based gpg identity";
+    enable = lib.mkEnableOption "enable yubikey based gpg identity";
 
     publicKeyPath = lib.mkOption {
       type = lib.types.path;
       description = "Path to the exported gpg public key";
+    };
+
+    sshKeygrip = lib.mkOption {
+      type = lib.types.string;
+      description = "Keygrip of key to expose as ssh key";
     };
 
     pinentryPackage = lib.mkOption {
@@ -71,7 +76,6 @@ in {
     services.gpg-agent = {
       enable = true;
 
-      # https://github.com/drduh/config/blob/master/gpg-agent.conf
       defaultCacheTtl = 600; # 1h
       maxCacheTtl = 7200; # 2h
       pinentryPackage = cfg.pinentryPackage;
@@ -79,7 +83,8 @@ in {
         ttyname $GPG_TTY
       '';
 
-      sshKeys = ["0C5B390F0ECDC5446622AE31F0916A3588C5B284"];
+      enableSshSupport = true;
+      sshKeys = [ cfg.sshKeygrip ];
     };
 
     programs.git = {
@@ -87,5 +92,8 @@ in {
       signing.key = null;
       extraConfig.commit.gpgsign = true;
     };
+
+    # custom wrapper that checks if a smartcard is present (pkgs/withsc.nix)
+    home.packages = [ pkgs.withsc ];
   };
 }

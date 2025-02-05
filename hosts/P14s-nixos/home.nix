@@ -20,6 +20,7 @@
     yubikeyGpg = {
       enable = true;
       publicKeyPath = ./public-key.txt;
+      sshKeygrip = "0C5B390F0ECDC5446622AE31F0916A3588C5B284";
       pinentryPackage = pkgs.pinentry-rofi;
     };
     passwordStore = {
