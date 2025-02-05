@@ -12,19 +12,12 @@ in {
   };
 
   config = lib.mkIf cfg.enable {
-
     # force electron / chromium apps to use wayland
-    home.sessionVariables = {
-        NIXOS_OZONE_WL = "1";
-    };
+    home.sessionVariables.NIXOS_OZONE_WL = "1";
     
     wayland.windowManager.hyprland = let
-      start = pkgs.pkgs.writeShellScriptBin "start" ''
-        uwsm finalize
-      '';
-      stop = pkgs.pkgs.writeShellScriptBin "stop" ''
-        uwsm stop
-      '';
+      start = pkgs.pkgs.writeShellScriptBin "start" "uwsm finalize";
+      stop = pkgs.pkgs.writeShellScriptBin "stop" "uwsm stop";
       screenshot = "${pkgs.grim}/bin/grim -g \"$(${pkgs.slurp}/bin/slurp)\" - | ${pkgs.wl-clipboard}/bin/wl-copy";
 
       # map from name to number
@@ -81,20 +74,17 @@ in {
             "$mod, q, killactive"
             "$mod Shift, Q, exec, ${stop}/bin/stop"
             "$mod, Tab, fullscreen"
+            "$mod, Return, togglespecialworkspace"
 
             # move focus
             "$mod, H, movefocus, l"
             "$mod, J, movefocus, d"
             "$mod, K, movefocus, u"
             "$mod, L, movefocus, r"
-
-            # move window
             "$mod Shift, H, movewindow, l"
             "$mod Shift, J, movewindow, d"
             "$mod Shift, K, movewindow, u"
             "$mod Shift, L, movewindow, r"
-
-            "$mod, Return, togglespecialworkspace"
 
             # utils
             "$mod, Space, exec, ${config.programs.rofi.package}/bin/rofi -show drun"
@@ -102,14 +92,9 @@ in {
             "$mod, t, exec, ${screenshot}"
             "$mod, r, exec, dlpdf"
 
-            # apps
-            "$mod Shift, Return, exec, ${config.programs.foot.package}/bin/footclient --title=tmux tmux"
-            "$mod, E, exec, ${config.programs.foot.package}/bin/footclient --title=zettelkasten zsh -c \"cd ~/git/zettelkasten; zsh\""
-            # brightness controls
+            # system
             ",XF86MonBrightnessDown, exec, ${pkgs.brightnessctl}/bin/brightnessctl set 10%-"
             ",XF86MonBrightnessUp, exec, ${pkgs.brightnessctl}/bin/brightnessctl set +10%"
-
-            # volume controls
             ",XF86AudioLowerVolume, exec, ${pkgs.pamixer}/bin/pamixer -d 5"
             ",XF86AudioRaiseVolume, exec, ${pkgs.pamixer}/bin/pamixer -i 5"
             ",XF86AudioMute, exec, ${pkgs.pamixer}/bin/pamixer -t"
@@ -146,8 +131,15 @@ in {
           "opacity 0.5 override, tag:transparent"
         ];
 
-        workspace = [
+        workspace = let
+        a = "${pkgs.foot}/bin/footclient tmux";
+        s = "${pkgs.qutebrowser}/bin/qutebrowser";
+        d = "${pkgs.foot}/bin/footclient --title=zettelkasten zsh -c \"cd ~/git/zettelkasten; zsh\"";
+       in [
           "special:special, on-created-empty:[float] footclient"
+          "1, on-created-empty:${a}"
+          "2, on-created-empty:${s}"
+          "3, on-created-empty:${d}"
         ];
       };
     };
