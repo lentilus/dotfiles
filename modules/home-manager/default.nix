@@ -1,9 +1,6 @@
 {
-  custom = {
-    imports = [
-      ./core
-      ./dev
-      ./desktop
-    ];
-  };
+imports = [
+./yubikey.nix
+./passwordstore.nix
+];
 }

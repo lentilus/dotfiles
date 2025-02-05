@@ -32,7 +32,6 @@
     autosuggestions.enable = false;
   };
 
-
   # power saving
   services.tlp.enable = true;
 

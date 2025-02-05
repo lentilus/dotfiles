@@ -79,10 +79,10 @@
       specialArgs = {inherit inputs outputs;};
     };
 
-    # work
-    darwinConfigurations."JAAI-MBP-LP" = inputs.darwin.lib.darwinSystem {
-      modules = [./hosts/JAAI-MBP-LP-darwin/configuration.nix];
-      specialArgs = {inherit inputs outputs;};
-    };
+    # # work
+    # darwinConfigurations."JAAI-MBP-LP" = inputs.darwin.lib.darwinSystem {
+    #   modules = [./hosts/JAAI-MBP-LP-darwin/configuration.nix];
+    #   specialArgs = {inherit inputs outputs;};
+    # };
   };
 }
