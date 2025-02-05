@@ -1,7 +1,5 @@
 {lib, ...}: {
-  home.sessionVariables = {
-    TERMINAL = lib.mkDefault "footclient";
-  };
+  home.sessionVariables.TERMINAL = lib.mkDefault "footclient";
   programs.foot = lib.mkDefault {
     enable = true;
     server.enable = true;
