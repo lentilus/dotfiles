@@ -13,7 +13,7 @@ in {
 
   config = lib.mkIf cfg.enable {
     accounts.calendar = {
-      accounts = (import ./accounts.nix) pkgs;
+      accounts = import ./accounts.nix;
       basePath = basePath;
     };
     programs = {

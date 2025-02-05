@@ -15,7 +15,7 @@ in {
         pkgs.withsc
     ];
 
-    accounts.email.accounts = (import ./accounts.nix) pkgs;
+    accounts.email.accounts = import ./accounts.nix;
 
     programs.mbsync.enable = true;
     programs.msmtp.enable = true;

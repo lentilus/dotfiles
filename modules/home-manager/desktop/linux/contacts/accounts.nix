@@ -1,6 +1,4 @@
-pkgs: let
-  sc = "${pkgs.withsc}/bin/withsc";
-in {
+{
   personal = {
     local = {
       type = "filesystem";
@@ -11,7 +9,7 @@ in {
       type = "carddav";
       url = "https://dav.mailbox.org/carddav/32";
       userName = "linus.preusser@mailbox.org";
-      passwordCommand = [sc "pass" "communication/contacts"];
+      passwordCommand = [ "withsc" "pass" "communication/contacts"];
     };
     vdirsyncer = {
       enable = true;

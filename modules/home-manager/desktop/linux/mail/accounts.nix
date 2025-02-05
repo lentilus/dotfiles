@@ -1,6 +1,4 @@
-pkgs: let
-  sc = "${pkgs.withsc}/bin/withsc";
-in {
+{
   mailbox = {
     primary = true;
     address = "linus.preusser@mailbox.org";
@@ -11,7 +9,7 @@ in {
     smtp.host = "smtp.mailbox.org";
 
     maildir.path = "mailbox";
-    passwordCommand = "${sc} pass show communication/mailbox";
+    passwordCommand = "withsc pass communication/mailbox";
 
     aliases = [
       "lentilus@mailbox.org"
@@ -39,7 +37,7 @@ in {
   uni = {
     address = "linus.preusser@stud.uni-goettingen.de";
     realName = "Linus Preusser";
-    userName = ''"ug-student\\linus.preusser"'';
+    userName = "ug-student\\linus.preusser";
     imap.host = "email.stud.uni-goettingen.de";
     smtp = {
       host = "email.stud.uni-goettingen.de";
@@ -48,7 +46,7 @@ in {
     };
 
     maildir.path = "uni";
-    passwordCommand = "${sc} pass show uni/ecampus";
+    passwordCommand = "withsc pass uni/ecampus";
 
     aerc.enable = true;
     msmtp.enable = true;

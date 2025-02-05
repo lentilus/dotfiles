@@ -12,7 +12,7 @@ in {
 
   config = lib.mkIf cfg.enable {
     accounts.contact = {
-      accounts = (import ./accounts.nix) pkgs;
+      accounts = import ./accounts.nix;
       basePath = "Contacts";
     };
     programs = {
