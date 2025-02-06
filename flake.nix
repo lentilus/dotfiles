@@ -63,11 +63,6 @@
 
     overlays = import ./overlays {inherit inputs;};
     formatter = forAllSystems (system: nixpkgs.legacyPackages.${system}.alejandra);
-    devShells = forAllSystems (system:
-      import ./shells {
-        inherit inputs outputs;
-        pkgs = nixpkgs.legacyPackages.${system};
-      });
 
     # custom modules
     homeManagerModules = import ./modules/home-manager;

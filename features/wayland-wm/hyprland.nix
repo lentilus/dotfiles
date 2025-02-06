@@ -79,7 +79,7 @@
           "$mod, Space, exec, ${config.programs.rofi.package}/bin/rofi -show drun"
           "$mod, x, exec, ${config.programs.rofi.pass.package}/bin/rofi-pass"
           "$mod, t, exec, ${screenshot}"
-          "$mod, r, exec, dlpdf"
+          "$mod, r, exec, ${pkgs.dlpdf}/bin/dlpdf"
 
           # system
           ",XF86MonBrightnessDown, exec, ${pkgs.brightnessctl}/bin/brightnessctl set 10%-"

@@ -11,6 +11,10 @@
     pkgs.fzf
     pkgs.nvim-pkg
     pkgs.ripgrep
+
+    # little scripts
+    pkgs.previewpdf
+    pkgs.ppdir
   ];
 
   # shell

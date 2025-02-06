@@ -1,5 +1,6 @@
-#!/usr/bin/env bash
-
+{ writeShellScriptBin }:
+# a wrapper script that aborts if smart card is not inserted
+writeShellScriptBin "ppdir" ''
 # Check if at least one directory is passed as an argument
 if [ "$#" -lt 1 ]; then
     echo "Usage: $0 <directory1> <directory2> ... <directoryN>"
@@ -33,3 +34,4 @@ for dir in "$@"; do
         echo "Warning: $dir is not a valid directory."
     fi
 done
+''

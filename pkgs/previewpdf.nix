@@ -1,5 +1,5 @@
-#!/usr/bin/env bash
-
+{writeShellScriptBin}:
+writeShellScriptBin "previewpdf" ''
 FILE=$1
 TEMPFILE="/tmp/zathura_pid"
 LOCKFILE="/tmp/zathura_lock"
@@ -40,7 +40,7 @@ send_dbus_command() {
     /org/pwmt/zathura \
     org.pwmt.zathura.OpenDocument \
     string:"$FILE" \
-    string:'' \
+    string:"" \
     int32:1 >/dev/null
 }
 
@@ -80,3 +80,4 @@ if [ -z "$ZATHURA_PID" ] || ! ps -p "$ZATHURA_PID" || ! send_dbus_command; then
 fi
 
 echo "Done. Releasing lock."
+''

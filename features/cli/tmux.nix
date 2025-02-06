@@ -4,14 +4,7 @@
   lib,
   ...
 }: {
-  programs.tmux = let
-    jump = pkgs.stdenv.mkDerivation {
-      name = "jumptmux";
-      propagatedBuildInputs = [pkgs.findutils];
-      dontUnpack = true;
-      installPhase = "install -Dm755 ${./jump} $out/bin/jumptmux";
-    };
-  in {
+  programs.tmux = {
     enable = true;
     keyMode = "vi";
     prefix = "C-Space";
@@ -35,7 +28,7 @@
       set-option -g focus-events on
 
       unbind C-f
-      bind-key -n C-f run-shell "tmux neww ${jump}/bin/jumptmux"
+      bind-key -n C-f run-shell "tmux neww ${pkgs.jump}/bin/jump"
       bind-key -n M-Space previous-window
       bind -n M-H split-window -h -c "#{pane_current_path}"
       bind -n M-V split-window -v -c "#{pane_current_path}"
