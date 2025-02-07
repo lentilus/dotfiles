@@ -1,16 +1,11 @@
-{
-  config,
-  pkgs,
-  lib,
-  ...
-}: {
+{pkgs, ...}: {
   home.packages = [
     pkgs.coreutils
     pkgs.locale
-    pkgs.git
     pkgs.fzf
     pkgs.nvim-pkg
     pkgs.ripgrep
+    pkgs.tree
 
     # little scripts
     pkgs.previewpdf
@@ -20,10 +15,7 @@
   # shell
   programs.zsh = {
     enable = true;
-    completionInit = ''
-      # load completions in background
-      autoload -U compinit && compinit -C -u
-    '';
+    completionInit = "autoload -U compinit && compinit -C -u";
     autosuggestion.enable = true;
     syntaxHighlighting.enable = true;
 
@@ -31,7 +23,8 @@
       vi = "nvim";
       c = "clear";
       ls = "ls -A --color";
-      fw = "cd $(git worktree list | fzf | awk '{print $1;}')";
+      fw = "cd $(git worktree list | fzf | awk '{print $1;}') || :";
+      nd = "nix develop --command zsh";
     };
 
     initExtraFirst = ''
@@ -56,7 +49,6 @@
   };
 
   home.sessionPath = [
-    "$HOME/.local/scripts" # personal scripts
     "$HOME/.local/bin" # pipx
   ];
 
