@@ -20,15 +20,6 @@
       url = "github:lentilus/nvim-flake";
     };
 
-    # fix GL
-    nixgl = {
-      url = "github:nix-community/nixGL";
-      inputs = {
-        nixpkgs.follows = "nixpkgs";
-        flake-utils.follows = "flake-utils";
-      };
-    };
-
     # fix spotlight and stuff on darwin
     mac-app-util = {
       url = "github:hraban/mac-app-util";
@@ -53,14 +44,7 @@
     ];
 
     forAllSystems = nixpkgs.lib.genAttrs systems;
-
-    sources = {
-      dotfiles = ./config;
-      scripts = ./config/scripts;
-    };
   in {
-    inherit sources;
-
     overlays = import ./overlays {inherit inputs;};
     formatter = forAllSystems (system: nixpkgs.legacyPackages.${system}.alejandra);
 
@@ -68,16 +52,16 @@
     homeManagerModules = import ./modules/home-manager;
     nixosModules = import ./modules/nixos;
 
+    # dev shell
+    devShells = forAllSystems (system: {
+      default = import ./shell.nix { pkgs = nixpkgs.legacyPackages.${system};};
+    });
+
     # personal
     nixosConfigurations."P14s-nixos" = inputs.nixpkgs.lib.nixosSystem {
       modules = [./hosts/P14s-nixos/configuration.nix];
       specialArgs = {inherit inputs outputs;};
     };
 
-    # # work
-    # darwinConfigurations."JAAI-MBP-LP" = inputs.darwin.lib.darwinSystem {
-    #   modules = [./hosts/JAAI-MBP-LP-darwin/configuration.nix];
-    #   specialArgs = {inherit inputs outputs;};
-    # };
   };
 }
