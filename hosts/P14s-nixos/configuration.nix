@@ -63,7 +63,7 @@
 
   nixpkgs = {
     overlays = [
-      inputs.nixgl.overlay
+      # inputs.nixgl.overlay
       inputs.nvim.overlays.default
 
       outputs.overlays.additions
