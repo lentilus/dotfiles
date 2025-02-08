@@ -1,3 +1,6 @@
-{
-services.dunst.enable = true;
+{pkgs, ...}: {
+  services.dunst.enable = true;
+  home.packages = [
+    pkgs.libnotify
+  ];
 }

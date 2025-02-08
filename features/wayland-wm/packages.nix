@@ -1,10 +1,9 @@
-{pkgs, ...}:
-{
-    home.packages =  [
-        pkgs.poppler_utils
-        pkgs.signal-desktop
-        pkgs.firefox
-        pkgs.whatsapp-for-linux
-        pkgs.anki
-    ];
+{pkgs, ...}: {
+  home.packages = [
+    pkgs.poppler_utils
+    pkgs.zathura
+    pkgs.anki
+    pkgs.zapzap
+    pkgs.signal-desktop
+  ];
 }

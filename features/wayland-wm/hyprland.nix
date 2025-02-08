@@ -1,37 +1,41 @@
 {
   config,
   pkgs,
-  lib,
   ...
 }: {
   wayland.windowManager.hyprland = let
-    start = pkgs.pkgs.writeShellScriptBin "start" "uwsm finalize";
-    stop = pkgs.pkgs.writeShellScriptBin "stop" "uwsm stop";
+    start = "uwsm finalize";
+    stop = "uwsm stop";
     screenshot = "${pkgs.grim}/bin/grim -g \"$(${pkgs.slurp}/bin/slurp)\" - | ${pkgs.wl-clipboard}/bin/wl-copy";
 
-    # map from name to number
-    workspaces = {
-      "1" = "a";
-      "2" = "s";
-      "3" = "d";
-      "4" = "f";
-      "5" = "u";
-      "6" = "i";
-      "7" = "o";
-      "8" = "p";
-    };
+    launcher = "${config.programs.rofi.package}/bin/rofi -show drun";
+    selectWindow = "${config.programs.rofi.package}/bin/rofi -show window";
+    selectPass = "${config.programs.rofi.pass.package}/bin/rofi-pass";
+    viewPdf = "${pkgs.dlpdf}/bin/dlpdf";
 
-    # Generate keybindings from workspaces
+    brightnessUp = "${pkgs.brightnessctl}/bin/brightnessctl set 10%-";
+    brightnessDown = "${pkgs.brightnessctl}/bin/brightnessctl set +10%";
+    volumeUp = "${pkgs.pamixer}/bin/pamixer -d 5";
+    volumeDown = "${pkgs.pamixer}/bin/pamixer -i 5";
+    volumeMute = "${pkgs.pamixer}/bin/pamixer -t";
+
+    programming = "${pkgs.foot}/bin/footclient tmux";
+    scratchpad = "footclient";
+    browser = "${pkgs.qutebrowser}/bin/qutebrowser";
+    notes = "${pkgs.foot}/bin/footclient --title=zettelkasten zsh -c \"cd ~/git/zettelkasten; zsh\"";
+
+    # map from name to number
+    workspaceKeys = ["a" "s" "d" "f" "u" "i" "o" "p"];
+
     moves = builtins.concatLists (
-      builtins.attrValues (
-        builtins.mapAttrs (
-          ws: key: [
-            "$mod, ${key}, workspace, ${ws}"
-            "$mod SHIFT, ${key}, movetoworkspace, ${ws}"
-          ]
-        )
-        workspaces
-      )
+      map (i: let
+        key = builtins.elemAt workspaceKeys (i - 1);
+        index = toString i;
+      in [
+        "$mod, ${key}, workspace, ${index}"
+        "$mod SHIFT, ${key}, movetoworkspace, ${index}"
+      ])
+      (builtins.genList (i: i + 1) (builtins.length workspaceKeys))
     );
   in {
     enable = true;
@@ -41,7 +45,7 @@
 
     settings = {
       "$mod" = "SUPER";
-      exec-once = "${start}/bin/start";
+      exec-once = start;
       misc.disable_hyprland_logo = true;
       input.touchpad.natural_scroll = true;
 
@@ -61,7 +65,7 @@
         [
           # controls
           "$mod, q, killactive"
-          "$mod Shift, Q, exec, ${stop}/bin/stop"
+          "$mod Shift, Q, exec, ${stop}"
           "$mod, Tab, fullscreen"
           "$mod, Return, togglespecialworkspace"
 
@@ -76,27 +80,23 @@
           "$mod Shift, L, movewindow, r"
 
           # utils
-          "$mod, Space, exec, ${config.programs.rofi.package}/bin/rofi -show drun"
-          "$mod, x, exec, ${config.programs.rofi.pass.package}/bin/rofi-pass"
+          "$mod, Space, exec, ${launcher}"
+          "$mod, w, exec, ${selectWindow}"
+          "$mod, x, exec, ${selectPass}"
           "$mod, t, exec, ${screenshot}"
-          "$mod, r, exec, ${pkgs.dlpdf}/bin/dlpdf"
+          "$mod, r, exec, ${viewPdf}"
 
           # system
-          ",XF86MonBrightnessDown, exec, ${pkgs.brightnessctl}/bin/brightnessctl set 10%-"
-          ",XF86MonBrightnessUp, exec, ${pkgs.brightnessctl}/bin/brightnessctl set +10%"
-          ",XF86AudioLowerVolume, exec, ${pkgs.pamixer}/bin/pamixer -d 5"
-          ",XF86AudioRaiseVolume, exec, ${pkgs.pamixer}/bin/pamixer -i 5"
-          ",XF86AudioMute, exec, ${pkgs.pamixer}/bin/pamixer -t"
+          ",XF86MonBrightnessDown, exec, ${brightnessUp}"
+          ",XF86MonBrightnessUp, exec, ${brightnessDown}"
+          ",XF86AudioLowerVolume, exec, ${volumeUp}"
+          ",XF86AudioRaiseVolume, exec, ${volumeDown}"
+          ",XF86AudioMute, exec, ${volumeMute}"
         ]
         ++ moves;
       windowrulev2 = [
         "suppressevent maximize, class:.*"
 
-        # tags
-        "tag +term, title:tmux"
-        "tag +browser, class:qutebrowser"
-        "tag +math, title:zettelkasten"
-        "tag +preview, class:zathura, workspace:3"
         "tag +communication, title:aerc"
         "tag +communication, title:Signal"
         "tag +document, class:zathura"
@@ -107,9 +107,6 @@
         "tag -transparent, title:tmux"
 
         # rules
-        "workspace 1, tag:term"
-        "workspace 2, tag:browser"
-        "workspace 3, tag:math"
         "workspace 4, tag:document"
         "workspace 5, tag:communication"
         "workspace 6, tag:media"
@@ -120,15 +117,11 @@
         "opacity 0.5 override, tag:transparent"
       ];
 
-      workspace = let
-        a = "${pkgs.foot}/bin/footclient tmux";
-        s = "${pkgs.qutebrowser}/bin/qutebrowser";
-        d = "${pkgs.foot}/bin/footclient --title=zettelkasten zsh -c \"cd ~/git/zettelkasten; zsh\"";
-      in [
-        "special:special, on-created-empty:[float] footclient"
-        "1, on-created-empty:${a}"
-        "2, on-created-empty:${s}"
-        "3, on-created-empty:${d}"
+      workspace = [
+        "special:special, on-created-empty:[float] ${scratchpad}"
+        "1, on-created-empty:${programming}"
+        "2, on-created-empty:${browser}"
+        "3, on-created-empty:${notes}"
       ];
     };
   };
