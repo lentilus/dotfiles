@@ -37,7 +37,7 @@
   uni = {
     address = "linus.preusser@stud.uni-goettingen.de";
     realName = "Linus Preusser";
-    userName = "ug-student\\linus.preusser";
+    userName = ''"ug-student\\linus.preusser"'';
     imap.host = "email.stud.uni-goettingen.de";
     smtp = {
       host = "email.stud.uni-goettingen.de";

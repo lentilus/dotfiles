@@ -1,7 +1,7 @@
 {
-imports = [
+  imports = [
     ./mail
     ./calendar
     ./contacts
-];
+  ];
 }
