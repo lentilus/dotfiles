@@ -1,6 +1,6 @@
 {
-imports = [
-./yubikey.nix
-./passwordstore.nix
-];
+  imports = [
+    ./yubikey.nix
+    ./passwordstore.nix
+  ];
 }
