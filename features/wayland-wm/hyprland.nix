@@ -19,10 +19,10 @@
     volumeDown = "${pkgs.pamixer}/bin/pamixer -i 5";
     volumeMute = "${pkgs.pamixer}/bin/pamixer -t";
 
-    programming = "${pkgs.foot}/bin/footclient tmux";
-    scratchpad = "footclient";
+    programming = "${pkgs.kitty}/bin/kitty tmux";
+    scratchpad = "${pkgs.kitty}/bin/kitty";
     browser = "${pkgs.qutebrowser}/bin/qutebrowser";
-    notes = "${pkgs.foot}/bin/footclient --title=zettelkasten zsh -c \"cd ~/git/zettelkasten; zsh\"";
+    notes = "${pkgs.kitty}/bin/kitty --title=zettelkasten zsh -c \"cd ~/git/zettelkasten; zsh\"";
 
     # map from name to number
     workspaceKeys = ["a" "s" "d" "f" "u" "i" "o" "p"];

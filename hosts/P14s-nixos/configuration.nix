@@ -41,6 +41,8 @@
     networkmanager.enable = true;
   };
 
+ programs.light.enable = true;
+
   time.timeZone = "Europe/Berlin";
   # home-manager
   home-manager = {
@@ -58,6 +60,7 @@
       "wheel"
       "input" # kanata
       "networkmanager"
+      "video" # light
     ];
   };
 

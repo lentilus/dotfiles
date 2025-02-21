@@ -6,4 +6,5 @@
     pkgs.zapzap
     pkgs.signal-desktop
   ];
+  programs.mpv.enable = true;
 }

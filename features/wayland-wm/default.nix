@@ -1,9 +1,10 @@
 {
   imports = [
-    ./hyprland.nix
-    ./waybar
+    # ./hyprland.nix
+    # ./waybar
+    ./sway.nix
     ./stylix.nix
-    ./foot.nix
+    ./kitty.nix
     ./rofi.nix
     ./packages.nix
     ./dunst.nix

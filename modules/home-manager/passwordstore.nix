@@ -22,6 +22,10 @@ in {
       };
     };
 
+    systemd.user.sessionVariables = {
+      PASSWORD_STORE_DIR = cfg.storePath;
+    };
+
     home.packages = [
       pkgs.wtype
       pkgs.wl-clipboard

@@ -4,7 +4,6 @@
     pkgs.locale
     pkgs.fzf
     pkgs.nvim-pkg
-    pkgs.ripgrep
     pkgs.tree
 
     # little scripts
@@ -19,6 +18,11 @@
     autosuggestion.enable = true;
     syntaxHighlighting.enable = true;
 
+    # do not source /etc/zshrc
+    envExtra = ''
+      setopt no_global_rcs
+    '';
+
     shellAliases = {
       vi = "nvim";
       c = "clear";
@@ -28,23 +32,20 @@
     };
 
     initExtraFirst = ''
-      ### prompt START ###
       setopt prompt_subst
       autoload -Uz vcs_info
+      zstyle ':vcs_info:git:*' formats ' %b'
       precmd() { vcs_info }
-      zstyle ':vcs_info:git:*' formats '(%b)'
-      PROMPT='%F{blue}%~%f ''${vcs_info_msg_0_} > '
-      ### prompt END ###
+      PS1='%F{blue}%~%f''${vcs_info_msg_0_} %# '
     '';
 
     initExtra = ''
-      ### PLUGINS START ###
-      source ${pkgs.zsh-vi-mode}/share/zsh-vi-mode/zsh-vi-mode.plugin.zsh
+      # loading plugins like this is much faster for some reason ???
       source ${pkgs.zsh-fzf-tab}/share/fzf-tab/fzf-tab.plugin.zsh
-      ### PLUGINS END ###
+      source ${pkgs.zsh-vi-mode}/share/zsh-vi-mode/zsh-vi-mode.plugin.zsh
 
-      # for quick hotfix situations
-      [ -f $HOME/.extrazsh ] && source "$HOME/.extrazsh"
+      ### mutable extra config
+      [ -f $HOME/.zshrc.local ] && source "$HOME/.zshrc.local"
     '';
   };
 

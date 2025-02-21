@@ -34,6 +34,10 @@
         package = pkgs.unstable.nerd-fonts.jetbrains-mono;
         name = "JetBrainsMono Nerd Font Mono";
       };
+      sizes = {
+        applications = 12;
+        desktop = 12;
+      };
     };
   };
 }
