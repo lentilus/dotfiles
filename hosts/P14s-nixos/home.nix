@@ -9,10 +9,7 @@
   imports = [
     inputs.stylix.homeManagerModules.stylix
     outputs.homeManagerModules
-    ../../features/cli
-    ../../features/browser
-    ../../features/pim
-    ../../features/wayland-wm
+    ../../features/home-manager
   ];
 
   ### custom options ###

@@ -5,7 +5,7 @@ pkgs.mkShell {
     nixd
     nixos-rebuild
   ];
-  
+
   shellHook = ''
     echo "Welcome to your development shell!"
     export NIX_CONFIG="experimental-features = nix-command flakes"

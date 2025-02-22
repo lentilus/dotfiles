@@ -30,13 +30,13 @@
       bind  c  new-window      -c "#{pane_current_path}"
 
       set-hook -g session-created 'rename-window -t 0 EDITOR; send-keys -t EDITOR "$EDITOR" C-m; new-window -n SHELL -c "#{pane_current_path}";'
-      
+
       # Set Alt-a to switch to the EDITOR window
       bind -n M-a select-window -t EDITOR
-      
+
       # Set Alt-s to switch to the SHELL window
       bind -n M-s select-window -t SHELL
-      
+
       # Ensure the first window is always EDITOR
       set-option -g renumber-windows on
     '';

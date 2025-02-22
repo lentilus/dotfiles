@@ -8,8 +8,9 @@
 }: {
   imports = [
     inputs.home-manager.nixosModules.home-manager
-    outputs.nixosModules.custom
+    outputs.nixosModules
     ./hardware-configuration.nix
+    ../../features/nixos/login-window-manager.nix
   ];
 
   # bootloader
@@ -18,22 +19,7 @@
     efi.canTouchEfiVariables = true;
   };
 
-  # custom options
-  custom = {
-    greeting.enable = true;
-    homeRowMods.enable = true;
-    authentication.enable = true;
-    audio.enable = true;
-  };
-
-  programs.zsh = {
-    enable = true;
-    enableCompletion = false;
-    autosuggestions.enable = false;
-  };
-
-  # power saving
-  services.tlp.enable = true;
+  programs.zsh.enable = true;
 
   # networking
   networking = {
@@ -41,9 +27,20 @@
     networkmanager.enable = true;
   };
 
- programs.light.enable = true;
+  services = {
+    pcscd.enable = true;
+    udev.packages = [pkgs.yubikey-personalization];
+    tlp.enable = true;
+
+    # custom services
+    polkit-authentication.enable = true;
+    backlight.enable = true;
+    homeRowMods.enable = true;
+    audio.enable = true;
+  };
 
   time.timeZone = "Europe/Berlin";
+
   # home-manager
   home-manager = {
     useGlobalPkgs = true;

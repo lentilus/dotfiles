@@ -1,13 +1,11 @@
 {
   config,
-  pkgs,
   lib,
-  outputs,
   ...
 }: let
-  cfg = config.custom.audio;
+  cfg = config.services.audio;
 in {
-  options.custom.audio = {
+  options.services.audio = {
     enable = lib.mkEnableOption "enable pipewire and other audio related stuff";
   };
 

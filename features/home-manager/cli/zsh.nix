@@ -52,9 +52,4 @@
   home.sessionPath = [
     "$HOME/.local/bin" # pipx
   ];
-
-  home.sessionVariables = {
-    EDITOR = "nvim";
-    VISUAL = "nvim";
-  };
 }

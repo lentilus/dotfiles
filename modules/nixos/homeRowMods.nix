@@ -1,13 +1,11 @@
 {
   config,
-  pkgs,
   lib,
-  outputs,
   ...
 }: let
-  cfg = config.custom.homeRowMods;
+  cfg = config.services.homeRowMods;
 in {
-  options.custom.homeRowMods = {
+  options.services.homeRowMods = {
     enable = lib.mkEnableOption "enable home-row-mods using kanata";
   };
 
