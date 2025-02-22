@@ -3,6 +3,10 @@
 
   modifications = final: prev: {
     qutebrowser = prev.qutebrowser.override {enableWideVine = true;};
+    pinentry-rofi = prev.pkgs.writeShellScriptBin "pinentry-rofi" ''
+      PATH="$PATH:${prev.pkgs.coreutils}/bin:${prev.pkgs.rofi-wayland}/bin:${prev.pkgs.rofi}/bin"
+      "${prev.pinentry-rofi}/bin/pinentry-rofi" "$@"
+    '';
   };
 
   # When applied, the unstable nixpkgs set (declared in the flake inputs) will
