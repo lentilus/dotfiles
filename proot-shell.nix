@@ -1,3 +1,5 @@
+# originally by: dermetfan (https://git.sr.ht/~dermetfan/home-manager-shell)
+# modified by: lentilus
 {
   home-manager,
   pkgs,
