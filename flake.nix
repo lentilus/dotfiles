@@ -6,9 +6,6 @@
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
     nvim.url = "github:lentilus/nvim-flake";
 
-    # TODO: rm dependence on flake-utils 
-    flake-utils.url = "github:numtide/flake-utils";
-
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -52,26 +49,15 @@
       specialArgs = {inherit inputs outputs;};
     };
 
-    apps = forAllSystems (system: {
-      # proot shell
-      shell = inputs.flake-utils.lib.mkApp {
-        drv = import ./proot-shell.nix {
-          home-manager = inputs.home-manager;
-          pkgs = nixpkgs.legacyPackages.${system};
-          modules = [
-            ./features/home-manager/cli
-            {
-              nixpkgs = {
-                overlays = [
-                  inputs.nvim.overlays.default
-                  outputs.overlays.additions
-                  outputs.overlays.modifications
-                  outputs.overlays.unstable-packages
-                ];
-              };
-            }
-          ];
-        };
+    packages = forAllSystems (system: {
+      shell = import ./proot-shell.nix {
+        home-manager = inputs.home-manager;
+        pkgs = nixpkgs.legacyPackages.${system};
+        extraSpecialArgs = {inherit inputs outputs;};
+        modules = [
+          ./features/home-manager/cli
+          ./features/nixpkgs.nix
+        ];
       };
     });
   };
