@@ -35,7 +35,7 @@
         name = "JetBrainsMono Nerd Font Mono";
       };
       sizes = {
-        applications = 12;
+        applications = 10;
         desktop = 12;
       };
     };
