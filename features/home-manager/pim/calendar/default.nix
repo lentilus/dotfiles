@@ -1,14 +1,7 @@
 {
-  lib,
-  config,
-  pkgs,
-  ...
-}: let
-  basePath = "Calendar";
-in {
   accounts.calendar = {
     accounts = import ./accounts.nix;
-    basePath = basePath;
+    basePath = "Calendar";
   };
   programs = {
     vdirsyncer.enable = true;
@@ -16,8 +9,7 @@ in {
     todoman = {
       enable = true;
       extraConfig = ''
-        path = "~/${basePath}/*"
-        default_list = "personal";
+        default_list = "todo";
       '';
     };
   };

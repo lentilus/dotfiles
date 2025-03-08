@@ -18,7 +18,10 @@
 
     aerc = {
       enable = true;
-      extraAccounts.address-book-cmd = "khard email --parsable --remove-first-line %s";
+      extraAccounts = {
+        address-book-cmd = "khard email --parsable --remove-first-line %s";
+        check-mail-cmd = "mbsync -a";
+      };
     };
 
     msmtp.enable = true;
@@ -48,7 +51,10 @@
     maildir.path = "uni";
     passwordCommand = "withsc pass uni/ecampus";
 
-    aerc.enable = true;
+    aerc = {
+      enable = true;
+      extraAccounts.check-mail-cmd = "mbsync -a";
+    };
     msmtp.enable = true;
     mbsync = {
       enable = true;
