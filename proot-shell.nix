@@ -4,6 +4,7 @@
   home-manager,
   pkgs,
   args ? {},
+  extraSpecialArgs ? {},
   modules ? [],
 }: let
   lib = pkgs.lib;
@@ -15,7 +16,7 @@
     home.stateVersion = with lib; versions.majorMinor version;
   };
   homeConfiguration = home-manager.lib.homeManagerConfiguration (lib.recursiveUpdate {
-      inherit pkgs;
+      inherit pkgs extraSpecialArgs;
       modules = [minimal] ++ modules;
     }
     args);
