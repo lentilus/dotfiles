@@ -13,16 +13,23 @@
     package = lib.mkDefault pkgs.qutebrowser;
     enable = true;
     settings = {
-      tabs.show = "never";
       scrolling.bar = "never";
-      content.blocking.method = "both";
       window.hide_decoration = true;
-      content.javascript.clipboard = "access";
       url.start_pages = ["about:blank"];
       colors.webpage.darkmode.enabled = false;
 
-      # https://github.com/qutebrowser/qutebrowser/issues/3231
-      tabs.background = true;
+      content = {
+        blocking.method = "both";
+        javascript.clipboard = "access";
+        local_content_can_access_remote_urls = true;
+      };
+
+      tabs = {
+        # https://github.com/qutebrowser/qutebrowser/issues/3231
+        background = true;
+        show = "never";
+      };
+
     };
     searchEngines = lib.mkDefault {
       DEFAULT = "https://www.duckduckgo.com/?q={}";
@@ -47,6 +54,6 @@
   };
 
   home.file.".config/qutebrowser/blocked-hosts".text = ''
+  www.youtube.com
   '';
-  # www.youtube.com
 }
