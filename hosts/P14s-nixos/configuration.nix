@@ -10,6 +10,7 @@
     inputs.home-manager.nixosModules.home-manager
     outputs.nixosModules
     ./hardware-configuration.nix
+    ../../features/nixpkgs.nix
     ../../features/nixos/login-window-manager.nix
   ];
 
@@ -59,20 +60,6 @@
       "networkmanager"
       "video" # light
     ];
-  };
-
-  nixpkgs = {
-    overlays = [
-      # inputs.nixgl.overlay
-      inputs.nvim.overlays.default
-
-      outputs.overlays.additions
-      outputs.overlays.modifications
-      outputs.overlays.unstable-packages
-    ];
-    config = {
-      allowUnfree = true;
-    };
   };
 
   nix = let
