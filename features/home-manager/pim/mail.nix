@@ -1,14 +1,14 @@
-{
-  lib,
-  config,
-  pkgs,
-  ...
-}: {
-  accounts.email.accounts = import ./accounts.nix;
-
-  programs.mbsync.enable = true;
-  programs.msmtp.enable = true;
+{pkgs, ...}: {
   services.mbsync.enable = true;
+  programs.mbsync = {
+    enable = true;
+    extraConfig = ''
+      # global settings
+      Create Both
+      Expunge Both
+
+    '';
+  };
 
   programs.aerc = {
     enable = true;
@@ -31,6 +31,8 @@
     extraAccounts = ''
       copy-to = Sent
       folders-sort = Inbox,Drafts,Sent,Junk,Archive,Trash
+      pgp-auto-sign = true
+      address-book-cmd = "khard email --parsable --remove-first-line %s"
     '';
   };
 }

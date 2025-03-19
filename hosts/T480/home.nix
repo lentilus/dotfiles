@@ -15,10 +15,11 @@
   ### custom options ###
   yubikey = {
     enable = true;
-    publicKeyPath = ./public-key.txt;
+    publicKeyPath = ./publickey.asc;
     sshKeygrip = "0C5B390F0ECDC5446622AE31F0916A3588C5B284";
     pinentryPackage = pkgs.pinentry-rofi;
   };
+
   passwordstore = {
     enable = true;
     storePath = "${config.home.homeDirectory}/git/pass";
@@ -30,11 +31,22 @@
     settings.experimental-features = ["nix-command" "flakes"];
   };
 
-  xdg.enable = true;
+  xdg = {
+    enable = true;
+    mimeApps.enable = true;
+  };
 
   home = {
     username = "lentilus";
     homeDirectory = "/home/lentilus";
     stateVersion = "24.05";
+  };
+
+  home.file = {
+    "git/README".text = "My projects.";
+    "Music/README".text = "My music.";
+    "Books/README".text = "My books.";
+    "Pictures/README".text = "My pictures.";
+    "Documents/README".text = "My documents.";
   };
 }

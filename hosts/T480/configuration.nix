@@ -1,8 +1,6 @@
 {
   inputs,
   outputs,
-  lib,
-  config,
   pkgs,
   ...
 }: {
@@ -14,40 +12,47 @@
     ../../features/nixos/login-window-manager.nix
   ];
 
-  # bootloader
-  boot.loader = {
-    systemd-boot.enable = true;
-    efi.canTouchEfiVariables = true;
+  boot = {
+    # https://github.com/NixOS/nixpkgs/issues/342082
+    initrd = {
+      systemd.enable = true;
+      luks.devices.cryptroot.device = "/dev/disk/by-uuid/8f424f87-b2e1-4128-92a1-d3ae8fcc3928";
+    };
+    loader = {
+      systemd-boot.enable = true;
+      efi.canTouchEfiVariables = true;
+    };
   };
 
   programs.zsh.enable = true;
 
-  # networking
   networking = {
-    hostName = "P14s-nixos";
+    hostName = "T480";
     networkmanager.enable = true;
   };
 
   services = {
     pcscd.enable = true;
-    udev.packages = [pkgs.yubikey-personalization];
     tlp.enable = true;
+    dbus.enable = true;
+    udev.packages = [pkgs.yubikey-personalization];
 
     # custom services
-    polkit-authentication.enable = true;
     backlight.enable = true;
     homeRowMods.enable = true;
     audio.enable = true;
   };
 
+  security.polkit.enable = true;
+
   time.timeZone = "Europe/Berlin";
 
-  # home-manager
   home-manager = {
     useGlobalPkgs = true;
     useUserPackages = true;
     users.lentilus = import ./home.nix;
     extraSpecialArgs = {inherit inputs outputs;};
+    backupFileExtension = "backup";
   };
 
   users.users.lentilus = {
@@ -60,21 +65,6 @@
       "networkmanager"
       "video" # light
     ];
-  };
-
-  nix = let
-    flakeInputs = lib.filterAttrs (_: lib.isType "flake") inputs;
-  in {
-    settings = {
-      experimental-features = "nix-command flakes";
-      # Opinionated: disable global registry
-      flake-registry = "";
-      # Workaround for https://github.com/NixOS/nix/issues/9574
-      nix-path = config.nix.nixPath;
-    };
-    # Opinionated: make flake registry and nix path match flake inputs
-    registry = lib.mapAttrs (_: flake: {inherit flake;}) flakeInputs;
-    nixPath = lib.mapAttrsToList (n: _: "${n}=flake:${n}") flakeInputs;
   };
 
   # https://nixos.wiki/wiki/FAQ/When_do_I_update_stateVersion

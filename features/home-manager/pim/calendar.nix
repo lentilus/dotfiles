@@ -1,8 +1,5 @@
 {
-  accounts.calendar = {
-    accounts = import ./accounts.nix;
-    basePath = "Calendar";
-  };
+  accounts.calendar.basePath = "Calendar";
   programs = {
     vdirsyncer.enable = true;
     khal.enable = true;

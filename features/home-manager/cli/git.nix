@@ -2,7 +2,7 @@
   programs.git = {
     enable = true;
     userName = "lentilus";
-    userEmail = "lentilus@mailbox.org";
+    userEmail = "mail@lentilus.me";
     lfs.enable = true;
     extraConfig = {
       init.defaultBranch = "main";

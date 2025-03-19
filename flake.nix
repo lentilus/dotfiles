@@ -24,29 +24,25 @@
   } @ inputs: let
     inherit (self) outputs;
 
-    systems = [
-      "x86_64-linux"
-      # "aarch64-darwin"
-    ];
+    systems = ["x86_64-linux"];
 
     forAllSystems = nixpkgs.lib.genAttrs systems;
   in {
     overlays = import ./overlays {inherit inputs;};
     formatter = forAllSystems (system: nixpkgs.legacyPackages.${system}.alejandra);
 
-    # custom modules
     homeManagerModules = import ./modules/home-manager;
     nixosModules = import ./modules/nixos;
 
-    # dev shell
     devShells = forAllSystems (system: {
       default = import ./shell.nix {pkgs = nixpkgs.legacyPackages.${system};};
     });
 
-    # personal
-    nixosConfigurations."P14s-nixos" = inputs.nixpkgs.lib.nixosSystem {
-      modules = [./hosts/P14s-nixos/configuration.nix];
-      specialArgs = {inherit inputs outputs;};
+    nixosConfigurations = {
+      "T480" = inputs.nixpkgs.lib.nixosSystem {
+        modules = [./hosts/T480/configuration.nix];
+        specialArgs = {inherit inputs outputs;};
+      };
     };
 
     packages = forAllSystems (system: {

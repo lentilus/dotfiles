@@ -29,6 +29,7 @@
       ls = "ls -A --color";
       fw = "cd $(git worktree list | fzf | awk '{print $1;}') || :";
       nd = "nix develop --command zsh";
+      np = "nix-shell --command zsh -p";
     };
 
     initExtraFirst = ''

@@ -37,9 +37,7 @@ in {
       ];
 
       # https://support.yubico.com/hc/en-us/articles/4819584884124-Resolving-GPG-s-CCID-conflicts
-      scdaemonSettings = {
-        disable-ccid = true;
-      };
+      scdaemonSettings.disable-ccid = true;
 
       # https://github.com/drduh/config/blob/master/gpg.conf
       settings = {
@@ -93,7 +91,9 @@ in {
       extraConfig.commit.gpgsign = true;
     };
 
-    # custom wrapper that checks if a smartcard is present (pkgs/withsc.nix)
-    home.packages = [pkgs.withsc];
+    systemd.user.sessionVariables = {
+      # disable pinentry popup from systemd-services
+      PASSWORD_STORE_GPG_OPTS = "--batch --pinentry-mode=error";
+    };
   };
 }
