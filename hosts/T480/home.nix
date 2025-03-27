@@ -8,11 +8,11 @@
 }: {
   imports = [
     inputs.stylix.homeManagerModules.stylix
+    inputs.sops-nix.homeManagerModules.sops
     outputs.homeManagerModules
     ../../features/home-manager
   ];
 
-  ### custom options ###
   yubikey = {
     enable = true;
     publicKeyPath = ./publickey.asc;
@@ -24,7 +24,12 @@
     enable = true;
     storePath = "${config.home.homeDirectory}/git/pass";
   };
-  ### custom options END ###
+
+  sops = {
+    defaultSopsFile = ./secrets.yaml;
+    defaultSopsFormat = "yaml";
+    gnupg.home = ".gnupg";
+  };
 
   nix = {
     package = lib.mkDefault pkgs.unstable.nix;

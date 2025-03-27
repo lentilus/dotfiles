@@ -1,10 +1,9 @@
 {pkgs, ...}: {
   home.packages = [
-    pkgs.poppler_utils
-    pkgs.zathura
+    # pkgs.poppler_utils
     pkgs.anki
     pkgs.libreoffice
     pkgs.calibre
+    pkgs.passes # display pkpass files
   ];
-  programs.mpv.enable = true;
 }

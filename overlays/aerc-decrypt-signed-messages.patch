@@ -1,0 +1,18 @@
+ lib/crypto/gpg/gpgbin/gpgbin.go | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/lib/crypto/gpg/gpgbin/gpgbin.go b/lib/crypto/gpg/gpgbin/gpgbin.go
+index 69f290fd..0fe7fc3f 100644
+--- a/lib/crypto/gpg/gpgbin/gpgbin.go
++++ b/lib/crypto/gpg/gpgbin/gpgbin.go
+@@ -223,6 +223,10 @@ func parse(r io.Reader, md *models.MessageDetails) error {
+ 		case "NODATA":
+ 			md.SignatureError = "gpg: no signature packet found"
+ 		case "FAILURE":
++			if line == "[GNUPG:] FAILURE gpg-exit 33554433" {
++				log.Errorf("skipping gpg failure: gpg-exit 33554433")
++				break
++			}
+ 			return fmt.Errorf(strings.TrimPrefix(line, "[GNUPG:] "))
+ 		}
+ 	}

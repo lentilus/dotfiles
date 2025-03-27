@@ -91,9 +91,9 @@ in {
       extraConfig.commit.gpgsign = true;
     };
 
-    systemd.user.sessionVariables = {
-      # disable pinentry popup from systemd-services
-      PASSWORD_STORE_GPG_OPTS = "--batch --pinentry-mode=error";
-    };
+    # systemd.user.sessionVariables = {
+    #   # disable pinentry popup from systemd-services
+    #   PASSWORD_STORE_GPG_OPTS = "--batch --pinentry-mode=error";
+    # };
   };
 }

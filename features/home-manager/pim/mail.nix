@@ -12,6 +12,7 @@
 
   programs.aerc = {
     enable = true;
+    # package = pkgs.unstable.aerc;
     extraConfig = {
       general = {
         # we don't store any credentials, so this is fine!

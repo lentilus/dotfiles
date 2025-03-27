@@ -1,36 +1,38 @@
-{
-  pkgs,
-  lib,
-  ...
-}: let
-  host = "mailbox.org";
-  mail = "mail@lentilus.me";
-  pass = "${pkgs.pass}/bin/pass show gocrypt/pim/${host}/${mail}";
+{ config, lib, ... }:
+let
+  # Helper to generate a password command from a given secret key.
+  secret = key: "cat ${config.sops.secrets.${key}.path}";
 in {
+  sops.secrets = {
+    "primary-mail" = {};
+    "uni-mail" = {};
+    "contacts" = {};
+  };
+
   accounts = {
     email.accounts = {
       mailbox = {
         primary = true;
-        address = mail;
-        realName = "lentilus";
-        userName = mail;
-        imap.host = "imap.${host}";
-        smtp.host = "smtp.${host}";
         maildir.path = "mailbox";
-        passwordCommand = pass;
+        realName = "lentilus";
         aliases = ["*@lentilus.me"];
+        address = "mail@lentilus.me";
+        userName = "mail@lentilus.me";
+        imap.host = "imap.mailbox.org";
+        smtp.host = "smtp.mailbox.org";
+        passwordCommand = secret "primary-mail";
         aerc.enable = true;
         mbsync.enable = true;
       };
 
       uni = {
-        address = "linus.preusser@stud.uni-goettingen.de";
+        maildir.path = "uni";
         realName = "Linus Preusser";
+        address = "linus.preusser@stud.uni-goettingen.de";
         userName = ''"ug-student\\linus.preusser"'';
         imap.host = "email.stud.uni-goettingen.de";
         # smtp.host = "email.stud.uni-goettingen.de";
-        maildir.path = "uni";
-        passwordCommand = "${pkgs.pass}/bin/pass gocrypt/uni/ecampus.uni-goettingen.de/linus.preusser";
+        passwordCommand = secret "uni-mail";
         aerc.enable = true;
         mbsync = {
           enable = true;
@@ -39,47 +41,23 @@ in {
       };
     };
 
-    calendar.accounts = let
-      template = id: {
-        remote = {
-          type = "caldav";
-          url = "https://dav.${host}/caldav/${id}";
-          userName = mail;
-          passwordCommand = lib.strings.splitString " " pass;
-        };
-        vdirsyncer = {
-          enable = true;
-          auth = "basic";
-          collections = null;
-          metadata = ["color"];
-        };
-        khal.enable = true;
+    contact.accounts.personal = {
+      local = {
+        type = "filesystem";
+        fileExt = ".vcf";
       };
-    in {
-      personal = template "Y2FsOi8vMC8zMQ";
-      birthdays = template "Y2FsOi8vMS8w";
-      todo = template "MzM" // {khal.enable = false;};
-    };
-
-    contact.accounts = {
-      personal = {
-        local = {
-          type = "filesystem";
-          fileExt = ".vcf";
-        };
-        remote = {
-          type = "carddav";
-          url = "https://dav.${host}/carddav/32";
-          userName = mail;
-          passwordCommand = lib.strings.splitString " " pass;
-        };
-        vdirsyncer = {
-          enable = true;
-          auth = "basic";
-          collections = null;
-        };
-        khard.enable = true;
+      remote = {
+        type = "carddav";
+        url = "https://dav.mailbox.org/carddav/32";
+        userName = "mail@lentilus.me";
+        passwordCommand = ["cat" config.sops.secrets."contacts".path];
       };
+      vdirsyncer = {
+        enable = true;
+        auth = "basic";
+        collections = null;
+      };
+      khard.enable = true;
     };
   };
 }

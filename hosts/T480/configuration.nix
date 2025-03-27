@@ -35,7 +35,6 @@
     pcscd.enable = true;
     tlp.enable = true;
     dbus.enable = true;
-    udev.packages = [pkgs.yubikey-personalization];
 
     # custom services
     backlight.enable = true;

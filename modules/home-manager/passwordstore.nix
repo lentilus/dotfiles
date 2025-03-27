@@ -47,10 +47,5 @@ in {
     home.shellAliases = {
       pass = "pass gocrypt";
     };
-
-    # mount encrypted store on login
-    wayland.windowManager.sway.config.startup = [
-      {command = "${pass}/bin/pass gocrypt open";}
-    ];
   };
 }

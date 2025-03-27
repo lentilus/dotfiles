@@ -1,0 +1,9 @@
+# See https://github.com/Mic92/sops-nix
+keys:
+  - &lentilus 988659C39959183385845F0F6594ADA13130D0CD
+creation_rules:
+  - path_regex: hosts/T480/secrets.yaml$
+    key_groups:
+    - pgp:
+      - *lentilus
+
