@@ -8,6 +8,7 @@
     inputs.home-manager.nixosModules.home-manager
     outputs.nixosModules
     ./hardware-configuration.nix
+    ./powersaving.nix
     ../../features/nixpkgs.nix
     ../../features/nixos/login-window-manager.nix
   ];
@@ -27,8 +28,10 @@
   programs.zsh.enable = true;
 
   networking = {
-    hostName = "T480";
+    # allows undeclarative network settings
+    # as opposed to `wireless.enable` for declaritive wpa_supplicant
     networkmanager.enable = true;
+    hostName = "T480";
   };
 
   services = {
@@ -42,13 +45,26 @@
     audio.enable = true;
   };
 
+  services.searx = {
+    enable = true;
+    settings = {
+      server = {
+        port = 2987;
+        bind_address = "127.0.0.1";
+        secret_key = "secret key";
+        limiter = false;
+        default_http_headers.Access-Control-Allow-Origin = "*";
+      };
+      search.formats = ["json"];
+    };
+  };
+
   security.polkit.enable = true;
 
   time.timeZone = "Europe/Berlin";
 
   home-manager = {
     useGlobalPkgs = true;
-    useUserPackages = true;
     users.lentilus = import ./home.nix;
     extraSpecialArgs = {inherit inputs outputs;};
     backupFileExtension = "backup";

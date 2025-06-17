@@ -26,20 +26,16 @@
       };
 
       keybindings = lib.mkOptionDefault {
-        # unbind things
-        "${mod}+s" = null;
-        "${mod}+a" = null;
-        "${mod}+Space" = null;
-
         "${mod}+Shift+d" = ''exec ${rofi} -dmenu -p "nix-shell:" | xargs -I {} nix-shell -p {} --command {}'';
         "${mod}+1" = ''workspace 1; exec ${onempty "1" "${terminal} -- tmux a"}'';
-        "${mod}+2" = ''workspace 2; exec ${onempty "2" "qutebrowser"}'';
+        "${mod}+2" = ''workspace 2; exec ${onempty "2" "qutebrowser about:blank"}'';
         "${mod}+q" = "kill";
 
         "${mod}+w" = "exec ${rofi} -show window";
         "${mod}+x" = "exec ${rofi-pass}";
         "${mod}+t" = "exec ${pkgs.slurp}/bin/slurp | ${pkgs.grim}/bin/grim -g - - | ${pkgs.wl-clipboard}/bin/wl-copy";
         "${mod}+g" = "exec ${pkgs.dlpdf}/bin/dlpdf";
+
         "XF86AudioLowerVolume" = "exec ${pamixer} -d 5";
         "XF86AudioRaiseVolume" = "exec ${pamixer} -i 5";
         "XF86AudioMute" = "exec ${pamixer} -t";

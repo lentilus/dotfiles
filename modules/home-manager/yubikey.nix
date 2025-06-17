@@ -1,7 +1,6 @@
 {
   config,
   lib,
-  pkgs,
   ...
 }: let
   cfg = config.yubikey;
@@ -15,7 +14,7 @@ in {
     };
 
     sshKeygrip = lib.mkOption {
-      type = lib.types.string;
+      type = lib.types.str;
       description = "Keygrip of key to expose as ssh key";
     };
 
@@ -76,7 +75,7 @@ in {
 
       defaultCacheTtl = 600; # 1h
       maxCacheTtl = 7200; # 2h
-      pinentryPackage = cfg.pinentryPackage;
+      pinentry.package = cfg.pinentryPackage;
       extraConfig = ''
         ttyname $GPG_TTY
       '';
@@ -90,10 +89,5 @@ in {
       signing.key = null;
       extraConfig.commit.gpgsign = true;
     };
-
-    # systemd.user.sessionVariables = {
-    #   # disable pinentry popup from systemd-services
-    #   PASSWORD_STORE_GPG_OPTS = "--batch --pinentry-mode=error";
-    # };
   };
 }

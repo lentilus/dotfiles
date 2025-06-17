@@ -24,7 +24,6 @@
 
       unbind C-f
       bind-key -n C-f run-shell "tmux neww ${pkgs.jump}/bin/jump"
-      bind-key -n M-Space previous-window
       bind -n M-H split-window -h -c "#{pane_current_path}"
       bind -n M-V split-window -v -c "#{pane_current_path}"
       bind  c  new-window      -c "#{pane_current_path}"

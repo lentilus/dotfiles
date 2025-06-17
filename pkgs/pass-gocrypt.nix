@@ -2,7 +2,7 @@
   stdenv,
   fetchFromGitHub,
   gocryptfs,
-  pass_gocrypt_timeout ? 300
+  pass_gocrypt_timeout ? 300,
 }:
 stdenv.mkDerivation {
   pname = "pass-gocrypt";

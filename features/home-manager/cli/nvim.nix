@@ -1,6 +1,10 @@
-{pkgs, ...}: {
+{
+  pkgs,
+  inputs,
+  ...
+}: {
   home.packages = [
-    pkgs.nvim-pkg
+    inputs.nvim.packages.${pkgs.system}.nvim
   ];
 
   home.sessionVariables = {

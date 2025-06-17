@@ -1,7 +1,10 @@
-{ config, lib, ... }:
-let
+{
+  config,
+  pkgs,
+  ...
+}: let
   # Helper to generate a password command from a given secret key.
-  secret = key: "cat ${config.sops.secrets.${key}.path}";
+  secret = key: "${pkgs.coreutils}/bin/cat ${config.sops.secrets.${key}.path}";
 in {
   sops.secrets = {
     "primary-mail" = {};
@@ -50,7 +53,7 @@ in {
         type = "carddav";
         url = "https://dav.mailbox.org/carddav/32";
         userName = "mail@lentilus.me";
-        passwordCommand = ["cat" config.sops.secrets."contacts".path];
+        passwordCommand = ["${pkgs.coreutils}/bin/cat" config.sops.secrets."contacts".path];
       };
       vdirsyncer = {
         enable = true;

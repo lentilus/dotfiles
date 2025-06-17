@@ -12,14 +12,15 @@
     # package = lib.mkDefault pkgs.unstable.qutebrowser;
     package = lib.mkDefault pkgs.qutebrowser;
     enable = true;
-    greasemonkey = [
-      (pkgs.writeText "strip-duckduckgo.js" (builtins.readFile ./minimal-duckduckgo.js))
-    ];
+    # greasemonkey = [
+    #   (pkgs.writeText "strip-duckduckgo.js" (builtins.readFile ./minimal-duckduckgo.js))
+    # ];
     settings = {
       scrolling.bar = "never";
       window.hide_decoration = true;
       url.start_pages = ["about:blank"];
-      colors.webpage.darkmode.enabled = false;
+      # colors.webpage.preferred_color_scheme = "dark";
+      # colors.webpage.darkmode.enabled = false;
 
       content = {
         blocking.method = "both";

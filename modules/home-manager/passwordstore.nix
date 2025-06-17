@@ -15,37 +15,37 @@ in {
   };
 
   config = let
-      pass = pkgs.pass.withExtensions (_: [pkgs.pass-gocrypt]);
-    in
+    pass = pkgs.pass.withExtensions (_: [pkgs.pass-gocrypt]);
+  in
     lib.mkIf cfg.enable {
-    home.packages = [
-      pkgs.wtype
-      pkgs.wl-clipboard
-    ];
+      home.packages = [
+        pkgs.wtype
+        pkgs.wl-clipboard
+      ];
 
-    programs = {
-      password-store = {
-        enable = true;
-        package = pass;
-        settings.PASSWORD_STORE_DIR = cfg.storePath;
+      programs = {
+        password-store = {
+          enable = true;
+          package = pass;
+          settings.PASSWORD_STORE_DIR = cfg.storePath;
+        };
+        rofi.pass = {
+          enable = true;
+          package = pkgs.rofi-pass-wayland;
+          stores = [cfg.storePath];
+          extraConfig = ''
+            default_autotype='path :tab pass'
+            default_user=':filename'
+          '';
+        };
       };
-      rofi.pass = {
-        enable = true;
-        package = pkgs.rofi-pass-wayland;
-        stores = [cfg.storePath];
-        extraConfig = ''
-          default_autotype='path :tab pass'
-          default_user=':filename'
-        '';
+
+      systemd.user.sessionVariables = {
+        PASSWORD_STORE_DIR = cfg.storePath;
+      };
+
+      home.shellAliases = {
+        pass = "pass gocrypt";
       };
     };
-
-    systemd.user.sessionVariables = {
-      PASSWORD_STORE_DIR = cfg.storePath;
-    };
-
-    home.shellAliases = {
-      pass = "pass gocrypt";
-    };
-  };
 }

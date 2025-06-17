@@ -7,7 +7,7 @@
   ...
 }: {
   imports = [
-    inputs.stylix.homeManagerModules.stylix
+    inputs.stylix.homeModules.stylix
     inputs.sops-nix.homeManagerModules.sops
     outputs.homeManagerModules
     ../../features/home-manager
