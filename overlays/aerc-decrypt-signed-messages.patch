@@ -1,0 +1,18 @@
+ lib/crypto/gpg/gpgbin/gpgbin.go | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/lib/crypto/gpg/gpgbin/gpgbin.go b/lib/crypto/gpg/gpgbin/gpgbin.go
+index b4985328..4d0fd355 100644
+--- a/lib/crypto/gpg/gpgbin/gpgbin.go
++++ b/lib/crypto/gpg/gpgbin/gpgbin.go
+@@ -208,6 +208,10 @@ func parseStatusFd(r io.Reader, md *models.MessageDetails) error {
+ 				return NoValidOpenPgpData
+ 			}
+ 		case "FAILURE":
++			if line == "[GNUPG:] FAILURE gpg-exit 33554433" {
++				log.Errorf("skipping gpg failure: gpg-exit 33554433")
++				break
++			}
+ 			return fmt.Errorf("%s", strings.TrimPrefix(line, "[GNUPG:] "))
+ 		}
+ 	}

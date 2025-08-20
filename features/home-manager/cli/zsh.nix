@@ -8,6 +8,8 @@
     pkgs.locale
     pkgs.fzf
     pkgs.tree
+    pkgs.htop
+    pkgs.unzip
 
     # little scripts
     pkgs.previewpdf
@@ -21,10 +23,8 @@
     autosuggestion.enable = true;
     syntaxHighlighting.enable = true;
 
-    localVariables = {
-      # renders ambigous multi-key commands inaccessible
-      KEYTIMEOUT = 1;
-    };
+    # note: renders ambigous multi-key commands inaccessible
+    localVariables.KEYTIMEOUT = 1;
 
     # do not source /etc/zshrc
     envExtra = ''
@@ -59,7 +59,7 @@
       # vv does not work for KEYTIMEOUT=1
       bindkey -M vicmd 'V' edit-command-line
 
-      ### mutable extra config
+      # mutable extra config
       [ -f $HOME/.zshrc.local ] && source "$HOME/.zshrc.local"
     '';
   };

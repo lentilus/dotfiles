@@ -2,14 +2,15 @@
   inputs,
   outputs,
   pkgs,
+  config,
   ...
 }: {
   imports = [
     inputs.home-manager.nixosModules.home-manager
+    inputs.sops-nix.nixosModules.sops
     outputs.nixosModules
     ./hardware-configuration.nix
-    ./powersaving.nix
-    ../../features/nixpkgs.nix
+    # ../../features/nixpkgs.nix
     ../../features/nixos/login-window-manager.nix
   ];
 
@@ -25,14 +26,33 @@
     };
   };
 
-  programs.zsh.enable = true;
+  sops = {
+    age.keyFile = "/home/lentilus/.config/sops/age/keys.txt";
+
+    # wireguard
+    secrets.wg-config = {
+      sopsFile = ./wg-secrets.conf;
+      format = "binary";
+    };
+  };
+
 
   networking = {
     # allows undeclarative network settings
     # as opposed to `wireless.enable` for declaritive wpa_supplicant
     networkmanager.enable = true;
     hostName = "T480";
+
+    # wireguard
+    wg-quick.interfaces = {
+      wg0 = {
+        autostart = true;
+        configFile = config.sops.secrets."wg-config".path;
+      } ;
+    };
   };
+
+  programs.zsh.enable = true;
 
   services = {
     pcscd.enable = true;

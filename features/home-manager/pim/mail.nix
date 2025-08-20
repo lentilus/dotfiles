@@ -6,13 +6,12 @@
       # global settings
       Create Both
       Expunge Both
-
     '';
   };
 
   programs.aerc = {
     enable = true;
-    # package = pkgs.unstable.aerc;
+    package = pkgs.aerc;
     extraConfig = {
       general = {
         # we don't store any credentials, so this is fine!
@@ -20,13 +19,14 @@
         pgp-provider = "gpg";
       };
 
+      compose.save-drafts = false;
+
       filters = {
         "text/plain" = "colorize";
         "text/calendar" = "calendar";
         "message/delivery-status" = "colorize";
         "message/rfc822" = "colorize";
-        "text/html" = "${pkgs.w3m}/bin/w3m -T text/html -cols $(tput cols)\
-                -dump -o display_image=false -o display_link_number=true";
+        "text/html" = "${pkgs.html2text}/bin/html2text";
       };
     };
     extraAccounts = ''
@@ -34,6 +34,7 @@
       folders-sort = Inbox,Drafts,Sent,Junk,Archive,Trash
       pgp-auto-sign = true
       address-book-cmd = "khard email --parsable --remove-first-line %s"
+      check-mail-cmd = "mbsync -a"
     '';
   };
 }

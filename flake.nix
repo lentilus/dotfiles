@@ -33,20 +33,27 @@
     systems = ["x86_64-linux"];
 
     forAllSystems = nixpkgs.lib.genAttrs systems;
+    
+    pkgsFor = let
+        ols = import ./overlays {inherit inputs;};
+    in system:
+     import inputs.nixpkgs {
+       inherit system;
+       config.allowUnfree = true;
+       overlays = with ols; [ additions modifications unstable-packages ];
+    };
   in {
-    overlays = import ./overlays {inherit inputs;};
     formatter = forAllSystems (system: nixpkgs.legacyPackages.${system}.alejandra);
+    nixpkgs = forAllSystems (system: pkgsFor system);
 
     homeManagerModules = import ./modules/home-manager;
     nixosModules = import ./modules/nixos;
 
     nixosConfigurations = {
       "T480" = inputs.nixpkgs.lib.nixosSystem {
-        modules = [./hosts/T480/configuration.nix];
-        specialArgs = {inherit inputs outputs;};
-      };
-      "nixos" = inputs.nixpkgs.lib.nixosSystem {
-        modules = [./hosts/P14s/configuration.nix];
+        system = "x86_64-linux";
+        pkgs = pkgsFor "x86_64-linux";
+        modules = [ ./hosts/T480/configuration.nix ];
         specialArgs = {inherit inputs outputs;};
       };
     };
@@ -54,18 +61,15 @@
     packages = forAllSystems (system: {
       shell = import ./proot-shell.nix {
         home-manager = inputs.home-manager;
-        pkgs = nixpkgs.legacyPackages.${system};
+        pkgs = pkgsFor system;
         extraSpecialArgs = {inherit inputs outputs;};
-        modules = [
-          ./features/home-manager/cli
-          ./features/nixpkgs.nix
-        ];
+        modules = [ ./features/home-manager/cli ];
       };
     });
 
     devShells = forAllSystems (system: {
       default = let
-        pkgs = nixpkgs.legacyPackages.${system};
+        pkgs = pkgsFor system;
       in
         pkgs.mkShell {
           buildInputs = with pkgs; [nix nixd nixos-rebuild sops];

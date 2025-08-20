@@ -1,5 +1,4 @@
 {
-  config,
   pkgs,
   lib,
   ...
@@ -12,15 +11,13 @@
     # package = lib.mkDefault pkgs.unstable.qutebrowser;
     package = lib.mkDefault pkgs.qutebrowser;
     enable = true;
-    # greasemonkey = [
-    #   (pkgs.writeText "strip-duckduckgo.js" (builtins.readFile ./minimal-duckduckgo.js))
-    # ];
     settings = {
       scrolling.bar = "never";
       window.hide_decoration = true;
       url.start_pages = ["about:blank"];
       # colors.webpage.preferred_color_scheme = "dark";
       # colors.webpage.darkmode.enabled = false;
+      editor.command = ["kitty" "nvim" "{}"];
 
       content = {
         blocking.method = "both";
@@ -40,7 +37,6 @@
       w = "https://en.wikipedia.org/wiki/Special:Search?search={}&go=Go&ns0=1";
       hm = "https://home-manager-options.extranix.com/?query={}&release=master";
       np = "https://search.nixos.org/packages?channel=unstable&from=0&size=50&sort=relevance&type=packages&query={}";
-      yt = "https://www.youtube.com/results?search_query={}";
       gpt = "https://chatgpt.com/?q={}";
     };
     keyBindings.normal = {
@@ -51,8 +47,6 @@
       "<Tab>" = ":tab-next";
       ",o" = "spawn xdg-open {url}";
       ",O" = "hint links spawn xdg-open {url}";
-      ",m" = "spawn ${config.programs.mpv.package}/bin/mpv {url}";
-      ",M" = "hint links spawn ${config.programs.mpv.package}/bin/mpv {url}";
     };
   };
 

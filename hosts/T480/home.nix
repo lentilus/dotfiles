@@ -26,9 +26,9 @@
   };
 
   sops = {
+    age.keyFile = "/home/lentilus/.config/sops/age/keys.txt";
     defaultSopsFile = ./secrets.yaml;
     defaultSopsFormat = "yaml";
-    gnupg.home = ".gnupg";
   };
 
   nix = {

@@ -9,6 +9,11 @@
       PATH="$PATH:${prev.pkgs.coreutils}/bin:${prev.pkgs.rofi-wayland}/bin:${prev.pkgs.rofi}/bin"
       "${prev.pinentry-rofi}/bin/pinentry-rofi" "$@"
     '';
+
+    # https://lists.sr.ht/~rjarry/aerc-devel/%3C20250312162530.11561-2-bryce@brycevandegrift.xyz%3E
+    aerc = prev.aerc.overrideAttrs (oldAttrs: {
+      patches = (oldAttrs.patches ++ [./aerc-decrypt-signed-messages.patch]);
+    });
   };
 
   # When applied, the unstable nixpkgs set (declared in the flake inputs) will

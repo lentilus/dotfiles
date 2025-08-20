@@ -29,14 +29,20 @@ in {
           package = pass;
           settings.PASSWORD_STORE_DIR = cfg.storePath;
         };
-        rofi.pass = {
-          enable = true;
-          package = pkgs.rofi-pass-wayland;
-          stores = [cfg.storePath];
-          extraConfig = ''
-            default_autotype='path :tab pass'
-            default_user=':filename'
-          '';
+        # rofi.pass = {
+        #   enable = true;
+        #   package = pkgs.rofi-pass-wayland;
+        #   stores = [cfg.storePath];
+        #   extraConfig = ''
+        #     default_autotype='path :tab pass'
+        #     default_user=':filename'
+        #   '';
+        # };
+        qutebrowser.keyBindings.normal = {
+          # qute-pass
+          "<z><l>" = "spawn --userscript qute-pass";
+          "<z><u><l>" = "spawn --userscript qute-pass --username-only";
+          "<z><p><l>" = "spawn --userscript qute-pass --password-only";
         };
       };
 
