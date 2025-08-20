@@ -5,7 +5,7 @@ keys:
   - &hosts:
     - &T480 age1awzjsmyuj7v6jnwqzddtg0n93cajul0vg7yenhmrke7w7kgwge3s0lxdq0
 creation_rules:
-  - path_regex: hosts/.*secrets.*$
+  - path_regex: ^secrets/.*$
     key_groups:
     - age:
       - *T480

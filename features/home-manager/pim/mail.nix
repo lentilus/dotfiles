@@ -1,24 +1,52 @@
-{pkgs, ...}: {
-  services.mbsync.enable = true;
+{config, pkgs, ...}: {
+  sops.secrets = {
+    "mbsyncrc" = {
+      sopsFile = ../../../secrets/mbsyncrc;
+      format = "binary";
+    };
+    "aerc-accounts-conf" = {
+      sopsFile = ../../../secrets/aerc-accounts.conf;
+      format = "binary";
+    };
+  };
+
+  services.mbsync = {
+    enable = true;
+    configFile = config.sops.secrets."mbsyncrc".path;
+  };
+
+  # I think we can get rid of the below, since I only want this to be able to
+  # trigger syncing from aerc. But we can also achieve this by just nudging
+  # the service.
   programs.mbsync = {
     enable = true;
-    extraConfig = ''
-      # global settings
-      Create Both
-      Expunge Both
-    '';
+    package = pkgs.symlinkJoin {
+      name = "mbsync";
+      paths = [ pkgs.isync ];
+      buildInputs = [ pkgs.makeWrapper ];
+      postBuild = ''
+        wrapProgram $out/bin/mbsync \
+          --add-flags "--config=${config.sops.secrets."mbsyncrc".path}"
+      '';
+    };
   };
 
   programs.aerc = {
     enable = true;
-    package = pkgs.aerc;
-    extraConfig = {
-      general = {
-        # we don't store any credentials, so this is fine!
-        unsafe-accounts-conf = true;
-        pgp-provider = "gpg";
-      };
 
+    # manage accounts-conf with sops-nix
+    package = pkgs.symlinkJoin {
+      name = "aerc-custom";
+      paths = [ pkgs.aerc ];
+      buildInputs = [ pkgs.makeWrapper ];
+      postBuild = ''
+        wrapProgram $out/bin/aerc \
+          --add-flags "--accounts-conf=${config.sops.secrets."aerc-accounts-conf".path}"
+      '';
+    };
+
+    extraConfig = {
+      general.pgp-provider = "gpg";
       compose.save-drafts = false;
 
       filters = {
@@ -29,12 +57,5 @@
         "text/html" = "${pkgs.html2text}/bin/html2text";
       };
     };
-    extraAccounts = ''
-      copy-to = Sent
-      folders-sort = Inbox,Drafts,Sent,Junk,Archive,Trash
-      pgp-auto-sign = true
-      address-book-cmd = "khard email --parsable --remove-first-line %s"
-      check-mail-cmd = "mbsync -a"
-    '';
   };
 }

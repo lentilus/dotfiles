@@ -25,11 +25,7 @@
     storePath = "${config.home.homeDirectory}/git/pass";
   };
 
-  sops = {
-    age.keyFile = "/home/lentilus/.config/sops/age/keys.txt";
-    defaultSopsFile = ./secrets.yaml;
-    defaultSopsFormat = "yaml";
-  };
+  sops.age.keyFile = "/home/lentilus/.config/sops/age/keys.txt";
 
   nix = {
     package = lib.mkDefault pkgs.unstable.nix;

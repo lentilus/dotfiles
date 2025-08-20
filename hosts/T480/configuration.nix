@@ -10,7 +10,6 @@
     inputs.sops-nix.nixosModules.sops
     outputs.nixosModules
     ./hardware-configuration.nix
-    # ../../features/nixpkgs.nix
     ../../features/nixos/login-window-manager.nix
   ];
 
@@ -26,31 +25,24 @@
     };
   };
 
-  sops = {
-    age.keyFile = "/home/lentilus/.config/sops/age/keys.txt";
-
-    # wireguard
-    secrets.wg-config = {
-      sopsFile = ./wg-secrets.conf;
-      format = "binary";
-    };
-  };
-
+  sops.age.keyFile = "/home/lentilus/.config/sops/age/keys.txt";
 
   networking = {
     # allows undeclarative network settings
     # as opposed to `wireless.enable` for declaritive wpa_supplicant
     networkmanager.enable = true;
     hostName = "T480";
-
-    # wireguard
-    wg-quick.interfaces = {
-      wg0 = {
-        autostart = true;
-        configFile = config.sops.secrets."wg-config".path;
-      } ;
-    };
   };
+
+  # wireguard vpn setup
+  sops.secrets.wg-config = {
+    sopsFile = ../../secrets/wireguard.conf;
+    format = "binary";
+  };
+  wg-quick.interfaces.wg0 = {
+    autostart = true;
+    configFile = config.sops.secrets."wg-config".path;
+  } ;
 
   programs.zsh.enable = true;
 
