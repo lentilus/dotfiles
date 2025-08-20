@@ -1,20 +1,14 @@
-# dotfiles of lentilus 
+# lentilus dotfiles
 
-## on a new host
-On a new machine install nix and build the config with
+This repository includes my entire working-environment managed in a
+`nix flake` with the help of `nixos` and `home-manager`.
+For secrets management I use `sops` with `sops-nix`.
 
-```bash
-nix build "github:lentilus/dotfiles#homeConfigurations.${USER}.activationPackage"
-./result/activate
+Using the power of `proot` my shell environment can be temporarily used on
+any machine that has nix installed by running the following.
+```nix
+HOME=/tmp/my-tmp-home nix run github:lentilus/dotfiles#shell --impure -- zsh
 ```
+In fact, you can safely try that on your own machine. You can
+look at `./proot-shell.nix` to see what it does.
 
-<!-- ## temporary, discreet shell with my home -->
-<!-- ```bash -->
-<!-- nix run "github:lentilus/dotfiles#tmp-shell" -->
-<!-- ``` -->
-
-## my dotfiles in devcontainers
-Bootstrap dotfiles without modifying the devcontainer.json
-```bash
-devpod up . --dotfiles https://github.com/lentilus/dotfiles.git
-```
