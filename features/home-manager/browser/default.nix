@@ -32,7 +32,7 @@
       };
     };
     searchEngines = lib.mkDefault {
-      DEFAULT = "https://html.duckduckgo.com/html/?q={}";
+      DEFAULT = "http://localhost:8349?q={}";
       g = "https://www.google.com/search?q={}";
       w = "https://en.wikipedia.org/wiki/Special:Search?search={}&go=Go&ns0=1";
       hm = "https://home-manager-options.extranix.com/?query={}&release=master";

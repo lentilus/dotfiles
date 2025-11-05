@@ -1,4 +1,8 @@
-{config, pkgs, ...}: {
+{
+  config,
+  pkgs,
+  ...
+}: {
   sops.secrets = {
     "mbsyncrc" = {
       sopsFile = ../../../secrets/mbsyncrc;
@@ -22,8 +26,8 @@
     enable = true;
     package = pkgs.symlinkJoin {
       name = "mbsync";
-      paths = [ pkgs.isync ];
-      buildInputs = [ pkgs.makeWrapper ];
+      paths = [pkgs.isync];
+      buildInputs = [pkgs.makeWrapper];
       postBuild = ''
         wrapProgram $out/bin/mbsync \
           --add-flags "--config=${config.sops.secrets."mbsyncrc".path}"
@@ -37,8 +41,8 @@
     # manage accounts-conf with sops-nix
     package = pkgs.symlinkJoin {
       name = "aerc-custom";
-      paths = [ pkgs.aerc ];
-      buildInputs = [ pkgs.makeWrapper ];
+      paths = [pkgs.aerc];
+      buildInputs = [pkgs.makeWrapper];
       postBuild = ''
         wrapProgram $out/bin/aerc \
           --add-flags "--accounts-conf=${config.sops.secrets."aerc-accounts-conf".path}"
@@ -48,13 +52,14 @@
     extraConfig = {
       general.pgp-provider = "gpg";
       compose.save-drafts = false;
+      account-hooks.from = "recipient";
 
       filters = {
         "text/plain" = "colorize";
         "text/calendar" = "calendar";
         "message/delivery-status" = "colorize";
         "message/rfc822" = "colorize";
-        "text/html" = "${pkgs.html2text}/bin/html2text";
+        "text/html" = "html";
       };
     };
   };

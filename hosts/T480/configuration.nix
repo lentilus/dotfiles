@@ -11,6 +11,7 @@
     outputs.nixosModules
     ./hardware-configuration.nix
     ../../features/nixos/login-window-manager.nix
+    ../../features/nixos/search-engnine.nix
   ];
 
   boot = {
@@ -39,10 +40,10 @@
     sopsFile = ../../secrets/wireguard.conf;
     format = "binary";
   };
-  wg-quick.interfaces.wg0 = {
+  networking.wg-quick.interfaces.wg0 = {
     autostart = true;
     configFile = config.sops.secrets."wg-config".path;
-  } ;
+  };
 
   programs.zsh.enable = true;
 
@@ -50,25 +51,12 @@
     pcscd.enable = true;
     tlp.enable = true;
     dbus.enable = true;
+    udisks2.enable = true; # calibre
 
     # custom services
     backlight.enable = true;
     homeRowMods.enable = true;
     audio.enable = true;
-  };
-
-  services.searx = {
-    enable = true;
-    settings = {
-      server = {
-        port = 2987;
-        bind_address = "127.0.0.1";
-        secret_key = "secret key";
-        limiter = false;
-        default_http_headers.Access-Control-Allow-Origin = "*";
-      };
-      search.formats = ["json"];
-    };
   };
 
   security.polkit.enable = true;

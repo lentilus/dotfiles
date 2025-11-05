@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Searx Results — favicons via DuckDuckGo (same tab)</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <style>
+    :root{
+      --bg:#fff; --text:#202124; --muted:#4d5156;
+      --link:#1a0dab; --visited:#551A8B; --selected-bg:#e8f0fe; --accent:#1a73e8;
+      --divider:#ebebeb;
+    }
+    html,body{height:100%}
+    body{
+      margin:0;
+      font:16px/1.4 system-ui, -apple-system, "Segoe UI", Roboto, Arial;
+      background:var(--bg); color:var(--text);
+    }
+    #results{ list-style:none; margin:0; padding:0; max-height:100vh; overflow-y:auto; outline:none; }
+
+    .result{
+      display:flex; gap:12px; align-items:flex-start;
+      padding:10px 14px; border-bottom:1px solid var(--divider);
+      cursor:pointer; user-select:none; -webkit-tap-highlight-color:transparent;
+    }
+
+    .favicon-slot{
+      width:16px; height:16px; flex:0 0 16px;
+      display:flex; align-items:center; justify-content:center;
+    }
+    .favicon {
+      width:16px; height:16px; border-radius:3px; object-fit:contain;
+      opacity:0.9; transition:opacity .12s ease, transform .12s ease, filter .12s ease;
+      transform: translateY(0.5px);
+      display:none;
+    }
+    .favicon.visible { display:block; }
+
+    .favicon-placeholder {
+      width:14px; height:14px; border-radius:3px;
+      background:linear-gradient(135deg,#f3f4f6,#eef2f7);
+      display:flex; align-items:center; justify-content:center;
+      font-size:10px; color:#a0a6ad;
+    }
+
+    .result:hover .favicon, .result[aria-selected="true"] .favicon, .result:focus-visible .favicon {
+      opacity:1; filter:none;
+    }
+
+    .content{ flex:1 1 auto; min-width:0 }
+    .result:hover{ background:#f6f7f9; }
+    .result[aria-selected="true"], .result:focus-visible {
+      background:var(--selected-bg);
+      box-shadow: inset 4px 0 0 0 var(--accent);
+    }
+    .result:focus{ outline:none }
+
+    .title{ font-size:16px; margin-bottom:4px; overflow:hidden }
+    .title a{
+      color:var(--link); text-decoration:none;
+      display:inline-block; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+      max-width:100%;
+    }
+    .title a:visited{ color:var(--visited) }
+    .title a:hover{ text-decoration:underline }
+
+    .url{ font-size:13px; color:#006621; margin-bottom:6px; overflow:hidden;
+          text-overflow:ellipsis; white-space:nowrap; }
+    .snippet{ font-size:13px; color:var(--muted); }
+    .result ::selection { background: rgba(26,115,232,0.12); }
+  </style>
+</head>
+<body>
+  <ul id="results" role="listbox" aria-label="Search results" tabindex="0"></ul>
+
+  <script>
+  (function(){
+    var SEARX_BASE = 'http://localhost:2987';
+    function param(n){ return new URLSearchParams(location.search).get(n); }
+    var q = param('q');
+    var list = document.getElementById('results');
+    if (!q) {
+      var li = document.createElement('li'); li.className='result'; li.textContent='Pass a query as ?q=your+terms';
+      list.appendChild(li); list.setAttribute('aria-disabled','true');
+      window.addEventListener('load', function(){ list.focus(); });
+      return;
+    }
+
+    function getJSONSync(u){
+      var x = new XMLHttpRequest();
+      try { x.open('GET', u, false); x.send(null);
+        if (x.status >= 200 && x.status < 300) return { json: JSON.parse(x.responseText), url:u };
+      } catch(e) {}
+      return null;
+    }
+
+    function normalize(j){
+      if (!j) return [];
+      if (Array.isArray(j)) return j;
+      if (Array.isArray(j.results)) return j.results;
+      if (Array.isArray(j.items)) return j.items;
+      for (var k in j) if (Array.isArray(j[k])) return j[k];
+      return [];
+    }
+
+    var base = SEARX_BASE.replace(/\/$/, '');
+    var urls = [
+      base + '/search?q=' + encodeURIComponent(q) + '&format=json',
+      base + '/search.json?q=' + encodeURIComponent(q)
+    ];
+    var found = null;
+    for (var i=0;i<urls.length;i++){ found = getJSONSync(urls[i]); if (found) break; }
+
+    var options = [], activeIndex = -1;
+    function syncOptions(){ options = Array.from(list.querySelectorAll('[role="option"]')); }
+    function clearAllSelected(){ options.forEach(function(o){ o.removeAttribute('aria-selected'); }); }
+    function setActive(i){
+      if (!options.length) return;
+      if (i < 0) i = 0; if (i > options.length-1) i = options.length-1;
+      if (activeIndex === i) return;
+      if (activeIndex >= 0 && options[activeIndex]) options[activeIndex].removeAttribute('aria-selected');
+      activeIndex = i;
+      var el = options[i]; if (!el) return;
+      el.setAttribute('aria-selected','true');
+      list.setAttribute('aria-activedescendant', el.id);
+      el.scrollIntoView({ block: 'nearest' });
+      try { sessionStorage.setItem('lastActive', String(i)); } catch(e){}
+    }
+
+    function duckduckgoFavicon(domain){
+      return 'https://icons.duckduckgo.com/ip3/' + domain + '.ico';
+    }
+
+    function appendResult(r, idx){
+      var li = document.createElement('li');
+      li.className = 'result'; li.setAttribute('role','option'); li.id = 'opt-' + idx; li.tabIndex = -1;
+      var url = r.url || r.link || r.uri || '';
+
+      var slot = document.createElement('div'); slot.className = 'favicon-slot';
+      var placeholder = document.createElement('div'); placeholder.className = 'favicon-placeholder';
+      placeholder.innerHTML = '<svg width="10" height="10" viewBox="0 0 24 24"><path fill="#c5cbd3" d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20z"/></svg>';
+      slot.appendChild(placeholder);
+
+      var img = document.createElement('img');
+      img.className = 'favicon';
+      img.alt = '';
+      var hostname = '';
+      try { hostname = url ? (new URL(url)).hostname : ''; } catch(e) { hostname = ''; }
+
+      if (hostname) {
+        img.src = duckduckgoFavicon(hostname);
+        img.onload = function(){
+          img.classList.add('visible');
+          placeholder.style.display = 'none';
+        };
+        img.onerror = function(){
+          img.classList.remove('visible');
+          img.style.display = 'none';
+        };
+      } else {
+        img.hidden = true;
+      }
+
+      var content = document.createElement('div'); content.className = 'content';
+      var t = document.createElement('div'); t.className = 'title';
+      var a = document.createElement('a'); a.href = url || '#';
+      a.textContent = r.title || r.title_plain || r.name || ('Result ' + (idx+1));
+      // no target="_blank" -> opens in same tab
+      t.appendChild(a); content.appendChild(t);
+
+      if (url){
+        var u = document.createElement('div'); u.className = 'url'; u.textContent = url;
+        content.appendChild(u); li.dataset.url = url;
+      }
+
+      var s = document.createElement('div'); s.className = 'snippet';
+      s.textContent = (r.content || r.snippet || r.description || '').replace(/<[^>]+>/g,'');
+      content.appendChild(s);
+
+      slot.appendChild(img);
+      li.appendChild(slot);
+      li.appendChild(content);
+      list.appendChild(li);
+    }
+
+    if (!found){
+      var li = document.createElement('li'); li.className = 'result';
+      li.textContent = 'No JSON endpoint reachable. Check Searx and CORS'; list.appendChild(li); list.setAttribute('aria-disabled','true');
+    } else {
+      var arr = normalize(found.json);
+      if (!arr.length){
+        var li = document.createElement('li'); li.className = 'result'; li.textContent = 'No results';
+        list.appendChild(li); list.setAttribute('aria-disabled','true');
+      } else {
+        arr.forEach(function(r,i){ appendResult(r,i); });
+        syncOptions();
+        var restore = parseInt(sessionStorage.getItem('lastActive'),10);
+        if (!isNaN(restore) && restore >= 0 && restore < options.length) setActive(restore); else setActive(0);
+      }
+    }
+
+    // keyboard nav: open in same tab
+    list.addEventListener('keydown', function(e){
+      if (!options.length) return;
+      var handled = false;
+      switch(e.key){
+        case 'ArrowDown': setActive(activeIndex + 1); handled = true; break;
+        case 'ArrowUp': setActive(activeIndex - 1); handled = true; break;
+        case 'Home': setActive(0); handled = true; break;
+        case 'End': setActive(options.length - 1); handled = true; break;
+        case 'PageDown': setActive(activeIndex + 10); handled = true; break;
+        case 'PageUp': setActive(activeIndex - 10); handled = true; break;
+        case 'Enter':
+          var el = options[activeIndex];
+          if (el) {
+            var anchor = el.querySelector('.title a');
+            if (anchor && anchor.href && anchor.href !== '#') location.href = anchor.href;
+            else if (el.dataset.url) location.href = el.dataset.url;
+          }
+          handled = true;
+          break;
+      }
+      if (handled){ e.preventDefault(); e.stopPropagation(); }
+    });
+
+    // click handler: same-tab navigation
+    list.addEventListener('click', function(e){
+      var li = e.target.closest('[role="option"]'); if (!li) return;
+      syncOptions();
+      var idx = options.indexOf(li); if (idx === -1) return;
+      if (idx === activeIndex){
+        var anchor = li.querySelector('.title a');
+        if (anchor && anchor.href && anchor.href !== '#') location.href = anchor.href;
+        else if (li.dataset.url) location.href = li.dataset.url;
+      } else setActive(idx);
+    });
+
+    list.addEventListener('dblclick', function(e){
+      var li = e.target.closest('[role="option"]'); if (!li) return;
+      var anchor = li.querySelector('.title a');
+      if (anchor && anchor.href && anchor.href !== '#') location.href = anchor.href;
+      else if (li.dataset.url) location.href = li.dataset.url;
+    });
+
+    window.addEventListener('pageshow', function(ev){
+      syncOptions(); clearAllSelected(); activeIndex = -1;
+      var restore = parseInt(sessionStorage.getItem('lastActive'), 10);
+      if (!isNaN(restore) && restore >= 0 && restore < options.length) setActive(restore);
+      else if (options.length) setActive(0);
+      try{ list.focus(); }catch(e){}
+      try{ if (window.getSelection) window.getSelection().removeAllRanges(); }catch(e){}
+    });
+
+    window.addEventListener('load', function(){ try{ list.focus(); }catch(e){} });
+  }());
+  </script>
+</body>
+</html>

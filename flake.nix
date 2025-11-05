@@ -33,15 +33,16 @@
     systems = ["x86_64-linux"];
 
     forAllSystems = nixpkgs.lib.genAttrs systems;
-    
+
     pkgsFor = let
-        ols = import ./overlays {inherit inputs;};
-    in system:
-     import inputs.nixpkgs {
-       inherit system;
-       config.allowUnfree = true;
-       overlays = with ols; [ additions modifications unstable-packages ];
-    };
+      ols = import ./overlays {inherit inputs;};
+    in
+      system:
+        import inputs.nixpkgs {
+          inherit system;
+          config.allowUnfree = true;
+          overlays = with ols; [additions modifications unstable-packages];
+        };
   in {
     formatter = forAllSystems (system: nixpkgs.legacyPackages.${system}.alejandra);
     nixpkgs = forAllSystems (system: pkgsFor system);
@@ -53,7 +54,7 @@
       "T480" = inputs.nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         pkgs = pkgsFor "x86_64-linux";
-        modules = [ ./hosts/T480/configuration.nix ];
+        modules = [./hosts/T480/configuration.nix];
         specialArgs = {inherit inputs outputs;};
       };
     };
@@ -63,7 +64,7 @@
         home-manager = inputs.home-manager;
         pkgs = pkgsFor system;
         extraSpecialArgs = {inherit inputs outputs;};
-        modules = [ ./features/home-manager/cli ];
+        modules = [./features/home-manager/cli];
       };
     });
 
