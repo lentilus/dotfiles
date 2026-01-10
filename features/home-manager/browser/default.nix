@@ -9,7 +9,7 @@
 
   programs.qutebrowser = {
     # package = lib.mkDefault pkgs.unstable.qutebrowser;
-    package = lib.mkDefault pkgs.qutebrowser;
+    package = lib.mkDefault pkgs.unstable.qutebrowser;
     enable = true;
     settings = {
       scrolling.bar = "never";
