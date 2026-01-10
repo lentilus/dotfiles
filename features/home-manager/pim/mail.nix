@@ -41,7 +41,7 @@
     # manage accounts-conf with sops-nix
     package = pkgs.symlinkJoin {
       name = "aerc-custom";
-      paths = [pkgs.aerc];
+      paths = [pkgs.unstable.aerc];
       buildInputs = [pkgs.makeWrapper];
       postBuild = ''
         wrapProgram $out/bin/aerc \
