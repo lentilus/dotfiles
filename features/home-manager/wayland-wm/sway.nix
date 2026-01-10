@@ -35,6 +35,7 @@
         "${mod}+x" = "exec ${rofi-pass}";
         "${mod}+t" = "exec ${pkgs.slurp}/bin/slurp | ${pkgs.grim}/bin/grim -g - - | ${pkgs.wl-clipboard}/bin/wl-copy";
         "${mod}+g" = "exec ${pkgs.dlpdf}/bin/dlpdf";
+        "${mod}+p" = "exec ${pkgs.wl-mirror}/bin/wl-present mirror";
 
         "XF86AudioLowerVolume" = "exec ${pamixer} -d 5";
         "XF86AudioRaiseVolume" = "exec ${pamixer} -i 5";
