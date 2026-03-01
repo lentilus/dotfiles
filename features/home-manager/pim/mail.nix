@@ -19,22 +19,6 @@
     configFile = config.sops.secrets."mbsyncrc".path;
   };
 
-  # I think we can get rid of the below, since I only want this to be able to
-  # trigger syncing from aerc. But we can also achieve this by just nudging
-  # the service.
-  programs.mbsync = {
-    enable = true;
-    package = pkgs.symlinkJoin {
-      name = "mbsync";
-      paths = [pkgs.isync];
-      buildInputs = [pkgs.makeWrapper];
-      postBuild = ''
-        wrapProgram $out/bin/mbsync \
-          --add-flags "--config=${config.sops.secrets."mbsyncrc".path}"
-      '';
-    };
-  };
-
   programs.aerc = {
     enable = true;
 

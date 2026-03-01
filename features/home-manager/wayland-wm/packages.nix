@@ -5,5 +5,8 @@
     pkgs.libreoffice
     pkgs.calibre
     pkgs.passes # display pkpass files
+    pkgs.unstable.spotdl
+    pkgs.archive-mail
+    pkgs.pgpmime-decrypt
   ];
 }

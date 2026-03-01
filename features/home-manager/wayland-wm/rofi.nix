@@ -5,6 +5,6 @@
 }: {
   programs.rofi = lib.mkDefault {
     enable = true;
-    package = pkgs.rofi-wayland;
+    package = pkgs.rofi;
   };
 }

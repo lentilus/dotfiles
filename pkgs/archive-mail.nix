@@ -1,2 +1,2 @@
 {writeShellScriptBin}:
-writeShellScriptBin "previewpdf" (builtins.readFile ./archive-mail.sh)
+writeShellScriptBin "archive-mail" (builtins.readFile ./archive-mail.sh)
